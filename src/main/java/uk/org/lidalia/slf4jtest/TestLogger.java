@@ -457,7 +457,7 @@ public class TestLogger implements Logger {
 
     @SuppressWarnings("unchecked")
     private Map<String, String> mdc() {
-        return fromNullable(MDC.getCopyOfContextMap()).or(Collections.emptyMap());
+        return fromNullable(MDC.getCopyOfContextMap()).or(Collections.<String, String>emptyMap());
     }
 
     private void optionallyPrint(final LoggingEvent event) {

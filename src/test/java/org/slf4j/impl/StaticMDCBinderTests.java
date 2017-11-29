@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.slf4j.MDC;
 import uk.org.lidalia.slf4jtest.TestMDCAdapter;
 
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -25,6 +26,6 @@ public class StaticMDCBinderTests {
 
     @Test
     public void getMarkerFactoryReturnsCorrectlyFromSlf4JLoggerFactory() {
-        assertThat(MDC.getMDCAdapter(), is(StaticMDCBinder.SINGLETON.getMDCA()));
+        assertThat(MDC.getMDCAdapter(), instanceOf(TestMDCAdapter.class));
     }
 }
