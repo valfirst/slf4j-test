@@ -18,16 +18,16 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/Mahoney/${project.artifactId}</url>
-        <connection>scm:git:git@github.com:Mahoney/${project.artifactId}.git</connection>
-        <developerConnection>scm:git:git@github.com:Mahoney/${project.artifactId}.git</developerConnection>
+        <url>https://github.com/valfirst/${project.artifactId}</url>
+        <connection>scm:git:git@github.com:valfirst/${project.artifactId}.git</connection>
+        <developerConnection>scm:git:git@github.com:valfirst/${project.artifactId}.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
         <site>
             <id>gh.pages</id>
-            <url>scm:git:git@github.com:Mahoney/${project.artifactId}.git</url>
+            <url>scm:git:git@github.com:valfirst/${project.artifactId}.git</url>
         </site>
         <snapshotRepository>
             <id>sonatype-nexus-snapshots</id>
