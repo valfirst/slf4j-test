@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,6 +14,8 @@ import org.junit.runner.RunWith;
 import org.slf4j.Marker;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -25,6 +28,7 @@ import static com.google.common.base.Optional.absent;
 import static com.google.common.base.Optional.of;
 import static java.lang.System.lineSeparator;
 import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.Is.is;
@@ -441,12 +445,11 @@ public class LoggingEventTests {
         assertThat(event.getMdc(), is(mdcAtStart));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void mdcNotModifiable() throws Throwable {
         Map<String, String> mdc = new HashMap<>();
         mdc.put("key", "value1");
-        final LoggingEvent event = new LoggingEvent(level, mdc, message);
-        event.getMdc().put("anything", "whatever");
+        assertThat(new LoggingEvent(level, mdc, message).getMdc(), is(instanceOf(ImmutableMap.class)) );
     }
 
     @Test
@@ -458,10 +461,9 @@ public class LoggingEventTests {
         assertThat(event.getArguments(), is(asList(argsAtStart)));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void argsNotModifiable() throws Throwable {
-        final LoggingEvent event = new LoggingEvent(level, message, arg1);
-        event.getArguments().add(arg2);
+    @Test
+    public void argsNotModifiable() {
+        assertThat(new LoggingEvent(level, message, arg1).getArguments(), is(instanceOf(ImmutableList.class)));
     }
 
     @Test
