@@ -14,12 +14,12 @@ import static org.junit.Assert.assertThat;
 public class StaticLoggerBinderTests {
 
     @Test
-    public void getLoggerFactory() throws Exception {
+    public void getLoggerFactory() {
         assertSame(TestLoggerFactory.getInstance(), StaticLoggerBinder.getSingleton().getLoggerFactory());
     }
 
     @Test
-    public void getLoggerFactoryClassStr() throws Exception {
+    public void getLoggerFactoryClassStr() {
         assertEquals("uk.org.lidalia.slf4jtest.TestLoggerFactory", StaticLoggerBinder.getSingleton().getLoggerFactoryClassStr());
     }
 
@@ -30,7 +30,7 @@ public class StaticLoggerBinderTests {
     }
 
     @Test
-    public void requestedApiVersion() throws Exception {
+    public void requestedApiVersion() {
         assertEquals("1.6", StaticLoggerBinder.REQUESTED_API_VERSION);
     }
 }

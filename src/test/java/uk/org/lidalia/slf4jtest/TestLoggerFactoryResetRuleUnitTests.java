@@ -12,7 +12,7 @@ import org.junit.runners.model.Statement;
 import uk.org.lidalia.lang.Task;
 import uk.org.lidalia.slf4jext.Level;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static uk.org.lidalia.lang.Exceptions.throwUnchecked;
@@ -34,10 +34,10 @@ public class TestLoggerFactoryResetRuleUnitTests {
 
         resetRule.apply(new Statement() {
             @Override
-            public void evaluate() throws Throwable {
-            	assertThat(TestLoggerFactory.getLoggingEvents(), is(Collections.<LoggingEvent>emptyList()));
-            	assertThat(logger.getLoggingEvents(), is(Collections.<LoggingEvent>emptyList()));
-            	assertThat(logger.getEnabledLevels(), is(Level.enablableValueSet()));
+            public void evaluate() {
+                assertThat(TestLoggerFactory.getLoggingEvents(), is(Collections.<LoggingEvent>emptyList()));
+                assertThat(logger.getLoggingEvents(), is(Collections.<LoggingEvent>emptyList()));
+                assertThat(logger.getEnabledLevels(), is(Level.enablableValueSet()));
             }
         }, Description.EMPTY).evaluate();
     }
@@ -51,7 +51,7 @@ public class TestLoggerFactoryResetRuleUnitTests {
 
         resetRule.apply(new Statement() {
             @Override
-            public void evaluate() throws Throwable {
+            public void evaluate() {
             }
         }, Description.EMPTY).evaluate();
 
@@ -62,7 +62,7 @@ public class TestLoggerFactoryResetRuleUnitTests {
     }
 
     @Test
-    public void resetsThreadLocalDataOnException() throws Throwable {
+    public void resetsThreadLocalDataOnException() {
 
         final TestLogger logger = TestLoggerFactory.getTestLogger("logger_name");
         logger.setEnabledLevels(INFO, DEBUG);
@@ -71,7 +71,7 @@ public class TestLoggerFactoryResetRuleUnitTests {
         final Exception toThrow = new Exception();
         Exception thrown = shouldThrow(Exception.class, new Task() {
             @Override
-            public void perform() throws Exception {
+            public void perform() {
                 try {
                     resetRule.apply(new Statement() {
                         @Override
@@ -99,11 +99,11 @@ public class TestLoggerFactoryResetRuleUnitTests {
 
         resetRule.apply(new Statement() {
             @Override
-            public void evaluate() throws Throwable {
+            public void evaluate() {
             }
         }, Description.EMPTY).evaluate();
 
-        final List<LoggingEvent> loggedEvents = asList(info("a message"));
+        final List<LoggingEvent> loggedEvents = singletonList(info("a message"));
 
         assertThat(TestLoggerFactory.getAllLoggingEvents(), is(loggedEvents));
         assertThat(logger.getAllLoggingEvents(), is(loggedEvents));

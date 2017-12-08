@@ -1,6 +1,5 @@
 package uk.org.lidalia.slf4jtest;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -131,7 +130,7 @@ public final class TestLoggerFactory implements ILoggerFactory {
     @SuppressWarnings("PMD.AccessorClassGeneration")
     private static class TestLoggerFactoryMaker implements Callable<TestLoggerFactory> {
         @Override
-        public TestLoggerFactory call() throws IOException {
+        public TestLoggerFactory call() {
             try {
                 final String level = new OverridableProperties("slf4jtest").getProperty("print.level", "OFF");
                 final Level printLevel = Level.valueOf(level);

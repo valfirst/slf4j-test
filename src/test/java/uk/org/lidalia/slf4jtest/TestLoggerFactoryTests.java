@@ -14,6 +14,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import uk.org.lidalia.slf4jext.Level;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
@@ -34,7 +35,7 @@ import static uk.org.lidalia.test.ShouldThrow.shouldThrow;
 public class TestLoggerFactoryTests {
 
     @Test
-    public void getLoggerDifferentNames() throws Exception {
+    public void getLoggerDifferentNames() {
         TestLogger logger1 = getInstance().getLogger("name1");
         TestLogger logger2 = getInstance().getLogger("name2");
 
@@ -42,7 +43,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void getLoggerSameNames() throws Exception {
+    public void getLoggerSameNames() {
         TestLogger logger1 = getInstance().getLogger("name1");
         TestLogger logger2 = getInstance().getLogger("name1");
 
@@ -50,7 +51,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void staticGetTestLoggerStringReturnsSame() throws Exception {
+    public void staticGetTestLoggerStringReturnsSame() {
         TestLogger logger1 = TestLoggerFactory.getTestLogger("name1");
         TestLogger logger2 = getInstance().getLogger("name1");
 
@@ -58,7 +59,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void staticGetTestLoggerClassReturnsSame() throws Exception {
+    public void staticGetTestLoggerClassReturnsSame() {
         TestLogger logger1 = TestLoggerFactory.getTestLogger(String.class);
         TestLogger logger2 = getInstance().getLogger("java.lang.String");
 
@@ -66,7 +67,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void clear() throws Exception {
+    public void clear() {
         TestLogger logger1 = getInstance().getLogger("name1");
         logger1.trace("hello");
         assertThat(logger1.getLoggingEvents().size(), is(1));
@@ -82,7 +83,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void getAllLoggingEvents() throws Exception {
+    public void getAllLoggingEvents() {
         TestLogger logger1 = getInstance().getLogger("name1");
         TestLogger logger2 = getInstance().getLogger("name2");
         logger1.trace("hello");
@@ -99,19 +100,17 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void getAllLoggingEventsDoesNotAddToMultipleLoggers() throws Exception {
+    public void getAllLoggingEventsDoesNotAddToMultipleLoggers() {
         TestLogger logger1 = getInstance().getLogger("name1");
         TestLogger logger2 = getInstance().getLogger("name2");
         logger1.trace("hello");
         logger2.trace("world");
 
         assertThat(logger1.getLoggingEvents(),
-                is(asList(
-                        trace("hello"))
+                is(singletonList(trace("hello"))
                 ));
         assertThat(logger2.getLoggingEvents(),
-                is(asList(
-                        trace("world"))
+                is(singletonList(trace("world"))
                 ));
     }
 
@@ -128,7 +127,7 @@ public class TestLoggerFactoryTests {
     public void getAllTestLoggers() {
         TestLogger logger1 = getInstance().getLogger("name1");
         TestLogger logger2 = getInstance().getLogger("name2");
-        Map<String, TestLogger> expected = new HashMap<String, TestLogger>();
+        Map<String, TestLogger> expected = new HashMap<>();
         expected.put("name1", logger1);
         expected.put("name2", logger2);
         assertThat(TestLoggerFactory.getAllTestLoggers(), is(expected));
@@ -139,7 +138,7 @@ public class TestLoggerFactoryTests {
         TestLogger logger1 = getInstance().getLogger("name1");
         TestLoggerFactory.clear();
 
-        Map<String, TestLogger> expected = new HashMap<String, TestLogger>();
+        Map<String, TestLogger> expected = new HashMap<>();
         expected.put("name1", logger1);
         assertThat(TestLoggerFactory.getAllTestLoggers(), is(expected));
     }
@@ -168,7 +167,7 @@ public class TestLoggerFactoryTests {
         getInstance().getLogger("name1").debug("hello");
         List<LoggingEvent> loggingEvents = TestLoggerFactory.getLoggingEvents();
         getInstance().getLogger("name1").info("world");
-        assertThat(loggingEvents, is(asList(debug("hello"))));
+        assertThat(loggingEvents, is(singletonList(debug("hello"))));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -183,7 +182,7 @@ public class TestLoggerFactoryTests {
         Map<String, TestLogger> allTestLoggers = TestLoggerFactory.getAllTestLoggers();
         getInstance().getLogger("name2");
 
-        Map<String, TestLogger> expected = new HashMap<String, TestLogger>();
+        Map<String, TestLogger> expected = new HashMap<>();
         expected.put("name1", logger1);
         assertThat(allTestLoggers, is(expected));
     }
@@ -233,7 +232,7 @@ public class TestLoggerFactoryTests {
         t.start();
         t.join();
         TestLoggerFactory.clear();
-        assertThat(TestLoggerFactory.getAllLoggingEvents(), is(asList(info("hello"))));
+        assertThat(TestLoggerFactory.getAllLoggingEvents(), is(singletonList(info("hello"))));
     }
 
     @Test

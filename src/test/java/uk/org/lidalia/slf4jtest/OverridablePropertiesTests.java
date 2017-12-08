@@ -37,7 +37,7 @@ public class OverridablePropertiesTests {
     }
 
     @Test
-    public void propertyNotInEither() throws IOException {
+    public void propertyNotInEither() {
         mockPropertyFileToContain("");
 
         final String defaultValue = "sensible_default";
@@ -47,7 +47,7 @@ public class OverridablePropertiesTests {
     }
 
     @Test
-    public void propertyInFileNotInSystemProperties() throws IOException {
+    public void propertyInFileNotInSystemProperties() {
         final String propName = "infile";
         final String propValue = "file value";
         mockPropertyFileToContain(propName + "=" + propValue);
@@ -58,7 +58,7 @@ public class OverridablePropertiesTests {
     }
 
     @Test
-    public void propertyNotInFileInSystemProperties() throws IOException {
+    public void propertyNotInFileInSystemProperties() {
         final String expectedValue = "system value";
         mockPropertyFileToContain("");
         System.setProperty(PROPERTY_SOURCE_NAME+"."+PROPERTY_IN_SYSTEM_PROPS, expectedValue);
@@ -69,7 +69,7 @@ public class OverridablePropertiesTests {
     }
 
     @Test
-    public void propertyInBothFileAndSystemProperties() throws IOException {
+    public void propertyInBothFileAndSystemProperties() {
         final String expectedValue = "system value";
         mockPropertyFileToContain(PROPERTY_IN_BOTH+"=file value");
         System.setProperty(PROPERTY_SOURCE_NAME+"."+PROPERTY_IN_BOTH, expectedValue);
@@ -80,7 +80,7 @@ public class OverridablePropertiesTests {
     }
 
     @Test
-    public void noPropertyFile() throws IOException {
+    public void noPropertyFile() {
         mockPropertyFileInputStreamToBe(null);
 
         OverridableProperties properties = new OverridableProperties(PROPERTY_SOURCE_NAME);
@@ -98,7 +98,7 @@ public class OverridablePropertiesTests {
 
         final IOException actual = shouldThrow(IOException.class, new Task() {
             @Override
-            public void perform() throws Exception {
+            public void perform() {
                 new OverridableProperties(PROPERTY_SOURCE_NAME);
             }
         });
@@ -115,7 +115,7 @@ public class OverridablePropertiesTests {
 
         final IOException actual = shouldThrow(IOException.class, new Task() {
             @Override
-            public void perform() throws Exception {
+            public void perform() {
                 new OverridableProperties(PROPERTY_SOURCE_NAME);
             }
         });
@@ -133,7 +133,7 @@ public class OverridablePropertiesTests {
 
         final IOException finalException = shouldThrow(IOException.class, new Task() {
             @Override
-            public void perform() throws Exception {
+            public void perform() {
                 new OverridableProperties(PROPERTY_SOURCE_NAME);
             }
         });

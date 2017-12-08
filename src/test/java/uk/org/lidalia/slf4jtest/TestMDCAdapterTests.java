@@ -28,7 +28,7 @@ public class TestMDCAdapterTests {
     @Test
     public void getCopyOfContextMap() {
         testMDCAdapter.put(key, value);
-        Map<String, String> expected = new HashMap<String, String>();
+        Map<String, String> expected = new HashMap<>();
         expected.put(key, value);
         assertEquals(expected, testMDCAdapter.getCopyOfContextMap());
     }
@@ -53,10 +53,10 @@ public class TestMDCAdapterTests {
 
     @Test
     public void setContextMapSetsCopy() {
-        Map<String, String> newValues = new HashMap<String, String>();
+        Map<String, String> newValues = new HashMap<>();
         newValues.put(key, value);
         testMDCAdapter.setContextMap(newValues);
-        Map<String, String> expected = new HashMap<String, String>(newValues);
+        Map<String, String> expected = new HashMap<>(newValues);
         newValues.clear();
         assertEquals(expected, testMDCAdapter.getCopyOfContextMap());
     }
@@ -64,7 +64,7 @@ public class TestMDCAdapterTests {
     @Test
     public void testMdcAdapterIsThreadLocal() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(2);
-        final Map<String, String> results = new HashMap<String, String>();
+        final Map<String, String> results = new HashMap<>();
         Thread thread1 = new Thread() {
             @Override
             public void run() {

@@ -27,7 +27,8 @@ import uk.org.lidalia.test.SystemOutputRule;
 import static com.google.common.collect.Sets.difference;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.asList;
-import static java.util.Collections.EMPTY_LIST;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
@@ -91,7 +92,7 @@ public class TestLoggerTests {
         testLogger.debug("message2");
         assertEquals(asList(debug(mdcValues, "message1"), debug(mdcValues, "message2")), testLogger.getLoggingEvents());
         testLogger.clear();
-        assertEquals(Collections.emptyList(), testLogger.getLoggingEvents());
+        assertEquals(emptyList(), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -110,42 +111,42 @@ public class TestLoggerTests {
     public void traceMessage() {
         testLogger.trace(message);
 
-        assertEquals(asList(trace(mdcValues, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(trace(mdcValues, message)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void traceMessageOneArg() {
         testLogger.trace(message, arg1);
 
-        assertEquals(asList(trace(mdcValues, message, arg1)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(trace(mdcValues, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void traceMessageTwoArgs() {
         testLogger.trace(message, arg1, arg2);
 
-        assertEquals(asList(trace(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(trace(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void traceMessageManyArgs() {
         testLogger.trace(message, args);
 
-        assertEquals(asList(trace(mdcValues, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(trace(mdcValues, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void traceMessageManyArgsWithThrowable() {
         testLogger.trace(message, argsWithThrowable);
 
-        assertEquals(asList(trace(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(trace(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void traceMessageThrowable() {
         testLogger.trace(message, throwable);
 
-        assertEquals(asList(trace(mdcValues, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(trace(mdcValues, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -157,42 +158,42 @@ public class TestLoggerTests {
     public void traceMarkerMessage() {
         testLogger.trace(marker, message);
 
-        assertEquals(asList(trace(mdcValues, marker, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(trace(mdcValues, marker, message)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void traceMarkerMessageOneArg() {
         testLogger.trace(marker, message, arg1);
 
-        assertEquals(asList(trace(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(trace(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void traceMarkerMessageTwoArgs() {
         testLogger.trace(marker, message, arg1, arg2);
 
-        assertEquals(asList(trace(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(trace(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void traceMarkerMessageManyArgs() {
         testLogger.trace(marker, message, args);
 
-        assertEquals(asList(trace(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(trace(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void traceMarkerMessageManyArgsWithThrowable() {
         testLogger.trace(marker, message, argsWithThrowable);
 
-        assertEquals(asList(trace(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(trace(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void traceMarkerMessageThrowable() {
         testLogger.trace(marker, message, throwable);
 
-        assertEquals(asList(trace(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(trace(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -204,42 +205,42 @@ public class TestLoggerTests {
     public void debugMessage() {
         testLogger.debug(message);
 
-        assertEquals(asList(debug(mdcValues, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(debug(mdcValues, message)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void debugMessageOneArg() {
         testLogger.debug(message, arg1);
 
-        assertEquals(asList(debug(mdcValues, message, arg1)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(debug(mdcValues, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void debugMessageTwoArgs() {
         testLogger.debug(message, arg1, arg2);
 
-        assertEquals(asList(debug(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(debug(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void debugMessageManyArgs() {
         testLogger.debug(message, args);
 
-        assertEquals(asList(debug(mdcValues, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(debug(mdcValues, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void debugMessageManyArgsWithThrowable() {
         testLogger.debug(message, argsWithThrowable);
 
-        assertEquals(asList(debug(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(debug(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void debugMessageThrowable() {
         testLogger.debug(message, throwable);
 
-        assertEquals(asList(debug(mdcValues, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(debug(mdcValues, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -251,42 +252,42 @@ public class TestLoggerTests {
     public void debugMarkerMessage() {
         testLogger.debug(marker, message);
 
-        assertEquals(asList(debug(mdcValues, marker, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(debug(mdcValues, marker, message)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void debugMarkerMessageOneArg() {
         testLogger.debug(marker, message, arg1);
 
-        assertEquals(asList(debug(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(debug(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void debugMarkerMessageTwoArgs() {
         testLogger.debug(marker, message, arg1, arg2);
 
-        assertEquals(asList(debug(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(debug(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void debugMarkerMessageManyArgs() {
         testLogger.debug(marker, message, args);
 
-        assertEquals(asList(debug(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(debug(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void debugMarkerMessageManyArgsWithThrowable() {
         testLogger.debug(marker, message, argsWithThrowable);
 
-        assertEquals(asList(debug(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(debug(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void debugMarkerMessageThrowable() {
         testLogger.debug(marker, message, throwable);
 
-        assertEquals(asList(debug(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(debug(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -298,42 +299,42 @@ public class TestLoggerTests {
     public void infoMessage() {
         testLogger.info(message);
 
-        assertEquals(asList(info(mdcValues, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(info(mdcValues, message)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void infoMessageOneArg() {
         testLogger.info(message, arg1);
 
-        assertEquals(asList(info(mdcValues, message, arg1)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(info(mdcValues, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void infoMessageTwoArgs() {
         testLogger.info(message, arg1, arg2);
 
-        assertEquals(asList(info(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(info(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void infoMessageManyArgs() {
         testLogger.info(message, args);
 
-        assertEquals(asList(info(mdcValues, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(info(mdcValues, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void infoMessageManyArgsWithThrowable() {
         testLogger.info(message, argsWithThrowable);
 
-        assertEquals(asList(info(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(info(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void infoMessageThrowable() {
         testLogger.info(message, throwable);
 
-        assertEquals(asList(info(mdcValues, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(info(mdcValues, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -345,42 +346,42 @@ public class TestLoggerTests {
     public void infoMarkerMessage() {
         testLogger.info(marker, message);
 
-        assertEquals(asList(info(mdcValues, marker, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(info(mdcValues, marker, message)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void infoMarkerMessageOneArg() {
         testLogger.info(marker, message, arg1);
 
-        assertEquals(asList(info(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(info(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void infoMarkerMessageTwoArgs() {
         testLogger.info(marker, message, arg1, arg2);
 
-        assertEquals(asList(info(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(info(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void infoMarkerMessageManyArgs() {
         testLogger.info(marker, message, args);
 
-        assertEquals(asList(info(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(info(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void infoMarkerMessageManyArgsWithThrowable() {
         testLogger.info(marker, message, argsWithThrowable);
 
-        assertEquals(asList(info(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(info(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void infoMarkerMessageThrowable() {
         testLogger.info(marker, message, throwable);
 
-        assertEquals(asList(info(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(info(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -392,42 +393,42 @@ public class TestLoggerTests {
     public void warnMessage() {
         testLogger.warn(message);
 
-        assertEquals(asList(warn(mdcValues, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(warn(mdcValues, message)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void warnMessageOneArg() {
         testLogger.warn(message, arg1);
 
-        assertEquals(asList(warn(mdcValues, message, arg1)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(warn(mdcValues, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void warnMessageTwoArgs() {
         testLogger.warn(message, arg1, arg2);
 
-        assertEquals(asList(warn(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(warn(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void warnMessageManyArgs() {
         testLogger.warn(message, args);
 
-        assertEquals(asList(warn(mdcValues, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(warn(mdcValues, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void warnMessageManyArgsWithThrowable() {
         testLogger.warn(message, argsWithThrowable);
 
-        assertEquals(asList(warn(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(warn(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void warnMessageThrowable() {
         testLogger.warn(message, throwable);
 
-        assertEquals(asList(warn(mdcValues, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(warn(mdcValues, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -439,42 +440,42 @@ public class TestLoggerTests {
     public void warnMarkerMessage() {
         testLogger.warn(marker, message);
 
-        assertEquals(asList(warn(mdcValues, marker, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(warn(mdcValues, marker, message)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void warnMarkerMessageOneArg() {
         testLogger.warn(marker, message, arg1);
 
-        assertEquals(asList(warn(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(warn(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void warnMarkerMessageTwoArgs() {
         testLogger.warn(marker, message, arg1, arg2);
 
-        assertEquals(asList(warn(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(warn(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void warnMarkerMessageManyArgs() {
         testLogger.warn(marker, message, args);
 
-        assertEquals(asList(warn(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(warn(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void warnMarkerMessageManyArgsWithThrowable() {
         testLogger.warn(marker, message, argsWithThrowable);
 
-        assertEquals(asList(warn(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(warn(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void warnMarkerMessageThrowable() {
         testLogger.warn(marker, message, throwable);
 
-        assertEquals(asList(warn(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(warn(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -486,42 +487,42 @@ public class TestLoggerTests {
     public void errorMessage() {
         testLogger.error(message);
 
-        assertEquals(asList(error(mdcValues, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(error(mdcValues, message)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void errorMessageOneArg() {
         testLogger.error(message, arg1);
 
-        assertEquals(asList(error(mdcValues, message, arg1)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(error(mdcValues, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void errorMessageTwoArgs() {
         testLogger.error(message, arg1, arg2);
 
-        assertEquals(asList(error(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(error(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void errorMessageManyArgs() {
         testLogger.error(message, args);
 
-        assertEquals(asList(error(mdcValues, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(error(mdcValues, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void errorMessageManyArgsWithThrowable() {
         testLogger.error(message, argsWithThrowable);
 
-        assertEquals(asList(error(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(error(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void errorMessageThrowable() {
         testLogger.error(message, throwable);
 
-        assertEquals(asList(error(mdcValues, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(error(mdcValues, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -533,42 +534,42 @@ public class TestLoggerTests {
     public void errorMarkerMessage() {
         testLogger.error(marker, message);
 
-        assertEquals(asList(error(mdcValues, marker, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(error(mdcValues, marker, message)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void errorMarkerMessageOneArg() {
         testLogger.error(marker, message, arg1);
 
-        assertEquals(asList(error(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(error(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void errorMarkerMessageTwoArgs() {
         testLogger.error(marker, message, arg1, arg2);
 
-        assertEquals(asList(error(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(error(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void errorMarkerMessageManyArgs() {
         testLogger.error(marker, message, args);
 
-        assertEquals(asList(error(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(error(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void errorMarkerMessageManyArgsWithThrowable() {
         testLogger.error(marker, message, argsWithThrowable);
 
-        assertEquals(asList(error(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(error(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     public void errorMarkerMessageThrowable() {
         testLogger.error(marker, message, throwable);
 
-        assertEquals(asList(error(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(error(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -626,7 +627,7 @@ public class TestLoggerTests {
         List<LoggingEvent> loggingEvents = testLogger.getLoggingEvents();
         testLogger.info(message);
 
-        assertEquals(asList(debug(mdcValues, message)), loggingEvents);
+        assertEquals(singletonList(debug(mdcValues, message)), loggingEvents);
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -645,7 +646,7 @@ public class TestLoggerTests {
         });
         t.start();
         t.join();
-        assertEquals(EMPTY_LIST, testLogger.getLoggingEvents());
+        assertEquals(emptyList(), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -673,7 +674,7 @@ public class TestLoggerTests {
         t.start();
         t.join();
         testLogger.clear();
-        assertEquals(asList(info(message)), testLogger.getAllLoggingEvents());
+        assertEquals(singletonList(info(message)), testLogger.getAllLoggingEvents());
     }
 
     @Test
@@ -688,13 +689,13 @@ public class TestLoggerTests {
         });
         t.start();
         t.join();
-        assertEquals(EMPTY_LIST, testLogger.getAllLoggingEvents());
-        assertEquals(EMPTY_LIST, testLogger.getLoggingEvents());
+        assertEquals(emptyList(), testLogger.getAllLoggingEvents());
+        assertEquals(emptyList(), testLogger.getLoggingEvents());
     }
 
     @Test
     public void setEnabledLevelOnlyChangesLevelForCurrentThread() throws Exception {
-        final AtomicReference<ImmutableSet<Level>> inThreadEnabledLevels = new AtomicReference<ImmutableSet<Level>>();
+        final AtomicReference<ImmutableSet<Level>> inThreadEnabledLevels = new AtomicReference<>();
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -724,7 +725,7 @@ public class TestLoggerTests {
 
     @Test
     public void setEnabledLevelsForAllThreads() throws Exception {
-        final AtomicReference<ImmutableSet<Level>> inThreadEnabledLevels = new AtomicReference<ImmutableSet<Level>>();
+        final AtomicReference<ImmutableSet<Level>> inThreadEnabledLevels = new AtomicReference<>();
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -786,7 +787,8 @@ public class TestLoggerTests {
 
         testLogger.info(message);
 
-        assertThat(testLogger.getLoggingEvents(), is(asList(info(ImmutableMap.of("key", "null"), message))));
+        assertThat(testLogger.getLoggingEvents(), is(
+                singletonList(info(ImmutableMap.of("key", "null"), message))));
     }
 
     private void assertEnabledReturnsCorrectly(Level levelToTest) {

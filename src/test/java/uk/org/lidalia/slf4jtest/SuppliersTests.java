@@ -7,7 +7,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.sameInstance;
@@ -30,7 +30,7 @@ public class SuppliersTests {
     public void makeEmptyMutableListMakesAMutableList() {
         List<String> list = Suppliers.<String>makeEmptyMutableList().get();
         list.add("value");
-        assertThat(list, is(asList("value")));
+        assertThat(list, is(singletonList("value")));
     }
 
     @Test

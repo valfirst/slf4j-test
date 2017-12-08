@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,7 +13,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Marker;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import junitparams.JUnitParamsRunner;
@@ -446,7 +444,7 @@ public class LoggingEventTests {
     }
 
     @Test
-    public void mdcNotModifiable() throws Throwable {
+    public void mdcNotModifiable() {
         Map<String, String> mdc = new HashMap<>();
         mdc.put("key", "value1");
         assertThat(new LoggingEvent(level, mdc, message).getMdc(), is(instanceOf(ImmutableMap.class)) );

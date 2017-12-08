@@ -15,12 +15,12 @@ class OverridableProperties {
     private final String propertySourceName;
     private final Properties properties;
 
-    OverridableProperties(final String propertySourceName) throws IOException {
+    OverridableProperties(final String propertySourceName) {
         this.propertySourceName = propertySourceName;
         this.properties = getProperties();
     }
 
-    private Properties getProperties() throws IOException {
+    private Properties getProperties() {
         final Optional<InputStream> resourceAsStream = fromNullable(Thread.currentThread().getContextClassLoader()
                 .getResourceAsStream(propertySourceName + ".properties"));
         return resourceAsStream.transform(loadProperties).or(EMPTY_PROPERTIES);
