@@ -5,5 +5,13 @@ jdk:
   - oraclejdk8
   - oraclejdk9
 
-install: true
-script: mvn verify
+jobs:
+  include:
+    - stage: code coverage reporting
+      jdk: oraclejdk8
+      script:
+        - sudo apt-get install jq
+        - wget -O ~/codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r .assets[0].browser_download_url)
+        - mvn test jacoco:report coveralls:report
+        - java -cp ~/codacy-coverage-reporter-assembly-latest.jar com.codacy.CodacyCoverageReporter -l Java -r target/site/jacoco/jacoco.xml
+
