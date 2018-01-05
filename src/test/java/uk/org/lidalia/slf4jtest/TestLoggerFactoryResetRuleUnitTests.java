@@ -23,7 +23,7 @@ import static uk.org.lidalia.test.ShouldThrow.shouldThrow;
 
 public class TestLoggerFactoryResetRuleUnitTests {
 
-    TestLoggerFactoryResetRule resetRule = new TestLoggerFactoryResetRule();
+    private TestLoggerFactoryResetRule resetRule = new TestLoggerFactoryResetRule();
 
     @Test
     public void resetsThreadLocalDataBeforeTest() throws Throwable {

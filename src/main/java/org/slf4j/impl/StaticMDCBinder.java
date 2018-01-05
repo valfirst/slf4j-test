@@ -6,7 +6,7 @@ import uk.org.lidalia.slf4jtest.TestMDCAdapter;
 
 public final class StaticMDCBinder {
 
-    public static final org.slf4j.impl.StaticMDCBinder SINGLETON = new org.slf4j.impl.StaticMDCBinder();
+    public static final StaticMDCBinder SINGLETON = new StaticMDCBinder();
 
     private final TestMDCAdapter testMDCAdapter = new TestMDCAdapter();
 

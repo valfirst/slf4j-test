@@ -6,7 +6,7 @@ import org.slf4j.spi.MarkerFactoryBinder;
 
 public final class StaticMarkerBinder implements MarkerFactoryBinder {
 
-    public static final org.slf4j.impl.StaticMarkerBinder SINGLETON = new org.slf4j.impl.StaticMarkerBinder();
+    public static final StaticMarkerBinder SINGLETON = new StaticMarkerBinder();
 
     private final IMarkerFactory markerFactory = new BasicMarkerFactory();
 

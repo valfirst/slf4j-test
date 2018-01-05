@@ -22,7 +22,6 @@ import uk.org.lidalia.slf4jext.Level;
 import uk.org.lidalia.test.StaticTimeRule;
 import uk.org.lidalia.test.SystemOutputRule;
 
-import static com.google.common.base.Optional.absent;
 import static com.google.common.base.Optional.of;
 import static java.lang.System.lineSeparator;
 import static java.util.Arrays.asList;
@@ -52,18 +51,18 @@ public class LoggingEventTests {
     @Rule public SystemOutputRule systemOutputRule = new SystemOutputRule();
     @Rule public StaticTimeRule alwaysStartOfEpoch = alwaysStartOfEpoch();
 
-    Level level = Level.TRACE;
-    Map<String, String> mdc = new HashMap<>();
+    private Level level = TRACE;
+    private Map<String, String> mdc = new HashMap<>();
     {
         mdc.put("key", "value");
     }
 
-    Marker marker = mock(Marker.class);
-    Throwable throwable = new Throwable();
-    String message = "message";
-    Object arg1 = "arg1";
-    Object arg2 = "arg2";
-    List<Object> args = asList(arg1, arg2);
+    private Marker marker = mock(Marker.class);
+    private Throwable throwable = new Throwable();
+    private String message = "message";
+    private Object arg1 = "arg1";
+    private Object arg2 = "arg2";
+    private List<Object> args = asList(arg1, arg2);
 
     @Test
     public void constructorMessageArgs() {
@@ -525,7 +524,7 @@ public class LoggingEventTests {
     @Test
     public void nullArgument() {
         LoggingEvent event = new LoggingEvent(level, "message with null arg", null, null);
-        assertThat(event, is(new LoggingEvent(level, "message with null arg", absent(), absent())));
+        assertThat(event, is(new LoggingEvent(level, "message with null arg", Optional.absent(), Optional.absent())));
     }
 
     @After

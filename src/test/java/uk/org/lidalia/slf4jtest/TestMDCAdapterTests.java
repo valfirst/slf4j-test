@@ -12,9 +12,9 @@ import static org.junit.Assert.assertNull;
 
 public class TestMDCAdapterTests {
 
-    TestMDCAdapter testMDCAdapter = new TestMDCAdapter();
-    String key = "key";
-    String value = "value";
+    private TestMDCAdapter testMDCAdapter = new TestMDCAdapter();
+    private String key = "key";
+    private String value = "value";
 
     @Test
     public void putGetRemoveLoop() {

@@ -699,19 +699,19 @@ public class TestLoggerTests {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                testLogger.setEnabledLevels(Level.WARN, Level.ERROR);
+                testLogger.setEnabledLevels(WARN, ERROR);
                 inThreadEnabledLevels.set(testLogger.getEnabledLevels());
             }
         });
         t.start();
         t.join();
-        assertEquals(ImmutableSet.of(Level.WARN, Level.ERROR), inThreadEnabledLevels.get());
-        assertEquals(Level.enablableValueSet(), testLogger.getEnabledLevels());
+        assertEquals(ImmutableSet.of(WARN, ERROR), inThreadEnabledLevels.get());
+        assertEquals(enablableValueSet(), testLogger.getEnabledLevels());
     }
 
     @Test
     public void clearOnlyChangesLevelForCurrentThread() throws Exception {
-        testLogger.setEnabledLevels(Level.WARN, Level.ERROR);
+        testLogger.setEnabledLevels(WARN, ERROR);
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -720,7 +720,7 @@ public class TestLoggerTests {
         });
         t.start();
         t.join();
-        assertEquals(ImmutableSet.of(Level.WARN, Level.ERROR), testLogger.getEnabledLevels());
+        assertEquals(ImmutableSet.of(WARN, ERROR), testLogger.getEnabledLevels());
     }
 
     @Test
@@ -729,19 +729,19 @@ public class TestLoggerTests {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                testLogger.setEnabledLevelsForAllThreads(Level.WARN, Level.ERROR);
+                testLogger.setEnabledLevelsForAllThreads(WARN, ERROR);
                 inThreadEnabledLevels.set(testLogger.getEnabledLevels());
             }
         });
         t.start();
         t.join();
-        assertEquals(ImmutableSet.of(Level.WARN, Level.ERROR), inThreadEnabledLevels.get());
-        assertEquals(ImmutableSet.of(Level.WARN, Level.ERROR), testLogger.getEnabledLevels());
+        assertEquals(ImmutableSet.of(WARN, ERROR), inThreadEnabledLevels.get());
+        assertEquals(ImmutableSet.of(WARN, ERROR), testLogger.getEnabledLevels());
     }
 
     @Test
     public void clearAllChangesAllLevels() throws Exception {
-        testLogger.setEnabledLevels(Level.WARN, Level.ERROR);
+        testLogger.setEnabledLevels(WARN, ERROR);
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -750,12 +750,12 @@ public class TestLoggerTests {
         });
         t.start();
         t.join();
-        assertEquals(Level.enablableValueSet(), testLogger.getEnabledLevels());
+        assertEquals(enablableValueSet(), testLogger.getEnabledLevels());
     }
 
     @Test
     public void printsWhenPrintLevelEqualToEventLevel() {
-        TestLoggerFactory.getInstance().setPrintLevel(Level.INFO);
+        TestLoggerFactory.getInstance().setPrintLevel(INFO);
 
         testLogger.info(message);
 
@@ -764,7 +764,7 @@ public class TestLoggerTests {
 
     @Test
     public void printsWhenPrintLevelLessThanEventLevel() {
-        TestLoggerFactory.getInstance().setPrintLevel(Level.DEBUG);
+        TestLoggerFactory.getInstance().setPrintLevel(DEBUG);
 
         testLogger.info(message);
 
@@ -773,7 +773,7 @@ public class TestLoggerTests {
 
     @Test
     public void doesNotWhenPrintLevelGreaterThanThanEventLevel() {
-        TestLoggerFactory.getInstance().setPrintLevel(Level.WARN);
+        TestLoggerFactory.getInstance().setPrintLevel(WARN);
 
         testLogger.info(message);
 

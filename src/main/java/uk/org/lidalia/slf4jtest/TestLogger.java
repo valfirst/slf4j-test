@@ -72,7 +72,7 @@ public class TestLogger implements Logger {
 
     /**
      * Removes all {@link LoggingEvent}s logged by this thread and resets the enabled levels of the logger
-     * to {@link uk.org.lidalia.slf4jext.Level#enablableValueSet()} for this thread.
+     * to {@link Level#enablableValueSet()} for this thread.
      */
     public void clear() {
         loggingEvents.get().clear();
@@ -81,7 +81,7 @@ public class TestLogger implements Logger {
 
     /**
      * Removes ALL {@link LoggingEvent}s logged on this logger, regardless of thread,
-     * and resets the enabled levels of the logger to {@link uk.org.lidalia.slf4jext.Level#enablableValueSet()}
+     * and resets the enabled levels of the logger to {@link Level#enablableValueSet()}
      * for ALL threads.
      */
     public void clearAll() {

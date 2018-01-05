@@ -190,7 +190,7 @@ public class TestLoggerFactoryTests {
     @Test(expected = UnsupportedOperationException.class)
     public void getAllLoggersReturnsUnmodifiableList() {
         Map<String, TestLogger> allTestLoggers = TestLoggerFactory.getAllTestLoggers();
-        allTestLoggers.put("newlogger", new TestLogger("newlogger", TestLoggerFactory.getInstance()));
+        allTestLoggers.put("newlogger", new TestLogger("newlogger", getInstance()));
     }
 
     @Test
@@ -261,7 +261,7 @@ public class TestLoggerFactoryTests {
 
     @Test
     public void defaultPrintLevelIsOff() {
-        assertThat(TestLoggerFactory.getInstance().getPrintLevel(), is(Level.OFF));
+        assertThat(getInstance().getPrintLevel(), is(Level.OFF));
     }
 
     @Test
@@ -271,7 +271,7 @@ public class TestLoggerFactoryTests {
         whenNew(OverridableProperties.class).withArguments("slf4jtest").thenReturn(properties);
         when(properties.getProperty("print.level", "OFF")).thenReturn("INFO");
 
-        assertThat(TestLoggerFactory.getInstance().getPrintLevel(), is(Level.INFO));
+        assertThat(getInstance().getPrintLevel(), is(Level.INFO));
     }
 
     @Test
@@ -285,7 +285,7 @@ public class TestLoggerFactoryTests {
         final IllegalStateException illegalStateException = shouldThrow(IllegalStateException.class, new Runnable() {
             @Override
             public void run() {
-                TestLoggerFactory.getInstance();
+                getInstance();
             }
         });
         assertThat(illegalStateException.getMessage(),
@@ -300,8 +300,8 @@ public class TestLoggerFactoryTests {
     @Test
     public void setLevel() {
         for (Level printLevel: Level.values()) {
-            TestLoggerFactory.getInstance().setPrintLevel(printLevel);
-            assertThat(TestLoggerFactory.getInstance().getPrintLevel(), is(printLevel));
+            getInstance().setPrintLevel(printLevel);
+            assertThat(getInstance().getPrintLevel(), is(printLevel));
         }
     }
 
@@ -309,7 +309,7 @@ public class TestLoggerFactoryTests {
     public void resetLoggerFactory() {
         try {
             TestLoggerFactory.reset();
-            TestLoggerFactory.getInstance().setPrintLevel(Level.OFF);
+            getInstance().setPrintLevel(Level.OFF);
         } catch (IllegalStateException e) {
             // ignore
         }
