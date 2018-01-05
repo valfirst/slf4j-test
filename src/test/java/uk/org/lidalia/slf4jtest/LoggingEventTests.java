@@ -1,6 +1,7 @@
 package uk.org.lidalia.slf4jtest;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,11 +53,7 @@ public class LoggingEventTests {
     @Rule public StaticTimeRule alwaysStartOfEpoch = alwaysStartOfEpoch();
 
     private Level level = TRACE;
-    private Map<String, String> mdc = new HashMap<>();
-    {
-        mdc.put("key", "value");
-    }
-
+    private Map<String, String> mdc = Collections.singletonMap("key", "value");
     private Marker marker = mock(Marker.class);
     private Throwable throwable = new Throwable();
     private String message = "message";
@@ -444,8 +441,7 @@ public class LoggingEventTests {
 
     @Test
     public void mdcNotModifiable() {
-        Map<String, String> mdc = new HashMap<>();
-        mdc.put("key", "value1");
+        Map<String, String> mdc = Collections.singletonMap("key", "value1");
         assertThat(new LoggingEvent(level, mdc, message).getMdc(), is(instanceOf(ImmutableMap.class)) );
     }
 

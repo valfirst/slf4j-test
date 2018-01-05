@@ -28,20 +28,15 @@ public class TestMDCAdapterTests {
     @Test
     public void getCopyOfContextMap() {
         testMDCAdapter.put(key, value);
-        Map<String, String> expected = new HashMap<>();
-        expected.put(key, value);
-        assertEquals(expected, testMDCAdapter.getCopyOfContextMap());
+        assertEquals(Collections.singletonMap(key, value), testMDCAdapter.getCopyOfContextMap());
     }
 
     @Test
-    @SuppressWarnings("raw type")
     public void getCopyOfContextMapIsCopy() {
         testMDCAdapter.put(key, value);
-        Map<String, String> expected = new HashMap<>();
-        expected.put(key, value);
         Map actual = testMDCAdapter.getCopyOfContextMap();
         testMDCAdapter.clear();
-        assertEquals(expected, actual);
+        assertEquals(Collections.singletonMap(key, value), actual);
     }
 
     @Test

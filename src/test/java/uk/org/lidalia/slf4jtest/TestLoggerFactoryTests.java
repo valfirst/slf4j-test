@@ -138,9 +138,7 @@ public class TestLoggerFactoryTests {
         TestLogger logger1 = getInstance().getLogger("name1");
         TestLoggerFactory.clear();
 
-        Map<String, TestLogger> expected = new HashMap<>();
-        expected.put("name1", logger1);
-        assertThat(TestLoggerFactory.getAllTestLoggers(), is(expected));
+        assertThat(TestLoggerFactory.getAllTestLoggers(), is(Collections.singletonMap("name1", logger1)));
     }
 
     @Test
@@ -182,9 +180,7 @@ public class TestLoggerFactoryTests {
         Map<String, TestLogger> allTestLoggers = TestLoggerFactory.getAllTestLoggers();
         getInstance().getLogger("name2");
 
-        Map<String, TestLogger> expected = new HashMap<>();
-        expected.put("name1", logger1);
-        assertThat(allTestLoggers, is(expected));
+        assertThat(allTestLoggers, is(Collections.singletonMap("name1", logger1)));
     }
 
     @Test(expected = UnsupportedOperationException.class)
