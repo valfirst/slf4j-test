@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.valfirst</groupId>
     <artifactId>slf4j-test</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.3.0</version>
 
     <name>SLF4J Test</name>
     <description>An in-memory SLF4J implementation focused on aiding unit testing.</description>
@@ -28,7 +27,7 @@
         <url>https://github.com/valfirst/${project.artifactId}</url>
         <connection>scm:git:git@github.com:valfirst/${project.artifactId}.git</connection>
         <developerConnection>scm:git:git@github.com:valfirst/${project.artifactId}.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>slf4j-test-1.3.0</tag>
     </scm>
 
     <distributionManagement>
