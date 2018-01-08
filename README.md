@@ -10,6 +10,26 @@ SLF4J Test
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/valfirst/jbehave-junit-runner/master/LICENSE.txt)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fvalfirst%2Fslf4j-test.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fvalfirst%2Fslf4j-test?ref=badge_shield)
 
+A test implementation of [SLF4J](https://www.slf4j.org/) that stores log messages in memory and provides methods for retrieving them. This implementation supports all versions of SLF4J including 1.8.X which have [a new binding mechanism](https://www.slf4j.org/faq.html#changesInVersion18). 
+
+Installation
+==========================
+
+The easiest way is to include it in your project(s) by ways of a Maven dependency. Binary, Sources and Javadocs are
+all available from Maven Central.
+
+```xml
+<dependency>
+    <groupId>com.github.valfirst</groupId>
+    <artifactId>slf4j-test</artifactId>
+    <version>1.3.0</version>
+</dependency>
+```
+
+Credits
+=================================
+This project is based on the original implementation by [Robert Elliot](https://github.com/Mahoney), located at https://github.com/Mahoney/slf4j-test which worked with SLF4J prior to version 1.8.X.
+
 See http://projects.lidalia.org.uk/slf4j-test for details.
 
 
