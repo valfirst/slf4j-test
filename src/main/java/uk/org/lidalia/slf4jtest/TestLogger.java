@@ -1,8 +1,10 @@
 package uk.org.lidalia.slf4jtest;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
@@ -11,17 +13,16 @@ import org.slf4j.Marker;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import uk.org.lidalia.lang.ThreadLocal;
 import uk.org.lidalia.slf4jext.Level;
-import static com.google.common.base.Optional.fromNullable;
-import static com.google.common.base.Optional.of;
 import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.Sets.immutableEnumSet;
 import static java.util.Arrays.asList;
+import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
 import static uk.org.lidalia.slf4jext.Level.DEBUG;
 import static uk.org.lidalia.slf4jext.Level.ERROR;
 import static uk.org.lidalia.slf4jext.Level.INFO;
@@ -55,8 +56,7 @@ public class TestLogger implements Logger {
 
     private final String name;
     private final TestLoggerFactory testLoggerFactory;
-    private final ThreadLocal<List<LoggingEvent>> loggingEvents = new ThreadLocal<>(
-            Suppliers.<LoggingEvent>makeEmptyMutableList());
+    private final ThreadLocal<List<LoggingEvent>> loggingEvents = new ThreadLocal<>(ArrayList::new);
 
     private final List<LoggingEvent> allLoggingEvents = new CopyOnWriteArrayList<>();
     private volatile ThreadLocal<ImmutableSet<Level>> enabledLevels = new ThreadLocal<>(enablableValueSet());
@@ -420,24 +420,24 @@ public class TestLogger implements Logger {
     }
 
     private void log(final Level level, final String format, final Object... args) {
-        log(level, format, Optional.<Marker>absent(), args);
+        log(level, format, Optional.empty(), args);
     }
 
     private void log(final Level level, final String msg, final Throwable throwable) { //NOPMD PMD wrongly thinks unused...
-        addLoggingEvent(level, Optional.<Marker>absent(), fromNullable(throwable), msg);
+        addLoggingEvent(level, Optional.empty(), ofNullable(throwable), msg);
     }
 
     private void log(final Level level, final Marker marker, final String format, final Object... args) {
-        log(level, format, fromNullable(marker), args);
+        log(level, format, ofNullable(marker), args);
     }
 
     private void log(final Level level, final Marker marker, final String msg, final Throwable throwable) {
-        addLoggingEvent(level, fromNullable(marker), fromNullable(throwable), msg);
+        addLoggingEvent(level, ofNullable(marker), ofNullable(throwable), msg);
     }
 
     private void log(final Level level, final String format, final Optional<Marker> marker, final Object[] args) {
         final FormattingTuple formattedArgs = MessageFormatter.arrayFormat(format, args);
-        addLoggingEvent(level, marker, fromNullable(formattedArgs.getThrowable()), format, formattedArgs.getArgArray());
+        addLoggingEvent(level, marker, ofNullable(formattedArgs.getThrowable()), format, formattedArgs.getArgArray());
     }
 
     private void addLoggingEvent(
@@ -457,7 +457,7 @@ public class TestLogger implements Logger {
 
     @SuppressWarnings("unchecked")
     private Map<String, String> mdc() {
-        return fromNullable(MDC.getCopyOfContextMap()).or(Collections.<String, String>emptyMap());
+        return ofNullable(MDC.getCopyOfContextMap()).orElseGet(Collections::emptyMap);
     }
 
     private void optionallyPrint(final LoggingEvent event) {

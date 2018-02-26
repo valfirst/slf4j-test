@@ -9,15 +9,12 @@ import com.google.common.collect.ImmutableMap;
 
 import uk.org.lidalia.lang.ThreadLocal;
 
-import static com.google.common.base.Optional.fromNullable;
-
 public class TestMDCAdapter implements MDCAdapter {
 
-    private final ThreadLocal<Map<String, String>> value = new ThreadLocal<>(
-            Suppliers.<String, String>makeEmptyMutableMap());
+    private final ThreadLocal<Map<String, String>> value = new ThreadLocal<>(HashMap::new);
 
     public void put(final String key, final String val) {
-        value.get().put(key, fromNullable(val).or("null"));
+        value.get().put(key, String.valueOf(val));
     }
 
     public String get(final String key) {

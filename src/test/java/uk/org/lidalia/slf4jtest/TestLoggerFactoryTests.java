@@ -191,12 +191,7 @@ public class TestLoggerFactoryTests {
 
     @Test
     public void getLoggingEventsOnlyReturnsEventsLoggedInThisThread() throws InterruptedException {
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                TestLoggerFactory.getTestLogger("name1").info("hello");
-            }
-        });
+        Thread t = new Thread(() -> TestLoggerFactory.getTestLogger("name1").info("hello"));
         t.start();
         t.join();
         assertThat(TestLoggerFactory.getLoggingEvents(), is(empty()));
@@ -204,12 +199,7 @@ public class TestLoggerFactoryTests {
 
     @Test
     public void getAllLoggingEventsReturnsEventsLoggedInAllThreads() throws InterruptedException {
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                TestLoggerFactory.getTestLogger("name1").info("message1");
-            }
-        });
+        Thread t = new Thread(() -> TestLoggerFactory.getTestLogger("name1").info("message1"));
         t.start();
         t.join();
         TestLoggerFactory.getTestLogger("name1").info("message2");
@@ -219,12 +209,7 @@ public class TestLoggerFactoryTests {
     @Test
     public void clearOnlyClearsEventsLoggedInThisThread() throws InterruptedException {
         final TestLogger logger = TestLoggerFactory.getTestLogger("name");
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                logger.info("hello");
-            }
-        });
+        Thread t = new Thread(() -> logger.info("hello"));
         t.start();
         t.join();
         TestLoggerFactory.clear();
@@ -237,13 +222,10 @@ public class TestLoggerFactoryTests {
         final TestLogger logger2 = TestLoggerFactory.getTestLogger("name2");
         logger1.info("hello11");
         logger2.info("hello21");
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                logger1.info("hello12");
-                logger2.info("hello22");
-                TestLoggerFactory.clearAll();
-            }
+        Thread t = new Thread(() -> {
+            logger1.info("hello12");
+            logger2.info("hello22");
+            TestLoggerFactory.clearAll();
         });
         t.start();
         t.join();
@@ -278,12 +260,8 @@ public class TestLoggerFactoryTests {
         final String invalidLevelName = "nonsense";
         when(properties.getProperty("print.level", "OFF")).thenReturn(invalidLevelName);
 
-        final IllegalStateException illegalStateException = shouldThrow(IllegalStateException.class, new Runnable() {
-            @Override
-            public void run() {
-                getInstance();
-            }
-        });
+        final IllegalStateException illegalStateException = shouldThrow(IllegalStateException.class,
+                TestLoggerFactory::getInstance);
         assertThat(illegalStateException.getMessage(),
                 is("Invalid level name in property print.level of file slf4jtest.properties " +
                         "or System property slf4jtest.print.level"));

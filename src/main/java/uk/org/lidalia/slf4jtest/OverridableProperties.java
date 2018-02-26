@@ -2,12 +2,9 @@ package uk.org.lidalia.slf4jtest;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 import java.util.Properties;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-
-import static com.google.common.base.Optional.fromNullable;
 import static uk.org.lidalia.lang.Exceptions.throwUnchecked;
 
 class OverridableProperties {
@@ -21,23 +18,21 @@ class OverridableProperties {
     }
 
     private Properties getProperties() {
-        final Optional<InputStream> resourceAsStream = fromNullable(Thread.currentThread().getContextClassLoader()
-                .getResourceAsStream(propertySourceName + ".properties"));
-        return resourceAsStream.transform(loadProperties).or(EMPTY_PROPERTIES);
+        return Optional.ofNullable(
+                Thread.currentThread().getContextClassLoader().getResourceAsStream(propertySourceName + ".properties"))
+                .map(OverridableProperties::loadProperties)
+                .orElse(EMPTY_PROPERTIES);
     }
 
-    private static final Function<InputStream, Properties> loadProperties = new Function<InputStream, Properties>() {
-        @Override
-        public Properties apply(final InputStream propertyResource) {
-            try (InputStream closablePropertyResource = propertyResource) {
-                final Properties loadedProperties = new Properties();
-                loadedProperties.load(closablePropertyResource);
-                return loadedProperties;
-            } catch (IOException ioException) {
-                return throwUnchecked(ioException, null);
-            }
+    private static Properties loadProperties(InputStream propertyResource) {
+        try (InputStream closablePropertyResource = propertyResource) {
+            final Properties loadedProperties = new Properties();
+            loadedProperties.load(closablePropertyResource);
+            return loadedProperties;
+        } catch (IOException ioException) {
+            return throwUnchecked(ioException, null);
         }
-    };
+    }
 
     String getProperty(final String propertyKey, final String defaultValue) {
         final String propertyFileProperty = properties.getProperty(propertyKey, defaultValue);

@@ -1,10 +1,12 @@
 package uk.org.lidalia.slf4jtest;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
@@ -14,10 +16,8 @@ import org.junit.Test;
 import org.slf4j.MDC;
 import org.slf4j.Marker;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 
 import uk.org.lidalia.slf4jext.Level;
 import uk.org.lidalia.slf4jext.Logger;
@@ -609,12 +609,8 @@ public class TestLoggerTests {
         testLogger.debug(message);
         testLogger.trace(message);
 
-        List<LoggingEvent> expectedEvents = Lists.transform(asList(shouldLog), new Function<Level, LoggingEvent>() {
-            @Override
-            public LoggingEvent apply(Level level) {
-                return new LoggingEvent(level, mdcValues, message);
-            }
-        });
+        List<LoggingEvent> expectedEvents = Arrays.stream(shouldLog).map(
+                level -> new LoggingEvent(level, mdcValues, message)).collect(Collectors.toList());
 
         assertEquals(expectedEvents, testLogger.getLoggingEvents());
         testLogger.clear();
@@ -637,12 +633,7 @@ public class TestLoggerTests {
 
     @Test
     public void getLoggingEventsOnlyReturnsEventsLoggedInThisThread() throws InterruptedException {
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                testLogger.info(message);
-            }
-        });
+        Thread t = new Thread(() -> testLogger.info(message));
         t.start();
         t.join();
         assertEquals(emptyList(), testLogger.getLoggingEvents());
@@ -650,12 +641,7 @@ public class TestLoggerTests {
 
     @Test
     public void getAllLoggingEventsReturnsEventsLoggedInAllThreads() throws InterruptedException {
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                testLogger.info(message);
-            }
-        });
+        Thread t = new Thread(() -> testLogger.info(message));
         t.start();
         t.join();
         testLogger.info(message);
@@ -664,12 +650,7 @@ public class TestLoggerTests {
 
     @Test
     public void clearOnlyClearsEventsLoggedInThisThread() throws InterruptedException {
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                testLogger.info(message);
-            }
-        });
+        Thread t = new Thread(() -> testLogger.info(message));
         t.start();
         t.join();
         testLogger.clear();
@@ -679,12 +660,9 @@ public class TestLoggerTests {
     @Test
     public void clearAllClearsEventsLoggedInAllThreads() throws InterruptedException {
         testLogger.info(message);
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                testLogger.info(message);
-                testLogger.clearAll();
-            }
+        Thread t = new Thread(() -> {
+            testLogger.info(message);
+            testLogger.clearAll();
         });
         t.start();
         t.join();
@@ -695,12 +673,9 @@ public class TestLoggerTests {
     @Test
     public void setEnabledLevelOnlyChangesLevelForCurrentThread() throws Exception {
         final AtomicReference<ImmutableSet<Level>> inThreadEnabledLevels = new AtomicReference<>();
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                testLogger.setEnabledLevels(WARN, ERROR);
-                inThreadEnabledLevels.set(testLogger.getEnabledLevels());
-            }
+        Thread t = new Thread(() -> {
+            testLogger.setEnabledLevels(WARN, ERROR);
+            inThreadEnabledLevels.set(testLogger.getEnabledLevels());
         });
         t.start();
         t.join();
@@ -711,12 +686,7 @@ public class TestLoggerTests {
     @Test
     public void clearOnlyChangesLevelForCurrentThread() throws Exception {
         testLogger.setEnabledLevels(WARN, ERROR);
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                testLogger.clear();
-            }
-        });
+        Thread t = new Thread(testLogger::clear);
         t.start();
         t.join();
         assertEquals(ImmutableSet.of(WARN, ERROR), testLogger.getEnabledLevels());
@@ -725,12 +695,9 @@ public class TestLoggerTests {
     @Test
     public void setEnabledLevelsForAllThreads() throws Exception {
         final AtomicReference<ImmutableSet<Level>> inThreadEnabledLevels = new AtomicReference<>();
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                testLogger.setEnabledLevelsForAllThreads(WARN, ERROR);
-                inThreadEnabledLevels.set(testLogger.getEnabledLevels());
-            }
+        Thread t = new Thread(() -> {
+            testLogger.setEnabledLevelsForAllThreads(WARN, ERROR);
+            inThreadEnabledLevels.set(testLogger.getEnabledLevels());
         });
         t.start();
         t.join();
@@ -741,12 +708,7 @@ public class TestLoggerTests {
     @Test
     public void clearAllChangesAllLevels() throws Exception {
         testLogger.setEnabledLevels(WARN, ERROR);
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                testLogger.clearAll();
-            }
-        });
+        Thread t = new Thread(testLogger::clearAll);
         t.start();
         t.join();
         assertEquals(enablableValueSet(), testLogger.getEnabledLevels());

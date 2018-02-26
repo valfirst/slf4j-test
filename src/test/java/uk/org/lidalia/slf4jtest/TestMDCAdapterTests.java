@@ -60,32 +60,26 @@ public class TestMDCAdapterTests {
     public void testMdcAdapterIsThreadLocal() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(2);
         final Map<String, String> results = new HashMap<>();
-        Thread thread1 = new Thread() {
-            @Override
-            public void run() {
-                testMDCAdapter.put(key, "value1");
-                latch.countDown();
-                try {
-                    latch.await();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-                results.put("thread1", testMDCAdapter.get(key));
+        Thread thread1 = new Thread(() -> {
+            testMDCAdapter.put(key, "value1");
+            latch.countDown();
+            try {
+                latch.await();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
-        };
-        Thread thread2 = new Thread() {
-            @Override
-            public void run() {
-                testMDCAdapter.put(key, "value2");
-                latch.countDown();
-                try {
-                    latch.await();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-                results.put("thread2", testMDCAdapter.get(key));
+            results.put("thread1", testMDCAdapter.get(key));
+        });
+        Thread thread2 = new Thread(() -> {
+            testMDCAdapter.put(key, "value2");
+            latch.countDown();
+            try {
+                latch.await();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
-        };
+            results.put("thread2", testMDCAdapter.get(key));
+        });
         thread1.start();
         thread2.start();
         thread1.join();

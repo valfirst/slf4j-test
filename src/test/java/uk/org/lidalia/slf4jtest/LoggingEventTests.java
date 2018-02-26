@@ -5,27 +5,26 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Marker;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
-
 import uk.org.lidalia.slf4jext.Level;
 import uk.org.lidalia.test.StaticTimeRule;
 import uk.org.lidalia.test.SystemOutputRule;
 
-import static com.google.common.base.Optional.of;
 import static java.lang.System.lineSeparator;
 import static java.util.Arrays.asList;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
@@ -66,8 +65,8 @@ public class LoggingEventTests {
         LoggingEvent event = new LoggingEvent(level, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(emptyMap));
-        assertThat(event.getMarker(), isAbsent());
-        assertThat(event.getThrowable(), isAbsent());
+        assertThat(event.getMarker(), is(empty()));
+        assertThat(event.getThrowable(), is(empty()));
         assertThat(event.getMessage(), is(message));
         assertThat(event.getArguments(), is(args));
     }
@@ -77,7 +76,7 @@ public class LoggingEventTests {
         LoggingEvent event = new LoggingEvent(level, throwable, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(emptyMap));
-        assertThat(event.getMarker(), isAbsent());
+        assertThat(event.getMarker(), is(empty()));
         assertThat(event.getThrowable(), is(of(throwable)));
         assertThat(event.getMessage(), is(message));
         assertThat(event.getArguments(), is(args));
@@ -89,7 +88,7 @@ public class LoggingEventTests {
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(emptyMap));
         assertThat(event.getMarker(), is(of(marker)));
-        assertThat(event.getThrowable(), isAbsent());
+        assertThat(event.getThrowable(), is(empty()));
         assertThat(event.getMessage(), is(message));
         assertThat(event.getArguments(), is(args));
     }
@@ -110,8 +109,8 @@ public class LoggingEventTests {
         LoggingEvent event = new LoggingEvent(level, mdc, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(mdc));
-        assertThat(event.getMarker(), isAbsent());
-        assertThat(event.getThrowable(), isAbsent());
+        assertThat(event.getMarker(), is(empty()));
+        assertThat(event.getThrowable(), is(empty()));
         assertThat(event.getMessage(), is(message));
         assertThat(event.getArguments(), is(args));
     }
@@ -121,7 +120,7 @@ public class LoggingEventTests {
         LoggingEvent event = new LoggingEvent(level, mdc, throwable, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(mdc));
-        assertThat(event.getMarker(), isAbsent());
+        assertThat(event.getMarker(), is(empty()));
         assertThat(event.getThrowable(), is(of(throwable)));
         assertThat(event.getMessage(), is(message));
         assertThat(event.getArguments(), is(args));
@@ -133,7 +132,7 @@ public class LoggingEventTests {
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(mdc));
         assertThat(event.getMarker(), is(of(marker)));
-        assertThat(event.getThrowable(), isAbsent());
+        assertThat(event.getThrowable(), is(empty()));
         assertThat(event.getMessage(), is(message));
         assertThat(event.getArguments(), is(args));
     }
@@ -465,7 +464,7 @@ public class LoggingEventTests {
         assertThat(event.getTimestamp(), is(alwaysStartOfEpoch.getInstant()));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = NoSuchElementException.class)
     public void creatingLoggerNotPresent() {
         info("message").getCreatingLogger();
     }
@@ -520,17 +519,11 @@ public class LoggingEventTests {
     @Test
     public void nullArgument() {
         LoggingEvent event = new LoggingEvent(level, "message with null arg", null, null);
-        assertThat(event, is(new LoggingEvent(level, "message with null arg", Optional.absent(), Optional.absent())));
+        assertThat(event, is(new LoggingEvent(level, "message with null arg", empty(), empty())));
     }
 
     @After
     public void reset() {
         TestLoggerFactory.reset();
-    }
-
-    @SuppressWarnings("unchecked")
-    private Matcher<Optional<?>> isAbsent() {
-        final Matcher optionalMatcher = is(Optional.absent());
-        return (Matcher<Optional<?>>) optionalMatcher;
     }
 }

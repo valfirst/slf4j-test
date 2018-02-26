@@ -1,7 +1,9 @@
 package uk.org.lidalia.slf4jtest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -16,7 +18,6 @@ import uk.org.lidalia.lang.LazyValue;
 import uk.org.lidalia.lang.ThreadLocal;
 import uk.org.lidalia.slf4jext.Level;
 
-import static com.google.common.base.Optional.fromNullable;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public final class TestLoggerFactory implements ILoggerFactory {
@@ -61,8 +62,7 @@ public final class TestLoggerFactory implements ILoggerFactory {
 
     private final ConcurrentMap<String, TestLogger> loggers = new ConcurrentHashMap<>();
     private final List<LoggingEvent> allLoggingEvents = new CopyOnWriteArrayList<>();
-    private final ThreadLocal<List<LoggingEvent>> loggingEvents =
-            new ThreadLocal<>(Suppliers.<LoggingEvent>makeEmptyMutableList());
+    private final ThreadLocal<List<LoggingEvent>> loggingEvents = new ThreadLocal<>(ArrayList::new);
     private volatile Level printLevel;
 
     public TestLoggerFactory() {
@@ -87,7 +87,7 @@ public final class TestLoggerFactory implements ILoggerFactory {
 
     public TestLogger getLogger(final String name) {
         final TestLogger newLogger = new TestLogger(name, this);
-        return fromNullable(loggers.putIfAbsent(name, newLogger)).or(newLogger);
+        return Optional.ofNullable(loggers.putIfAbsent(name, newLogger)).orElse(newLogger);
     }
 
     public void clearLoggers() {
