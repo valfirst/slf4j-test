@@ -1,5 +1,4 @@
-SLF4J Test
-============
+# SLF4J Test
 [![Build Status](https://travis-ci.org/valfirst/slf4j-test.svg?branch=master)](https://travis-ci.org/valfirst/slf4j-test)
 [![Coverage Status](https://coveralls.io/repos/github/valfirst/slf4j-test/badge.svg?branch=master)](https://coveralls.io/github/valfirst/slf4j-test?branch=master)
 [![Quality Gate](https://sonarcloud.io/api/badges/gate?key=com.github.valfirst:slf4j-test)](https://sonarcloud.io/dashboard/index/com.github.valfirst:slf4j-test)
@@ -13,8 +12,7 @@ SLF4J Test
 
 A test implementation of [SLF4J](https://www.slf4j.org/) that stores log messages in memory and provides methods for retrieving them. This implementation supports all versions of SLF4J including 1.8.X which have [a new binding mechanism](https://www.slf4j.org/faq.html#changesInVersion18). 
 
-Installation
-==========================
+## Installation
 
 The easiest way is to include it in your project(s) by ways of a Maven dependency. Binary, Sources and Javadocs are
 all available from Maven Central.
@@ -27,8 +25,24 @@ all available from Maven Central.
 </dependency>
 ```
 
-Credits
-=================================
+## JUnit 5 Support
+### Declarative Extension Registration
+SLF4J Test provides JUnit Platform extension which can registered via annotation:
+
+```java
+import org.junit.jupiter.api.extension.ExtendWith;
+import uk.org.lidalia.slf4jtest.TestLoggerFactoryExtension;
+
+@ExtendWith(TestLoggerFactoryExtension.class)
+class BasicJUnit5Test {
+   ...
+}
+```
+
+### Automatic Extension Registration
+SLF4J Test supports automatic extension registration via ServiceLoader mechanism. This feature is considered advanced in JUnit Platform and [it requires explicit enabling](https://junit.org/junit5/docs/current/user-guide/#extensions-registration-automatic-enabling).
+
+## Credits
 This project is based on the original implementation by [Robert Elliot](https://github.com/Mahoney), located at https://github.com/Mahoney/slf4j-test which worked with SLF4J prior to version 1.8.X.
 
 See http://projects.lidalia.org.uk/slf4j-test for details.
