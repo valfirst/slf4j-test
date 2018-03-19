@@ -1,10 +1,4 @@
-package uk.org.lidalia.slf4jtest;
-
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
+package com.github.valfirst.slf4jtest;
 
 import java.util.ServiceLoader;
 
@@ -15,6 +9,12 @@ import org.slf4j.MDC;
 import org.slf4j.MarkerFactory;
 import org.slf4j.helpers.BasicMarkerFactory;
 import org.slf4j.spi.SLF4JServiceProvider;
+
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Valery Yatsynovich

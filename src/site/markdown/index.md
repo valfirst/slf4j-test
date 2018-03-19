@@ -67,13 +67,13 @@ class above could be tested as so:
     import org.junit.After;
     import org.junit.Test;
 
-    import uk.org.lidalia.slf4jtest.TestLogger;
-    import uk.org.lidalia.slf4jtest.TestLoggerFactory;
+    import com.github.valfirst.slf4jtest.TestLogger;
+    import com.github.valfirst.slf4jtest.TestLoggerFactory;
 
     import static java.util.Arrays.asList;
     import static org.hamcrest.Matchers.is;
     import static org.junit.Assert.assertThat;
-    import static uk.org.lidalia.slf4jtest.LoggingEvent.info;
+    import static com.github.valfirst.slf4jtest.LoggingEvent.info;
 
     public class Slf4jUserTest {
 

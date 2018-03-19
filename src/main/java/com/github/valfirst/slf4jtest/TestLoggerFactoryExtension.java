@@ -1,4 +1,4 @@
-package uk.org.lidalia.slf4jtest;
+package com.github.valfirst.slf4jtest;
 
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;

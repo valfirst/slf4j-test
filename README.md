@@ -31,7 +31,7 @@ SLF4J Test provides JUnit Platform extension which can registered via annotation
 
 ```java
 import org.junit.jupiter.api.extension.ExtendWith;
-import uk.org.lidalia.slf4jtest.TestLoggerFactoryExtension;
+import com.github.valfirst.slf4jtest.TestLoggerFactoryExtension;
 
 @ExtendWith(TestLoggerFactoryExtension.class)
 class BasicJUnit5Test {

@@ -1,4 +1,4 @@
-package uk.org.lidalia.slf4jtest;
+package com.github.valfirst.slf4jtest;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

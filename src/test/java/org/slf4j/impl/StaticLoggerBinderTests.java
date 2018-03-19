@@ -1,10 +1,10 @@
 package org.slf4j.impl;
 
 import org.junit.Test;
-
 import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;
-import uk.org.lidalia.slf4jtest.TestLoggerFactory;
+
+import com.github.valfirst.slf4jtest.TestLoggerFactory;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -20,7 +20,7 @@ public class StaticLoggerBinderTests {
 
     @Test
     public void getLoggerFactoryClassStr() {
-        assertEquals("uk.org.lidalia.slf4jtest.TestLoggerFactory", StaticLoggerBinder.getSingleton().getLoggerFactoryClassStr());
+        assertEquals("com.github.valfirst.slf4jtest.TestLoggerFactory", StaticLoggerBinder.getSingleton().getLoggerFactoryClassStr());
     }
 
     @Test

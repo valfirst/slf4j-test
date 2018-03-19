@@ -1,11 +1,4 @@
-package uk.org.lidalia.slf4jtest;
-
-import static java.util.Collections.singletonList;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static uk.org.lidalia.slf4jext.Level.DEBUG;
-import static uk.org.lidalia.slf4jext.Level.INFO;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.info;
+package com.github.valfirst.slf4jtest;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,6 +8,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import uk.org.lidalia.slf4jext.Level;
+
+import static com.github.valfirst.slf4jtest.LoggingEvent.info;
+import static java.util.Collections.singletonList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static uk.org.lidalia.slf4jext.Level.DEBUG;
+import static uk.org.lidalia.slf4jext.Level.INFO;
 
 public class TestLoggerFactoryExtensionUnitTests {
 

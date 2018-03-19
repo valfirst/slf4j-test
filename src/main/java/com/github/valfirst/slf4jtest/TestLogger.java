@@ -1,4 +1,4 @@
-package uk.org.lidalia.slf4jtest;
+package com.github.valfirst.slf4jtest;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +18,7 @@ import com.google.common.collect.ImmutableSet;
 
 import uk.org.lidalia.lang.ThreadLocal;
 import uk.org.lidalia.slf4jext.Level;
+
 import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.Sets.immutableEnumSet;
 import static java.util.Arrays.asList;

@@ -1,4 +1,4 @@
-package uk.org.lidalia.slf4jtest;
+package com.github.valfirst.slf4jtest;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,6 +13,10 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import uk.org.lidalia.slf4jext.Level;
 
+import static com.github.valfirst.slf4jtest.LoggingEvent.debug;
+import static com.github.valfirst.slf4jtest.LoggingEvent.info;
+import static com.github.valfirst.slf4jtest.LoggingEvent.trace;
+import static com.github.valfirst.slf4jtest.TestLoggerFactory.getInstance;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -25,10 +29,6 @@ import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 import static uk.org.lidalia.slf4jext.Level.WARN;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.debug;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.info;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.trace;
-import static uk.org.lidalia.slf4jtest.TestLoggerFactory.getInstance;
 import static uk.org.lidalia.test.ShouldThrow.shouldThrow;
 
 @RunWith(PowerMockRunner.class)

@@ -1,4 +1,4 @@
-package uk.org.lidalia.slf4jtest;
+package com.github.valfirst.slf4jtest;
 
 import java.util.Collections;
 import java.util.List;
@@ -12,13 +12,13 @@ import org.junit.runners.model.Statement;
 import uk.org.lidalia.lang.Task;
 import uk.org.lidalia.slf4jext.Level;
 
+import static com.github.valfirst.slf4jtest.LoggingEvent.info;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static uk.org.lidalia.lang.Exceptions.throwUnchecked;
 import static uk.org.lidalia.slf4jext.Level.DEBUG;
 import static uk.org.lidalia.slf4jext.Level.INFO;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.info;
 import static uk.org.lidalia.test.ShouldThrow.shouldThrow;
 
 public class TestLoggerFactoryResetRuleUnitTests {

@@ -1,4 +1,4 @@
-package uk.org.lidalia.slf4jtest;
+package com.github.valfirst.slf4jtest;
 
 import org.slf4j.ILoggerFactory;
 import org.slf4j.IMarkerFactory;

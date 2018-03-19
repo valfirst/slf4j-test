@@ -1,4 +1,4 @@
-package uk.org.lidalia.slf4jtest;
+package com.github.valfirst.slf4jtest;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,12 +15,18 @@ import org.slf4j.Marker;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import uk.org.lidalia.slf4jext.Level;
 import uk.org.lidalia.test.StaticTimeRule;
 import uk.org.lidalia.test.SystemOutputRule;
 
+import static com.github.valfirst.slf4jtest.LoggingEvent.error;
+import static com.github.valfirst.slf4jtest.LoggingEvent.debug;
+import static com.github.valfirst.slf4jtest.LoggingEvent.info;
+import static com.github.valfirst.slf4jtest.LoggingEvent.trace;
+import static com.github.valfirst.slf4jtest.LoggingEvent.warn;
 import static java.lang.System.lineSeparator;
 import static java.util.Arrays.asList;
 import static java.util.Optional.empty;
@@ -36,11 +42,6 @@ import static uk.org.lidalia.slf4jext.Level.ERROR;
 import static uk.org.lidalia.slf4jext.Level.INFO;
 import static uk.org.lidalia.slf4jext.Level.TRACE;
 import static uk.org.lidalia.slf4jext.Level.WARN;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.debug;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.error;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.info;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.trace;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.warn;
 import static uk.org.lidalia.test.StaticTimeRule.alwaysStartOfEpoch;
 
 @RunWith(JUnitParamsRunner.class)
