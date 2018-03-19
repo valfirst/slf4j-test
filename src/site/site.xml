@@ -25,7 +25,7 @@
   <custom>
     <fluidoSkin>
       <gitHub>
-        <projectId>Mahoney/${project.artifactId}</projectId>
+        <projectId>valfirst/${project.artifactId}</projectId>
         <ribbonOrientation>right</ribbonOrientation>
       </gitHub>
     </fluidoSkin>
