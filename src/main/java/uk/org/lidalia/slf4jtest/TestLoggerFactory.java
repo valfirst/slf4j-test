@@ -1,13 +1,13 @@
 package uk.org.lidalia.slf4jtest;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.ILoggerFactory;
 
@@ -61,7 +61,7 @@ public final class TestLoggerFactory implements ILoggerFactory {
     }
 
     private final ConcurrentMap<String, TestLogger> loggers = new ConcurrentHashMap<>();
-    private final List<LoggingEvent> allLoggingEvents = new CopyOnWriteArrayList<>();
+    private final List<LoggingEvent> allLoggingEvents = Collections.synchronizedList(new ArrayList<>());
     private final ThreadLocal<List<LoggingEvent>> loggingEvents = new ThreadLocal<>(ArrayList::new);
     private volatile Level printLevel;
 
