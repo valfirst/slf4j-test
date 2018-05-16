@@ -5,7 +5,6 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ac96a0c1a5614c3b93491d10e70b3a36)](https://www.codacy.com/app/valfirst/slf4j-test?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=valfirst/slf4j-test&amp;utm_campaign=Badge_Grade)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.valfirst/slf4j-test.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3Acom.github.valfirst%20a%3Aslf4j-test)
 [![Javadocs](http://www.javadoc.io/badge/com.github.valfirst/slf4j-test.svg)](http://www.javadoc.io/doc/com.github.valfirst/slf4j-test)
-[![Dependency Status](https://beta.gemnasium.com/badges/github.com/valfirst/slf4j-test.svg)](https://beta.gemnasium.com/projects/github.com/valfirst/slf4j-test)
 [![Known Vulnerabilities](https://snyk.io/test/github/valfirst/slf4j-test/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/valfirst/slf4j-test?targetFile=pom.xml)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/valfirst/jbehave-junit-runner/master/LICENSE.txt)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fvalfirst%2Fslf4j-test.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fvalfirst%2Fslf4j-test?ref=badge_shield)
