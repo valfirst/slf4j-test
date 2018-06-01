@@ -293,26 +293,37 @@
                         <artifactId>jacoco-maven-plugin</artifactId>
                         <version>0.8.1</version>
                         <executions>
-                            <!-- Prepares the property pointing to the JaCoCo
-                            runtime agent which is passed as VM argument when Maven the Surefire plugin
-                            is executed. -->
                             <execution>
-                                <id>pre-unit-test</id>
+                                <id>default-prepare-agent</id>
                                 <goals>
                                     <goal>prepare-agent</goal>
                                 </goals>
                             </execution>
-
-                            <!-- Ensures that the code coverage report for
-                            unit tests is created after unit tests have been run. -->
                             <execution>
-                                <id>post-unit-test</id>
-                                <phase>test</phase>
+                                <id>jacoco-instrument</id>
+                                <goals>
+                                    <goal>instrument</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>jacoco-restore-instrumented-classes</id>
+                                <goals>
+                                    <goal>restore-instrumented-classes</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>jacoco-report</id>
+                                <phase>package</phase>
                                 <goals>
                                     <goal>report</goal>
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <excludes>
+                                <exclude>*</exclude>
+                            </excludes>
+                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.eluder.coveralls</groupId>
