@@ -9,17 +9,15 @@ import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-import uk.org.lidalia.lang.Task;
 import uk.org.lidalia.slf4jext.Level;
 
 import static com.github.valfirst.slf4jtest.LoggingEvent.info;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static uk.org.lidalia.lang.Exceptions.throwUnchecked;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.org.lidalia.slf4jext.Level.DEBUG;
 import static uk.org.lidalia.slf4jext.Level.INFO;
-import static uk.org.lidalia.test.ShouldThrow.shouldThrow;
 
 public class TestLoggerFactoryResetRuleUnitTests {
 
@@ -68,22 +66,13 @@ public class TestLoggerFactoryResetRuleUnitTests {
         logger.setEnabledLevels(INFO, DEBUG);
         logger.info("a message");
 
-        final Exception toThrow = new Exception();
-        Exception thrown = shouldThrow(Exception.class, new Task() {
+        final RuntimeException toThrow = new RuntimeException();
+        Exception thrown = assertThrows(Exception.class, () -> resetRule.apply(new Statement() {
             @Override
-            public void perform() {
-                try {
-                    resetRule.apply(new Statement() {
-                        @Override
-                        public void evaluate() throws Throwable {
-                            throw toThrow;
-                        }
-                    }, Description.EMPTY).evaluate();
-                } catch (Throwable throwable) {
-                    throwUnchecked(throwable);
-                }
+            public void evaluate() {
+                throw toThrow;
             }
-        });
+        }, Description.EMPTY).evaluate());
 
         assertThat(thrown, is(toThrow));
         assertThat(TestLoggerFactory.getLoggingEvents(), is(Collections.<LoggingEvent>emptyList()));
