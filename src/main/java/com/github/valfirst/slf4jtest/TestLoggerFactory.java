@@ -5,16 +5,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Supplier;
 
 import org.slf4j.ILoggerFactory;
 
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import uk.org.lidalia.lang.LazyValue;
 import uk.org.lidalia.lang.ThreadLocal;
 import uk.org.lidalia.slf4jext.Level;
 
@@ -22,10 +22,18 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public final class TestLoggerFactory implements ILoggerFactory {
 
-    private static final LazyValue<TestLoggerFactory> INSTANCE = new LazyValue<>(new TestLoggerFactoryMaker());
+    private static final Supplier<TestLoggerFactory> INSTANCE = Suppliers.memoize(() -> {
+        try {
+            final String level = new OverridableProperties("slf4jtest").getProperty("print.level", "OFF");
+            return new TestLoggerFactory(Level.valueOf(level));
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException("Invalid level name in property print.level of file slf4jtest.properties " +
+                    "or System property slf4jtest.print.level", e);
+        }
+    });
 
     public static TestLoggerFactory getInstance() {
-        return INSTANCE.call();
+        return INSTANCE.get();
     }
 
     public static TestLogger getTestLogger(final Class<?> aClass) {
@@ -125,20 +133,5 @@ public final class TestLoggerFactory implements ILoggerFactory {
 
     public void setPrintLevel(final Level printLevel) {
         this.printLevel = checkNotNull(printLevel);
-    }
-
-    @SuppressWarnings("PMD.AccessorClassGeneration")
-    private static class TestLoggerFactoryMaker implements Callable<TestLoggerFactory> {
-        @Override
-        public TestLoggerFactory call() {
-            try {
-                final String level = new OverridableProperties("slf4jtest").getProperty("print.level", "OFF");
-                final Level printLevel = Level.valueOf(level);
-                return new TestLoggerFactory(printLevel);
-            } catch (IllegalArgumentException e) {
-                throw new IllegalStateException("Invalid level name in property print.level of file slf4jtest.properties " +
-                        "or System property slf4jtest.print.level", e);
-            }
-        }
     }
 }
