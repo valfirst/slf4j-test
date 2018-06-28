@@ -2,10 +2,9 @@ package com.github.valfirst.slf4jtest;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.util.Optional;
 import java.util.Properties;
-
-import static uk.org.lidalia.lang.Exceptions.throwUnchecked;
 
 class OverridableProperties {
     private static final Properties EMPTY_PROPERTIES = new Properties();
@@ -30,7 +29,7 @@ class OverridableProperties {
             loadedProperties.load(closablePropertyResource);
             return loadedProperties;
         } catch (IOException ioException) {
-            return throwUnchecked(ioException, null);
+            throw new UncheckedIOException(ioException);
         }
     }
 

@@ -2,6 +2,7 @@ package com.github.valfirst.slf4jtest;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 
 import org.junit.After;
 import org.junit.Test;
@@ -80,9 +81,9 @@ public class OverridablePropertiesTests {
         mockPropertyFileInputStreamToBe(inputStreamMock);
         when(inputStreamMock.read(any(byte[].class))).thenThrow(ioException);
 
-        final IOException actual = assertThrows(IOException.class,
+        final UncheckedIOException actual = assertThrows(UncheckedIOException.class,
                 () -> new OverridableProperties(PROPERTY_SOURCE_NAME));
-        assertEquals(ioException, actual);
+        assertEquals(ioException, actual.getCause());
     }
 
     @Test
@@ -93,9 +94,9 @@ public class OverridablePropertiesTests {
         mockPropertyFileInputStreamToBe(inputStreamMock);
         doThrow(ioException).when(inputStreamMock).close();
 
-        final IOException actual = assertThrows(IOException.class,
+        final UncheckedIOException actual = assertThrows(UncheckedIOException.class,
                 () -> new OverridableProperties(PROPERTY_SOURCE_NAME));
-        assertEquals(ioException, actual);
+        assertEquals(ioException, actual.getCause());
     }
 
     @Test
@@ -108,10 +109,10 @@ public class OverridablePropertiesTests {
         when(inputStreamMock.read(any(byte[].class))).thenThrow(loadException);
         doThrow(closeException).when(inputStreamMock).close();
 
-        final IOException finalException = assertThrows(IOException.class,
+        final UncheckedIOException finalException = assertThrows(UncheckedIOException.class,
                 () -> new OverridableProperties(PROPERTY_SOURCE_NAME));
-        assertThat(finalException, sameInstance(loadException));
-        assertArrayEquals(new Throwable[]{closeException}, finalException.getSuppressed());
+        assertThat(finalException.getCause(), sameInstance(loadException));
+        assertArrayEquals(new Throwable[]{closeException}, finalException.getCause().getSuppressed());
     }
 
     private void mockPropertyFileInputStreamToBe(InputStream inputStream) {
