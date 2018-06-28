@@ -7,11 +7,9 @@ import org.slf4j.spi.MDCAdapter;
 
 import com.google.common.collect.ImmutableMap;
 
-import uk.org.lidalia.lang.ThreadLocal;
-
 public class TestMDCAdapter implements MDCAdapter {
 
-    private final ThreadLocal<Map<String, String>> value = new ThreadLocal<>(HashMap::new);
+    private final ThreadLocal<Map<String, String>> value = ThreadLocal.withInitial(HashMap::new);
 
     public void put(final String key, final String val) {
         value.get().put(key, String.valueOf(val));

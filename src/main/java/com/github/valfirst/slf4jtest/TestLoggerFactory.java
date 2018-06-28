@@ -15,7 +15,6 @@ import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import uk.org.lidalia.lang.ThreadLocal;
 import uk.org.lidalia.slf4jext.Level;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -70,7 +69,7 @@ public final class TestLoggerFactory implements ILoggerFactory {
 
     private final ConcurrentMap<String, TestLogger> loggers = new ConcurrentHashMap<>();
     private final List<LoggingEvent> allLoggingEvents = Collections.synchronizedList(new ArrayList<>());
-    private final ThreadLocal<List<LoggingEvent>> loggingEvents = new ThreadLocal<>(ArrayList::new);
+    private ThreadLocal<List<LoggingEvent>> loggingEvents = ThreadLocal.withInitial(ArrayList::new);
     private volatile Level printLevel;
 
     public TestLoggerFactory() {
@@ -109,7 +108,7 @@ public final class TestLoggerFactory implements ILoggerFactory {
         for (final TestLogger testLogger: loggers.values()) {
             testLogger.clearAll();
         }
-        loggingEvents.reset();
+        loggingEvents = ThreadLocal.withInitial(ArrayList::new);
         allLoggingEvents.clear();
     }
 
