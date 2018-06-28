@@ -12,16 +12,16 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 @ExtendWith(TestLoggerFactoryExtension.class)
-public class TestLoggerFactoryExtensionTests {
+class TestLoggerFactoryExtensionTests {
 
     @Test
-    public void logOnce() {
+    void logOnce() {
         LoggerFactory.getLogger("logger").info("a message");
         assertThat(getLoggingEvents(), is(singletonList(info("a message"))));
     }
 
     @Test
-    public void logAgain() {
+    void logAgain() {
         LoggerFactory.getLogger("logger").info("a message");
         assertThat(getLoggingEvents(), is(singletonList(info("a message"))));
     }

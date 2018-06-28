@@ -16,12 +16,12 @@ import static org.hamcrest.core.Is.is;
 import static uk.org.lidalia.slf4jext.Level.DEBUG;
 import static uk.org.lidalia.slf4jext.Level.INFO;
 
-public class TestLoggerFactoryExtensionUnitTests {
+class TestLoggerFactoryExtensionUnitTests {
 
     private TestLoggerFactoryExtension extension = new TestLoggerFactoryExtension();
 
     @Test
-    public void resetsThreadLocalData() {
+    void resetsThreadLocalData() {
 
         final TestLogger logger = TestLoggerFactory.getTestLogger("logger_name");
         logger.setEnabledLevels(INFO, DEBUG);
@@ -35,7 +35,7 @@ public class TestLoggerFactoryExtensionUnitTests {
     }
 
     @Test
-    public void doesNotResetNonThreadLocalData() {
+    void doesNotResetNonThreadLocalData() {
 
         final TestLogger logger = TestLoggerFactory.getTestLogger("logger_name");
         logger.info("a message");
@@ -50,7 +50,7 @@ public class TestLoggerFactoryExtensionUnitTests {
 
     @BeforeEach
     @AfterEach
-    public void resetTestLoggerFactory() {
+    void resetTestLoggerFactory() {
         TestLoggerFactory.reset();
     }
 }
