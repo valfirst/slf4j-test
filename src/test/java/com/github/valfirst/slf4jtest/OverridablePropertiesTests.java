@@ -1,6 +1,5 @@
 package com.github.valfirst.slf4jtest;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -10,20 +9,18 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import uk.org.lidalia.lang.Task;
-
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.powermock.api.mockito.PowerMockito.doThrow;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
-import static uk.org.lidalia.test.ShouldThrow.shouldThrow;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(OverridableProperties.class)
 public class OverridablePropertiesTests {
 
     private static final String PROPERTY_SOURCE_NAME = "test";
@@ -32,97 +29,77 @@ public class OverridablePropertiesTests {
 
     @After
     public void resetLoggerFactory() {
-        System.getProperties().remove(PROPERTY_SOURCE_NAME+"."+PROPERTY_IN_BOTH);
-        System.getProperties().remove(PROPERTY_SOURCE_NAME+"."+PROPERTY_IN_SYSTEM_PROPS);
+        System.getProperties().remove(PROPERTY_SOURCE_NAME + "." + PROPERTY_IN_BOTH);
+        System.getProperties().remove(PROPERTY_SOURCE_NAME + "." + PROPERTY_IN_SYSTEM_PROPS);
     }
 
     @Test
     public void propertyNotInEither() {
-        mockPropertyFileToContain("");
-
         final String defaultValue = "sensible_default";
         OverridableProperties properties = new OverridableProperties(PROPERTY_SOURCE_NAME);
-        assertThat(properties.getProperty("notpresent", defaultValue),
-                is(defaultValue));
+        assertEquals(defaultValue, properties.getProperty("notpresent", defaultValue));
     }
 
     @Test
     public void propertyInFileNotInSystemProperties() {
-        final String propName = "infile";
-        final String propValue = "file value";
-        mockPropertyFileToContain(propName + "=" + propValue);
-
         OverridableProperties properties = new OverridableProperties(PROPERTY_SOURCE_NAME);
-        assertThat(properties.getProperty(propName, "default"),
-                is(propValue));
+        assertEquals("file value", properties.getProperty("infile", "default"));
     }
 
     @Test
     public void propertyNotInFileInSystemProperties() {
         final String expectedValue = "system value";
-        mockPropertyFileToContain("");
-        System.setProperty(PROPERTY_SOURCE_NAME+"."+PROPERTY_IN_SYSTEM_PROPS, expectedValue);
+        System.setProperty(PROPERTY_SOURCE_NAME + "." + PROPERTY_IN_SYSTEM_PROPS, expectedValue);
 
-        OverridableProperties properties = new OverridableProperties("test");
-        assertThat(properties.getProperty(PROPERTY_IN_SYSTEM_PROPS, "default"),
-                is(expectedValue));
+        OverridableProperties properties = new OverridableProperties(PROPERTY_SOURCE_NAME);
+        assertEquals(expectedValue, properties.getProperty(PROPERTY_IN_SYSTEM_PROPS, "default"));
     }
 
     @Test
     public void propertyInBothFileAndSystemProperties() {
         final String expectedValue = "system value";
-        mockPropertyFileToContain(PROPERTY_IN_BOTH+"=file value");
-        System.setProperty(PROPERTY_SOURCE_NAME+"."+PROPERTY_IN_BOTH, expectedValue);
+        System.setProperty(PROPERTY_SOURCE_NAME + "." + PROPERTY_IN_BOTH, expectedValue);
 
         OverridableProperties properties = new OverridableProperties(PROPERTY_SOURCE_NAME);
-        assertThat(properties.getProperty(PROPERTY_IN_BOTH, "default"),
-                is(expectedValue));
+        assertEquals(expectedValue, properties.getProperty(PROPERTY_IN_BOTH, "default"));
     }
 
     @Test
     public void noPropertyFile() {
-        mockPropertyFileInputStreamToBe(null);
-
-        OverridableProperties properties = new OverridableProperties(PROPERTY_SOURCE_NAME);
+        OverridableProperties properties = new OverridableProperties("no-property-file");
 
         final String defaultValue = "sensible_default";
-        assertThat(properties.getProperty("blah", defaultValue), is(defaultValue));
+        assertEquals(defaultValue, properties.getProperty("blah", defaultValue));
     }
 
     @Test
+    @PrepareForTest(OverridableProperties.class)
     public void ioExceptionLoadingProperties() throws IOException {
         final IOException ioException = new IOException();
         final InputStream inputStreamMock = mock(InputStream.class);
         mockPropertyFileInputStreamToBe(inputStreamMock);
         when(inputStreamMock.read(any(byte[].class))).thenThrow(ioException);
 
-        final IOException actual = shouldThrow(IOException.class, new Task() {
-            @Override
-            public void perform() {
-                new OverridableProperties(PROPERTY_SOURCE_NAME);
-            }
-        });
-        assertThat(actual, is(ioException));
+        final IOException actual = assertThrows(IOException.class,
+                () -> new OverridableProperties(PROPERTY_SOURCE_NAME));
+        assertEquals(ioException, actual);
     }
 
     @Test
+    @PrepareForTest(OverridableProperties.class)
     public void ioExceptionClosingPropertyStream() throws IOException {
         final IOException ioException = new IOException();
         final InputStream inputStreamMock = mock(InputStream.class);
         mockPropertyFileInputStreamToBe(inputStreamMock);
         doThrow(ioException).when(inputStreamMock).close();
 
-
-        final IOException actual = shouldThrow(IOException.class, new Task() {
-            @Override
-            public void perform() {
-                new OverridableProperties(PROPERTY_SOURCE_NAME);
-            }
-        });
-        assertThat(actual, is(ioException));
+        final IOException actual = assertThrows(IOException.class,
+                () -> new OverridableProperties(PROPERTY_SOURCE_NAME));
+        assertEquals(ioException, actual);
     }
 
     @Test
+    @PrepareForTest(OverridableProperties.class)
     public void ioExceptionLoadingAndClosingPropertyStream() throws IOException {
         final IOException loadException = new IOException("exception on load");
         final IOException closeException = new IOException("exception on close");
@@ -131,19 +108,10 @@ public class OverridablePropertiesTests {
         when(inputStreamMock.read(any(byte[].class))).thenThrow(loadException);
         doThrow(closeException).when(inputStreamMock).close();
 
-        final IOException finalException = shouldThrow(IOException.class, new Task() {
-            @Override
-            public void perform() {
-                new OverridableProperties(PROPERTY_SOURCE_NAME);
-            }
-        });
+        final IOException finalException = assertThrows(IOException.class,
+                () -> new OverridableProperties(PROPERTY_SOURCE_NAME));
         assertThat(finalException, sameInstance(loadException));
-        assertThat(finalException.getSuppressed(), is(new Throwable[]{closeException}));
-    }
-
-    private void mockPropertyFileToContain(String propertyFileContents) {
-        final ByteArrayInputStream inputStream = new ByteArrayInputStream(propertyFileContents.getBytes());
-        mockPropertyFileInputStreamToBe(inputStream);
+        assertArrayEquals(new Throwable[]{closeException}, finalException.getSuppressed());
     }
 
     private void mockPropertyFileInputStreamToBe(InputStream inputStream) {

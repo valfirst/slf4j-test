@@ -5,19 +5,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class TestMDCAdapterTests {
+class TestMDCAdapterTests {
 
     private TestMDCAdapter testMDCAdapter = new TestMDCAdapter();
     private String key = "key";
     private String value = "value";
 
     @Test
-    public void putGetRemoveLoop() {
+    void putGetRemoveLoop() {
         assertNull(testMDCAdapter.get(key));
         testMDCAdapter.put(key, value);
         assertEquals(value, testMDCAdapter.get(key));
@@ -26,13 +26,13 @@ public class TestMDCAdapterTests {
     }
 
     @Test
-    public void getCopyOfContextMap() {
+    void getCopyOfContextMap() {
         testMDCAdapter.put(key, value);
         assertEquals(Collections.singletonMap(key, value), testMDCAdapter.getCopyOfContextMap());
     }
 
     @Test
-    public void getCopyOfContextMapIsCopy() {
+    void getCopyOfContextMapIsCopy() {
         testMDCAdapter.put(key, value);
         Map actual = testMDCAdapter.getCopyOfContextMap();
         testMDCAdapter.clear();
@@ -40,14 +40,14 @@ public class TestMDCAdapterTests {
     }
 
     @Test
-    public void clear() {
+    void clear() {
         testMDCAdapter.put(key, value);
         testMDCAdapter.clear();
         assertEquals(Collections.emptyMap(), testMDCAdapter.getCopyOfContextMap());
     }
 
     @Test
-    public void setContextMapSetsCopy() {
+    void setContextMapSetsCopy() {
         Map<String, String> newValues = new HashMap<>();
         newValues.put(key, value);
         testMDCAdapter.setContextMap(newValues);
@@ -57,7 +57,7 @@ public class TestMDCAdapterTests {
     }
 
     @Test
-    public void testMdcAdapterIsThreadLocal() throws InterruptedException {
+    void testMdcAdapterIsThreadLocal() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(2);
         final Map<String, String> results = new HashMap<>();
         Thread thread1 = new Thread(() -> {

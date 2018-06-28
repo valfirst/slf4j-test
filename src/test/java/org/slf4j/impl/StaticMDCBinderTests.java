@@ -1,30 +1,30 @@
 package org.slf4j.impl;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.MDC;
 
 import com.github.valfirst.slf4jtest.TestMDCAdapter;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
-public class StaticMDCBinderTests {
+class StaticMDCBinderTests {
 
     @Test
-    public void getMDCA() {
+    void getMDCA() {
         assertSame(TestMDCAdapter.class, StaticMDCBinder.SINGLETON.getMDCA().getClass());
         assertSame(StaticMDCBinder.SINGLETON.getMDCA(), StaticMDCBinder.SINGLETON.getMDCA());
     }
 
     @Test
-    public void getMDCAdapterClassStr() {
+    void getMDCAdapterClassStr() {
         assertEquals("com.github.valfirst.slf4jtest.TestMDCAdapter", StaticMDCBinder.SINGLETON.getMDCAdapterClassStr());
     }
 
     @Test
-    public void getMarkerFactoryReturnsCorrectlyFromSlf4JLoggerFactory() {
+    void getMarkerFactoryReturnsCorrectlyFromSlf4JLoggerFactory() {
         assertThat(MDC.getMDCAdapter(), instanceOf(TestMDCAdapter.class));
     }
 }
