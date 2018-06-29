@@ -46,6 +46,17 @@ import static java.util.Optional.ofNullable;
 @SuppressWarnings({ "PMD.ExcessivePublicCount", "PMD.TooManyMethods" })
 public class LoggingEvent {
 
+    private final Level level;
+    private final ImmutableMap<String, String> mdc;
+    private final Optional<Marker> marker;
+    private final Optional<Throwable> throwable;
+    private final String message;
+    private final ImmutableList<Object> arguments;
+
+    private final Optional<TestLogger> creatingLogger;
+    private final Instant timestamp = new Instant();
+    private final String threadName = Thread.currentThread().getName();
+
     public static LoggingEvent trace(final String message, final Object... arguments) {
         return new LoggingEvent(Level.TRACE, message, arguments);
     }
@@ -323,17 +334,6 @@ public class LoggingEvent {
         this.arguments = ImmutableList.copyOf(Arrays.stream(arguments).map(input -> ofNullable(input).orElse(empty()))
                 .collect(Collectors.toList()));
     }
-
-    private final Level level;
-    private final ImmutableMap<String, String> mdc;
-    private final Optional<Marker> marker;
-    private final Optional<Throwable> throwable;
-    private final String message;
-    private final ImmutableList<Object> arguments;
-
-    private final Optional<TestLogger> creatingLogger;
-    private final Instant timestamp = new Instant();
-    private final String threadName = Thread.currentThread().getName();
 
     public Level getLevel() {
         return level;

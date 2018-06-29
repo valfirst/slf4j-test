@@ -9,11 +9,11 @@ public final class StaticLoggerBinder implements LoggerFactoryBinder {
 
     private static final StaticLoggerBinder SINGLETON = new StaticLoggerBinder();
 
+    public static final String REQUESTED_API_VERSION = "1.6";
+
     public static StaticLoggerBinder getSingleton() {
         return SINGLETON;
     }
-
-    public static final String REQUESTED_API_VERSION = "1.6";
 
     private StaticLoggerBinder() { }
 

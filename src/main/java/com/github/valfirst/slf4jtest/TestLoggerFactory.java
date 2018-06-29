@@ -31,6 +31,11 @@ public final class TestLoggerFactory implements ILoggerFactory {
         }
     });
 
+    private final ConcurrentMap<String, TestLogger> loggers = new ConcurrentHashMap<>();
+    private final List<LoggingEvent> allLoggingEvents = Collections.synchronizedList(new ArrayList<>());
+    private ThreadLocal<List<LoggingEvent>> loggingEvents = ThreadLocal.withInitial(ArrayList::new);
+    private volatile Level printLevel;
+
     public static TestLoggerFactory getInstance() {
         return INSTANCE.get();
     }
@@ -66,11 +71,6 @@ public final class TestLoggerFactory implements ILoggerFactory {
     public static List<LoggingEvent> getAllLoggingEvents() {
         return getInstance().getAllLoggingEventsFromLoggers();
     }
-
-    private final ConcurrentMap<String, TestLogger> loggers = new ConcurrentHashMap<>();
-    private final List<LoggingEvent> allLoggingEvents = Collections.synchronizedList(new ArrayList<>());
-    private ThreadLocal<List<LoggingEvent>> loggingEvents = ThreadLocal.withInitial(ArrayList::new);
-    private volatile Level printLevel;
 
     public TestLoggerFactory() {
         this(Level.OFF);
