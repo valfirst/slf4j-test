@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -14,8 +15,6 @@ import org.slf4j.helpers.MessageFormatter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import uk.org.lidalia.lang.Identity;
-import uk.org.lidalia.lang.RichObject;
 import uk.org.lidalia.slf4jext.Level;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -45,7 +44,7 @@ import static java.util.Optional.ofNullable;
  * </p>
  */
 @SuppressWarnings({ "PMD.ExcessivePublicCount", "PMD.TooManyMethods" })
-public class LoggingEvent extends RichObject {
+public class LoggingEvent {
 
     public static LoggingEvent trace(final String message, final Object... arguments) {
         return new LoggingEvent(Level.TRACE, message, arguments);
@@ -325,12 +324,12 @@ public class LoggingEvent extends RichObject {
                 .collect(Collectors.toList()));
     }
 
-    @Identity private final Level level;
-    @Identity private final ImmutableMap<String, String> mdc;
-    @Identity private final Optional<Marker> marker;
-    @Identity private final Optional<Throwable> throwable;
-    @Identity private final String message;
-    @Identity private final ImmutableList<Object> arguments;
+    private final Level level;
+    private final ImmutableMap<String, String> mdc;
+    private final Optional<Marker> marker;
+    private final Optional<Throwable> throwable;
+    private final String message;
+    private final ImmutableList<Object> arguments;
 
     private final Optional<TestLogger> creatingLogger;
     private final Instant timestamp = new Instant();
@@ -408,5 +407,24 @@ public class LoggingEvent extends RichObject {
             default:
                 return System.out;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        LoggingEvent that = (LoggingEvent) o;
+        return level == that.level && Objects.equals(mdc, that.mdc) && Objects.equals(marker, that.marker) && Objects
+                .equals(throwable, that.throwable) && Objects.equals(message, that.message) && Objects.equals(arguments,
+                that.arguments);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(level, mdc, marker, throwable, message, arguments);
     }
 }
