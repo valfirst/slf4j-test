@@ -427,4 +427,11 @@ public class LoggingEvent {
     public int hashCode() {
         return Objects.hash(level, mdc, marker, throwable, message, arguments);
     }
+
+    @Override
+    public String toString()
+    {
+        return "LoggingEvent{" + "level=" + level + ", mdc=" + mdc + ", marker=" + marker + ", throwable=" + throwable
+                + ", message='" + message + '\'' + ", arguments=" + arguments + '}';
+    }
 }
