@@ -54,7 +54,7 @@
         <junit.version>4.12</junit.version>
         <junit5.version>5.3.1</junit5.version>
         <mockito.version>2.23.0</mockito.version>
-        <powermock.version>2.0.0-RC.1</powermock.version>
+        <powermock.version>2.0.0-RC.3</powermock.version>
     </properties>
 
     <dependencyManagement>
