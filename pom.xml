@@ -52,7 +52,7 @@
         <jdk.version>1.8</jdk.version>
         <slf4j.version>2.0.0-alpha1</slf4j.version>
         <junit.version>4.13</junit.version>
-        <junit5.version>5.6.2</junit5.version>
+        <junit5.version>5.7.0</junit5.version>
         <mockito.version>3.5.10</mockito.version>
         <powermock.version>2.0.7</powermock.version>
     </properties>
