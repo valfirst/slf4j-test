@@ -34,11 +34,11 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static uk.org.lidalia.slf4jext.Level.DEBUG;
@@ -738,7 +738,7 @@ public class TestLoggerTests {
 
         testLogger.info(message);
 
-        assertThat(systemOutputRule.getSystemOut(), isEmptyString());
+        assertThat(systemOutputRule.getSystemOut(), emptyString());
     }
 
     @Test
