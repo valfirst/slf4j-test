@@ -3,9 +3,9 @@ package com.github.valfirst.slf4jtest;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
@@ -19,12 +19,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.org.lidalia.slf4jext.Level.DEBUG;
 import static uk.org.lidalia.slf4jext.Level.INFO;
 
-public class TestLoggerFactoryResetRuleUnitTests {
+class TestLoggerFactoryResetRuleUnitTests {
 
-    private TestLoggerFactoryResetRule resetRule = new TestLoggerFactoryResetRule();
+    private final TestLoggerFactoryResetRule resetRule = new TestLoggerFactoryResetRule();
 
     @Test
-    public void resetsThreadLocalDataBeforeTest() throws Throwable {
+    void resetsThreadLocalDataBeforeTest() throws Throwable {
 
         final TestLogger logger = TestLoggerFactory.getTestLogger("logger_name");
         logger.setEnabledLevels(INFO, DEBUG);
@@ -41,7 +41,7 @@ public class TestLoggerFactoryResetRuleUnitTests {
     }
     
     @Test
-    public void resetsThreadLocalDataAfterTest() throws Throwable {
+    void resetsThreadLocalDataAfterTest() throws Throwable {
 
         final TestLogger logger = TestLoggerFactory.getTestLogger("logger_name");
         logger.setEnabledLevels(INFO, DEBUG);
@@ -60,7 +60,7 @@ public class TestLoggerFactoryResetRuleUnitTests {
     }
 
     @Test
-    public void resetsThreadLocalDataOnException() {
+    void resetsThreadLocalDataOnException() {
 
         final TestLogger logger = TestLoggerFactory.getTestLogger("logger_name");
         logger.setEnabledLevels(INFO, DEBUG);
@@ -81,7 +81,7 @@ public class TestLoggerFactoryResetRuleUnitTests {
     }
 
     @Test
-    public void doesNotResetNonThreadLocalData() throws Throwable {
+    void doesNotResetNonThreadLocalData() throws Throwable {
 
         final TestLogger logger = TestLoggerFactory.getTestLogger("logger_name");
         logger.info("a message");
@@ -98,8 +98,9 @@ public class TestLoggerFactoryResetRuleUnitTests {
         assertThat(logger.getAllLoggingEvents(), is(loggedEvents));
     }
 
-    @Before @After
-    public void resetTestLoggerFactory() {
+    @BeforeEach
+    @AfterEach
+    void resetTestLoggerFactory() {
         TestLoggerFactory.reset();
     }
 }

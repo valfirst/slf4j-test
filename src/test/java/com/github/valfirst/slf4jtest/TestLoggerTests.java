@@ -5,14 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.MDC;
 import org.slf4j.Marker;
 
@@ -21,7 +20,6 @@ import com.google.common.collect.ImmutableSet;
 
 import uk.org.lidalia.slf4jext.Level;
 import uk.org.lidalia.slf4jext.Logger;
-import uk.org.lidalia.test.SystemOutputRule;
 
 import static com.github.valfirst.slf4jtest.LoggingEvent.debug;
 import static com.github.valfirst.slf4jtest.LoggingEvent.error;
@@ -33,13 +31,14 @@ import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static uk.org.lidalia.slf4jext.Level.DEBUG;
 import static uk.org.lidalia.slf4jext.Level.ERROR;
@@ -48,7 +47,7 @@ import static uk.org.lidalia.slf4jext.Level.TRACE;
 import static uk.org.lidalia.slf4jext.Level.WARN;
 import static uk.org.lidalia.slf4jext.Level.enablableValueSet;
 
-public class TestLoggerTests {
+class TestLoggerTests extends StdIoTests {
 
     private static final String LOGGER_NAME = "uk.org";
     private final TestLogger testLogger = new TestLogger(LOGGER_NAME, TestLoggerFactory.getInstance());
@@ -62,31 +61,29 @@ public class TestLoggerTests {
 
     private final Map<String, String> mdcValues = new HashMap<>();
 
-    @Rule public SystemOutputRule systemOutputRule = new SystemOutputRule();
-
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void beforeEach() {
         mdcValues.put("key1", "value1");
         mdcValues.put("key2", "value2");
         MDC.setContextMap(mdcValues);
     }
 
-    @After
-    public void tearDown() {
+    @AfterEach
+    void afterEach() {
         MDC.clear();
         TestLoggerFactory.reset();
         TestLoggerFactory.getInstance().setPrintLevel(Level.OFF);
     }
 
     @Test
-    public void name() {
-        String name = RandomStringUtils.random(10);
+    void name() {
+        String name = UUID.randomUUID().toString();
         TestLogger logger = new TestLogger(name, TestLoggerFactory.getInstance());
         assertEquals(name, logger.getName());
     }
 
     @Test
-    public void clearRemovesEvents() {
+    void clearRemovesEvents() {
         testLogger.debug("message1");
         testLogger.debug("message2");
         assertEquals(asList(debug(mdcValues, "message1"), debug(mdcValues, "message2")), testLogger.getLoggingEvents());
@@ -95,509 +92,509 @@ public class TestLoggerTests {
     }
 
     @Test
-    public void clearResetsLevel() {
+    void clearResetsLevel() {
         testLogger.setEnabledLevels();
         testLogger.clear();
         assertEquals(newHashSet(TRACE, DEBUG, INFO, WARN, ERROR), testLogger.getEnabledLevels());
     }
 
     @Test
-    public void traceEnabled() {
+    void traceEnabled() {
         assertEnabledReturnsCorrectly(TRACE);
     }
 
     @Test
-    public void traceMessage() {
+    void traceMessage() {
         testLogger.trace(message);
 
         assertEquals(singletonList(trace(mdcValues, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void traceMessageOneArg() {
+    void traceMessageOneArg() {
         testLogger.trace(message, arg1);
 
         assertEquals(singletonList(trace(mdcValues, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void traceMessageTwoArgs() {
+    void traceMessageTwoArgs() {
         testLogger.trace(message, arg1, arg2);
 
         assertEquals(singletonList(trace(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void traceMessageManyArgs() {
+    void traceMessageManyArgs() {
         testLogger.trace(message, args);
 
         assertEquals(singletonList(trace(mdcValues, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void traceMessageManyArgsWithThrowable() {
+    void traceMessageManyArgsWithThrowable() {
         testLogger.trace(message, argsWithThrowable);
 
         assertEquals(singletonList(trace(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void traceMessageThrowable() {
+    void traceMessageThrowable() {
         testLogger.trace(message, throwable);
 
         assertEquals(singletonList(trace(mdcValues, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void traceEnabledMarker() {
+    void traceEnabledMarker() {
         assertEnabledReturnsCorrectly(TRACE, marker);
     }
 
     @Test
-    public void traceMarkerMessage() {
+    void traceMarkerMessage() {
         testLogger.trace(marker, message);
 
         assertEquals(singletonList(trace(mdcValues, marker, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void traceMarkerMessageOneArg() {
+    void traceMarkerMessageOneArg() {
         testLogger.trace(marker, message, arg1);
 
         assertEquals(singletonList(trace(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void traceMarkerMessageTwoArgs() {
+    void traceMarkerMessageTwoArgs() {
         testLogger.trace(marker, message, arg1, arg2);
 
         assertEquals(singletonList(trace(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void traceMarkerMessageManyArgs() {
+    void traceMarkerMessageManyArgs() {
         testLogger.trace(marker, message, args);
 
         assertEquals(singletonList(trace(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void traceMarkerMessageManyArgsWithThrowable() {
+    void traceMarkerMessageManyArgsWithThrowable() {
         testLogger.trace(marker, message, argsWithThrowable);
 
         assertEquals(singletonList(trace(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void traceMarkerMessageThrowable() {
+    void traceMarkerMessageThrowable() {
         testLogger.trace(marker, message, throwable);
 
         assertEquals(singletonList(trace(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void debugEnabled() {
+    void debugEnabled() {
         assertEnabledReturnsCorrectly(DEBUG);
     }
 
     @Test
-    public void debugMessage() {
+    void debugMessage() {
         testLogger.debug(message);
 
         assertEquals(singletonList(debug(mdcValues, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void debugMessageOneArg() {
+    void debugMessageOneArg() {
         testLogger.debug(message, arg1);
 
         assertEquals(singletonList(debug(mdcValues, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void debugMessageTwoArgs() {
+    void debugMessageTwoArgs() {
         testLogger.debug(message, arg1, arg2);
 
         assertEquals(singletonList(debug(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void debugMessageManyArgs() {
+    void debugMessageManyArgs() {
         testLogger.debug(message, args);
 
         assertEquals(singletonList(debug(mdcValues, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void debugMessageManyArgsWithThrowable() {
+    void debugMessageManyArgsWithThrowable() {
         testLogger.debug(message, argsWithThrowable);
 
         assertEquals(singletonList(debug(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void debugMessageThrowable() {
+    void debugMessageThrowable() {
         testLogger.debug(message, throwable);
 
         assertEquals(singletonList(debug(mdcValues, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void debugEnabledMarker() {
+    void debugEnabledMarker() {
         assertEnabledReturnsCorrectly(DEBUG, marker);
     }
 
     @Test
-    public void debugMarkerMessage() {
+    void debugMarkerMessage() {
         testLogger.debug(marker, message);
 
         assertEquals(singletonList(debug(mdcValues, marker, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void debugMarkerMessageOneArg() {
+    void debugMarkerMessageOneArg() {
         testLogger.debug(marker, message, arg1);
 
         assertEquals(singletonList(debug(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void debugMarkerMessageTwoArgs() {
+    void debugMarkerMessageTwoArgs() {
         testLogger.debug(marker, message, arg1, arg2);
 
         assertEquals(singletonList(debug(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void debugMarkerMessageManyArgs() {
+    void debugMarkerMessageManyArgs() {
         testLogger.debug(marker, message, args);
 
         assertEquals(singletonList(debug(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void debugMarkerMessageManyArgsWithThrowable() {
+    void debugMarkerMessageManyArgsWithThrowable() {
         testLogger.debug(marker, message, argsWithThrowable);
 
         assertEquals(singletonList(debug(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void debugMarkerMessageThrowable() {
+    void debugMarkerMessageThrowable() {
         testLogger.debug(marker, message, throwable);
 
         assertEquals(singletonList(debug(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void infoEnabled() {
+    void infoEnabled() {
         assertEnabledReturnsCorrectly(INFO);
     }
 
     @Test
-    public void infoMessage() {
+    void infoMessage() {
         testLogger.info(message);
 
         assertEquals(singletonList(info(mdcValues, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void infoMessageOneArg() {
+    void infoMessageOneArg() {
         testLogger.info(message, arg1);
 
         assertEquals(singletonList(info(mdcValues, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void infoMessageTwoArgs() {
+    void infoMessageTwoArgs() {
         testLogger.info(message, arg1, arg2);
 
         assertEquals(singletonList(info(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void infoMessageManyArgs() {
+    void infoMessageManyArgs() {
         testLogger.info(message, args);
 
         assertEquals(singletonList(info(mdcValues, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void infoMessageManyArgsWithThrowable() {
+    void infoMessageManyArgsWithThrowable() {
         testLogger.info(message, argsWithThrowable);
 
         assertEquals(singletonList(info(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void infoMessageThrowable() {
+    void infoMessageThrowable() {
         testLogger.info(message, throwable);
 
         assertEquals(singletonList(info(mdcValues, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void infoEnabledMarker() {
+    void infoEnabledMarker() {
         assertEnabledReturnsCorrectly(INFO, marker);
     }
 
     @Test
-    public void infoMarkerMessage() {
+    void infoMarkerMessage() {
         testLogger.info(marker, message);
 
         assertEquals(singletonList(info(mdcValues, marker, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void infoMarkerMessageOneArg() {
+    void infoMarkerMessageOneArg() {
         testLogger.info(marker, message, arg1);
 
         assertEquals(singletonList(info(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void infoMarkerMessageTwoArgs() {
+    void infoMarkerMessageTwoArgs() {
         testLogger.info(marker, message, arg1, arg2);
 
         assertEquals(singletonList(info(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void infoMarkerMessageManyArgs() {
+    void infoMarkerMessageManyArgs() {
         testLogger.info(marker, message, args);
 
         assertEquals(singletonList(info(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void infoMarkerMessageManyArgsWithThrowable() {
+    void infoMarkerMessageManyArgsWithThrowable() {
         testLogger.info(marker, message, argsWithThrowable);
 
         assertEquals(singletonList(info(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void infoMarkerMessageThrowable() {
+    void infoMarkerMessageThrowable() {
         testLogger.info(marker, message, throwable);
 
         assertEquals(singletonList(info(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void warnEnabled() {
+    void warnEnabled() {
         assertEnabledReturnsCorrectly(WARN);
     }
 
     @Test
-    public void warnMessage() {
+    void warnMessage() {
         testLogger.warn(message);
 
         assertEquals(singletonList(warn(mdcValues, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void warnMessageOneArg() {
+    void warnMessageOneArg() {
         testLogger.warn(message, arg1);
 
         assertEquals(singletonList(warn(mdcValues, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void warnMessageTwoArgs() {
+    void warnMessageTwoArgs() {
         testLogger.warn(message, arg1, arg2);
 
         assertEquals(singletonList(warn(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void warnMessageManyArgs() {
+    void warnMessageManyArgs() {
         testLogger.warn(message, args);
 
         assertEquals(singletonList(warn(mdcValues, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void warnMessageManyArgsWithThrowable() {
+    void warnMessageManyArgsWithThrowable() {
         testLogger.warn(message, argsWithThrowable);
 
         assertEquals(singletonList(warn(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void warnMessageThrowable() {
+    void warnMessageThrowable() {
         testLogger.warn(message, throwable);
 
         assertEquals(singletonList(warn(mdcValues, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void warnEnabledMarker() {
+    void warnEnabledMarker() {
         assertEnabledReturnsCorrectly(WARN, marker);
     }
 
     @Test
-    public void warnMarkerMessage() {
+    void warnMarkerMessage() {
         testLogger.warn(marker, message);
 
         assertEquals(singletonList(warn(mdcValues, marker, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void warnMarkerMessageOneArg() {
+    void warnMarkerMessageOneArg() {
         testLogger.warn(marker, message, arg1);
 
         assertEquals(singletonList(warn(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void warnMarkerMessageTwoArgs() {
+    void warnMarkerMessageTwoArgs() {
         testLogger.warn(marker, message, arg1, arg2);
 
         assertEquals(singletonList(warn(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void warnMarkerMessageManyArgs() {
+    void warnMarkerMessageManyArgs() {
         testLogger.warn(marker, message, args);
 
         assertEquals(singletonList(warn(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void warnMarkerMessageManyArgsWithThrowable() {
+    void warnMarkerMessageManyArgsWithThrowable() {
         testLogger.warn(marker, message, argsWithThrowable);
 
         assertEquals(singletonList(warn(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void warnMarkerMessageThrowable() {
+    void warnMarkerMessageThrowable() {
         testLogger.warn(marker, message, throwable);
 
         assertEquals(singletonList(warn(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void errorEnabled() {
+    void errorEnabled() {
         assertEnabledReturnsCorrectly(ERROR);
     }
 
     @Test
-    public void errorMessage() {
+    void errorMessage() {
         testLogger.error(message);
 
         assertEquals(singletonList(error(mdcValues, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void errorMessageOneArg() {
+    void errorMessageOneArg() {
         testLogger.error(message, arg1);
 
         assertEquals(singletonList(error(mdcValues, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void errorMessageTwoArgs() {
+    void errorMessageTwoArgs() {
         testLogger.error(message, arg1, arg2);
 
         assertEquals(singletonList(error(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void errorMessageManyArgs() {
+    void errorMessageManyArgs() {
         testLogger.error(message, args);
 
         assertEquals(singletonList(error(mdcValues, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void errorMessageManyArgsWithThrowable() {
+    void errorMessageManyArgsWithThrowable() {
         testLogger.error(message, argsWithThrowable);
 
         assertEquals(singletonList(error(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void errorMessageThrowable() {
+    void errorMessageThrowable() {
         testLogger.error(message, throwable);
 
         assertEquals(singletonList(error(mdcValues, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void errorEnabledMarker() {
+    void errorEnabledMarker() {
         assertEnabledReturnsCorrectly(ERROR, marker);
     }
 
     @Test
-    public void errorMarkerMessage() {
+    void errorMarkerMessage() {
         testLogger.error(marker, message);
 
         assertEquals(singletonList(error(mdcValues, marker, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void errorMarkerMessageOneArg() {
+    void errorMarkerMessageOneArg() {
         testLogger.error(marker, message, arg1);
 
         assertEquals(singletonList(error(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void errorMarkerMessageTwoArgs() {
+    void errorMarkerMessageTwoArgs() {
         testLogger.error(marker, message, arg1, arg2);
 
         assertEquals(singletonList(error(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void errorMarkerMessageManyArgs() {
+    void errorMarkerMessageManyArgs() {
         testLogger.error(marker, message, args);
 
         assertEquals(singletonList(error(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void errorMarkerMessageManyArgsWithThrowable() {
+    void errorMarkerMessageManyArgsWithThrowable() {
         testLogger.error(marker, message, argsWithThrowable);
 
         assertEquals(singletonList(error(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void errorMarkerMessageThrowable() {
+    void errorMarkerMessageThrowable() {
         testLogger.error(marker, message, throwable);
 
         assertEquals(singletonList(error(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
-    public void loggerSetToOff() {
+    void loggerSetToOff() {
         logsIfEnabled();
     }
 
     @Test
-    public void loggerSetToError() {
+    void loggerSetToError() {
         logsIfEnabled(ERROR);
     }
 
     @Test
-    public void loggerSetToWarn() {
+    void loggerSetToWarn() {
         logsIfEnabled(ERROR, WARN);
     }
 
     @Test
-    public void loggerSetToInfo() {
+    void loggerSetToInfo() {
         logsIfEnabled(ERROR, WARN, INFO);
     }
 
     @Test
-    public void loggerSetToDebug() {
+    void loggerSetToDebug() {
         logsIfEnabled(ERROR, WARN, INFO, DEBUG);
     }
 
     @Test
-    public void loggerSetToTrace() {
+    void loggerSetToTrace() {
         logsIfEnabled(ERROR, WARN, INFO, DEBUG, TRACE);
     }
 
@@ -617,7 +614,7 @@ public class TestLoggerTests {
     }
 
     @Test
-    public void getLoggingEventsReturnsCopyNotView() {
+    void getLoggingEventsReturnsCopyNotView() {
         testLogger.debug(message);
         List<LoggingEvent> loggingEvents = testLogger.getLoggingEvents();
         testLogger.info(message);
@@ -625,14 +622,15 @@ public class TestLoggerTests {
         assertEquals(singletonList(debug(mdcValues, message)), loggingEvents);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void getLoggingEventsReturnsUnmodifiableList() {
+    @Test
+    void getLoggingEventsReturnsUnmodifiableList() {
         List<LoggingEvent> loggingEvents = testLogger.getLoggingEvents();
-        loggingEvents.add(debug("hello"));
+        LoggingEvent debugEvent = debug("hello");
+        assertThrows(UnsupportedOperationException.class, () -> loggingEvents.add(debugEvent));
     }
 
     @Test
-    public void getLoggingEventsOnlyReturnsEventsLoggedInThisThread() throws InterruptedException {
+    void getLoggingEventsOnlyReturnsEventsLoggedInThisThread() throws InterruptedException {
         Thread t = new Thread(() -> testLogger.info(message));
         t.start();
         t.join();
@@ -640,7 +638,7 @@ public class TestLoggerTests {
     }
 
     @Test
-    public void getAllLoggingEventsReturnsEventsLoggedInAllThreads() throws InterruptedException {
+    void getAllLoggingEventsReturnsEventsLoggedInAllThreads() throws InterruptedException {
         Thread t = new Thread(() -> testLogger.info(message));
         t.start();
         t.join();
@@ -649,7 +647,7 @@ public class TestLoggerTests {
     }
 
     @Test
-    public void clearOnlyClearsEventsLoggedInThisThread() throws InterruptedException {
+    void clearOnlyClearsEventsLoggedInThisThread() throws InterruptedException {
         Thread t = new Thread(() -> testLogger.info(message));
         t.start();
         t.join();
@@ -658,7 +656,7 @@ public class TestLoggerTests {
     }
 
     @Test
-    public void clearAllClearsEventsLoggedInAllThreads() throws InterruptedException {
+    void clearAllClearsEventsLoggedInAllThreads() throws InterruptedException {
         testLogger.info(message);
         Thread t = new Thread(() -> {
             testLogger.info(message);
@@ -671,7 +669,7 @@ public class TestLoggerTests {
     }
 
     @Test
-    public void setEnabledLevelOnlyChangesLevelForCurrentThread() throws Exception {
+    void setEnabledLevelOnlyChangesLevelForCurrentThread() throws Exception {
         final AtomicReference<ImmutableSet<Level>> inThreadEnabledLevels = new AtomicReference<>();
         Thread t = new Thread(() -> {
             testLogger.setEnabledLevels(WARN, ERROR);
@@ -684,7 +682,7 @@ public class TestLoggerTests {
     }
 
     @Test
-    public void clearOnlyChangesLevelForCurrentThread() throws Exception {
+    void clearOnlyChangesLevelForCurrentThread() throws Exception {
         testLogger.setEnabledLevels(WARN, ERROR);
         Thread t = new Thread(testLogger::clear);
         t.start();
@@ -693,7 +691,7 @@ public class TestLoggerTests {
     }
 
     @Test
-    public void setEnabledLevelsForAllThreads() throws Exception {
+    void setEnabledLevelsForAllThreads() throws Exception {
         final AtomicReference<ImmutableSet<Level>> inThreadEnabledLevels = new AtomicReference<>();
         Thread t = new Thread(() -> {
             testLogger.setEnabledLevelsForAllThreads(WARN, ERROR);
@@ -706,7 +704,7 @@ public class TestLoggerTests {
     }
 
     @Test
-    public void clearAllChangesAllLevels() throws Exception {
+    void clearAllChangesAllLevels() throws Exception {
         testLogger.setEnabledLevels(WARN, ERROR);
         Thread t = new Thread(testLogger::clearAll);
         t.start();
@@ -715,34 +713,34 @@ public class TestLoggerTests {
     }
 
     @Test
-    public void printsWhenPrintLevelEqualToEventLevel() {
+    void printsWhenPrintLevelEqualToEventLevel() {
         TestLoggerFactory.getInstance().setPrintLevel(INFO);
 
         testLogger.info(message);
 
-        assertThat(systemOutputRule.getSystemOut(), containsString(message));
+        assertThat(getStdOut(), containsString(message));
     }
 
     @Test
-    public void printsWhenPrintLevelLessThanEventLevel() {
+    void printsWhenPrintLevelLessThanEventLevel() {
         TestLoggerFactory.getInstance().setPrintLevel(DEBUG);
 
         testLogger.info(message);
 
-        assertThat(systemOutputRule.getSystemOut(), containsString(message));
+        assertThat(getStdOut(), containsString(message));
     }
 
     @Test
-    public void doesNotWhenPrintLevelGreaterThanThanEventLevel() {
+    void doesNotWhenPrintLevelGreaterThanThanEventLevel() {
         TestLoggerFactory.getInstance().setPrintLevel(WARN);
 
         testLogger.info(message);
 
-        assertThat(systemOutputRule.getSystemOut(), emptyString());
+        assertThat(getStdOut(), emptyString());
     }
 
     @Test
-    public void nullMdcValue() {
+    void nullMdcValue() {
         MDC.clear();
         MDC.put("key", null);
 
@@ -754,25 +752,25 @@ public class TestLoggerTests {
 
     private void assertEnabledReturnsCorrectly(Level levelToTest) {
         testLogger.setEnabledLevels(levelToTest);
-        assertTrue("Logger level set to " + levelToTest + " means " + levelToTest + " should be enabled",
-                new Logger(testLogger).isEnabled(levelToTest));
+        assertTrue(new Logger(testLogger).isEnabled(levelToTest),
+                "Logger level set to " + levelToTest + " means " + levelToTest + " should be enabled");
 
         Set<Level> disabledLevels = difference(enablableValueSet(), newHashSet(levelToTest));
         for (Level disabledLevel: disabledLevels) {
-            assertFalse("Logger level set to " + levelToTest + " means " + levelToTest + " should be disabled",
-                    new Logger(testLogger).isEnabled(disabledLevel));
+            assertFalse(new Logger(testLogger).isEnabled(disabledLevel),
+                    "Logger level set to " + levelToTest + " means " + levelToTest + " should be disabled");
         }
     }
 
     private void assertEnabledReturnsCorrectly(Level levelToTest, Marker marker) {
         testLogger.setEnabledLevels(levelToTest);
-        assertTrue("Logger level set to " + levelToTest + " means " + levelToTest + " should be enabled",
-                new Logger(testLogger).isEnabled(levelToTest, marker));
+        assertTrue(new Logger(testLogger).isEnabled(levelToTest, marker),
+                "Logger level set to " + levelToTest + " means " + levelToTest + " should be enabled");
 
         Set<Level> disabledLevels = difference(enablableValueSet(), newHashSet(levelToTest));
         for (Level disabledLevel: disabledLevels) {
-            assertFalse("Logger level set to " + levelToTest + " means " + levelToTest + " should be disabled",
-                    new Logger(testLogger).isEnabled(disabledLevel, marker));
+            assertFalse(new Logger(testLogger).isEnabled(disabledLevel, marker),
+                    "Logger level set to " + levelToTest + " means " + levelToTest + " should be disabled");
         }
     }
 }
