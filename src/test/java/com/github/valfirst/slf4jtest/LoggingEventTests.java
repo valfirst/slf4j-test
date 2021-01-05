@@ -6,21 +6,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
-import org.junit.After;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.joda.time.DateTimeUtils;
+import org.joda.time.Instant;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Marker;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
 import uk.org.lidalia.slf4jext.Level;
-import uk.org.lidalia.test.StaticTimeRule;
-import uk.org.lidalia.test.SystemOutputRule;
 
 import static com.github.valfirst.slf4jtest.LoggingEvent.error;
 import static com.github.valfirst.slf4jtest.LoggingEvent.debug;
@@ -36,33 +38,38 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.Mockito.mock;
 import static uk.org.lidalia.slf4jext.Level.DEBUG;
 import static uk.org.lidalia.slf4jext.Level.ERROR;
 import static uk.org.lidalia.slf4jext.Level.INFO;
 import static uk.org.lidalia.slf4jext.Level.TRACE;
 import static uk.org.lidalia.slf4jext.Level.WARN;
-import static uk.org.lidalia.test.StaticTimeRule.alwaysStartOfEpoch;
 
-@RunWith(JUnitParamsRunner.class)
-public class LoggingEventTests {
+class LoggingEventTests extends StdIoTests {
 
     private static final ImmutableMap<String, String> emptyMap = ImmutableMap.of();
 
-    @Rule public SystemOutputRule systemOutputRule = new SystemOutputRule();
-    @Rule public StaticTimeRule alwaysStartOfEpoch = alwaysStartOfEpoch();
+    private final Level level = TRACE;
+    private final Map<String, String> mdc = Collections.singletonMap("key", "value");
+    private final Marker marker = mock(Marker.class);
+    private final Throwable throwable = new Throwable();
+    private final String message = "message";
+    private final Object arg1 = "arg1";
+    private final Object arg2 = "arg2";
+    private final List<Object> args = asList(arg1, arg2);
 
-    private Level level = TRACE;
-    private Map<String, String> mdc = Collections.singletonMap("key", "value");
-    private Marker marker = mock(Marker.class);
-    private Throwable throwable = new Throwable();
-    private String message = "message";
-    private Object arg1 = "arg1";
-    private Object arg2 = "arg2";
-    private List<Object> args = asList(arg1, arg2);
+    @AfterEach
+    void afterEach()
+    {
+        super.after();
+        DateTimeUtils.setCurrentMillisSystem();
+        TestLoggerFactory.reset();
+    }
 
     @Test
-    public void constructorMessageArgs() {
+    void constructorMessageArgs() {
         LoggingEvent event = new LoggingEvent(level, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(emptyMap));
@@ -73,7 +80,7 @@ public class LoggingEventTests {
     }
 
     @Test
-    public void constructorThrowableMessageArgs() {
+    void constructorThrowableMessageArgs() {
         LoggingEvent event = new LoggingEvent(level, throwable, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(emptyMap));
@@ -84,7 +91,7 @@ public class LoggingEventTests {
     }
 
     @Test
-    public void constructorMarkerMessageArgs() {
+    void constructorMarkerMessageArgs() {
         LoggingEvent event = new LoggingEvent(level, marker, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(emptyMap));
@@ -95,7 +102,7 @@ public class LoggingEventTests {
     }
 
     @Test
-    public void constructorMarkerThrowableMessageArgs() {
+    void constructorMarkerThrowableMessageArgs() {
         LoggingEvent event = new LoggingEvent(level, marker, throwable, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(emptyMap));
@@ -106,7 +113,7 @@ public class LoggingEventTests {
     }
 
     @Test
-    public void constructorMdcMessageArgs() {
+    void constructorMdcMessageArgs() {
         LoggingEvent event = new LoggingEvent(level, mdc, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(mdc));
@@ -117,7 +124,7 @@ public class LoggingEventTests {
     }
 
     @Test
-    public void constructorMdcThrowableMessageArgs() {
+    void constructorMdcThrowableMessageArgs() {
         LoggingEvent event = new LoggingEvent(level, mdc, throwable, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(mdc));
@@ -128,7 +135,7 @@ public class LoggingEventTests {
     }
 
     @Test
-    public void constructorMdcMarkerMessageArgs() {
+    void constructorMdcMarkerMessageArgs() {
         LoggingEvent event = new LoggingEvent(level, mdc, marker, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(mdc));
@@ -139,7 +146,7 @@ public class LoggingEventTests {
     }
 
     @Test
-    public void constructorMdcMarkerThrowableMessageArgs() {
+    void constructorMdcMarkerThrowableMessageArgs() {
         LoggingEvent event = new LoggingEvent(level, mdc, marker, throwable, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(mdc));
@@ -149,288 +156,220 @@ public class LoggingEventTests {
         assertThat(event.getArguments(), is(args));
     }
 
-    @Test
-    public void traceMessageArgs() {
-        LoggingEvent event = trace(message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(TRACE, message, arg1, arg2);
+    static Stream<Arguments> messageArgs() {
+        return Stream.of(
+            arguments((BiFunction<String, Object[], LoggingEvent>) LoggingEvent::trace, TRACE),
+            arguments((BiFunction<String, Object[], LoggingEvent>) LoggingEvent::debug, DEBUG),
+            arguments((BiFunction<String, Object[], LoggingEvent>) LoggingEvent::info,  INFO),
+            arguments((BiFunction<String, Object[], LoggingEvent>) LoggingEvent::warn,  WARN),
+            arguments((BiFunction<String, Object[], LoggingEvent>) LoggingEvent::error, ERROR)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("messageArgs")
+    void messageArgs(BiFunction<String, Object[], LoggingEvent> producer, Level level) {
+        LoggingEvent event = producer.apply(message, new Object[] {arg1, arg2});
+        LoggingEvent expected = new LoggingEvent(level, message, arg1, arg2);
+        assertThat(event, is(expected));
+    }
+
+    static Stream<Arguments> throwableMessageArgs() {
+        return Stream.of(
+            arguments((TriFunction<Throwable, String, Object[], LoggingEvent>) LoggingEvent::trace, TRACE),
+            arguments((TriFunction<Throwable, String, Object[], LoggingEvent>) LoggingEvent::debug, DEBUG),
+            arguments((TriFunction<Throwable, String, Object[], LoggingEvent>) LoggingEvent::info,  INFO),
+            arguments((TriFunction<Throwable, String, Object[], LoggingEvent>) LoggingEvent::warn,  WARN),
+            arguments((TriFunction<Throwable, String, Object[], LoggingEvent>) LoggingEvent::error, ERROR)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("throwableMessageArgs")
+    void throwableMessageArgs(TriFunction<Throwable, String, Object[], LoggingEvent> producer, Level level) {
+        LoggingEvent event = producer.apply(throwable, message, new Object[] {arg1, arg2});
+        LoggingEvent expected = new LoggingEvent(level, throwable, message, arg1, arg2);
+        assertThat(event, is(expected));
+    }
+
+    static Stream<Arguments> markerMessageArgs() {
+        return Stream.of(
+            arguments((TriFunction<Marker, String, Object[], LoggingEvent>) LoggingEvent::trace, TRACE),
+            arguments((TriFunction<Marker, String, Object[], LoggingEvent>) LoggingEvent::debug, DEBUG),
+            arguments((TriFunction<Marker, String, Object[], LoggingEvent>) LoggingEvent::info,  INFO),
+            arguments((TriFunction<Marker, String, Object[], LoggingEvent>) LoggingEvent::warn,  WARN),
+            arguments((TriFunction<Marker, String, Object[], LoggingEvent>) LoggingEvent::error, ERROR)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("markerMessageArgs")
+    void markerMessageArgs(TriFunction<Marker, String, Object[], LoggingEvent> producer, Level level) {
+        LoggingEvent event = producer.apply(marker, message, new Object[] {arg1, arg2});
+        LoggingEvent expected = new LoggingEvent(level, marker, message, arg1, arg2);
+        assertThat(event, is(expected));
+    }
+
+    static Stream<Arguments> mdcMessageArgs() {
+        return Stream.of(
+            arguments((TriFunction<Map<String, String>, String, Object[], LoggingEvent>) LoggingEvent::trace, TRACE),
+            arguments((TriFunction<Map<String, String>, String, Object[], LoggingEvent>) LoggingEvent::debug, DEBUG),
+            arguments((TriFunction<Map<String, String>, String, Object[], LoggingEvent>) LoggingEvent::info,  INFO),
+            arguments((TriFunction<Map<String, String>, String, Object[], LoggingEvent>) LoggingEvent::warn,  WARN),
+            arguments((TriFunction<Map<String, String>, String, Object[], LoggingEvent>) LoggingEvent::error, ERROR)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("mdcMessageArgs")
+    void mdcMessageArgs(TriFunction<Map<String, String>, String, Object[], LoggingEvent> producer, Level level) {
+        LoggingEvent event = producer.apply(mdc, message, new Object[] {arg1, arg2});
+        LoggingEvent expected = new LoggingEvent(level, mdc, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void traceThrowableMessageArgs() {
-        LoggingEvent event = trace(throwable, message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(TRACE, throwable, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void traceMarkerMessageArgs() {
-        LoggingEvent event = trace(marker, message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(TRACE, marker, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void traceMarkerThrowableMessageArgs() {
+    void traceMarkerThrowableMessageArgs() {
         LoggingEvent event = trace(marker, throwable, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(TRACE, marker, throwable, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void traceMdcMessageArgs() {
-        LoggingEvent event = trace(mdc, message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(TRACE, mdc, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void traceMdcThrowableMessageArgs() {
+    void traceMdcThrowableMessageArgs() {
         LoggingEvent event = trace(mdc, throwable, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(TRACE, mdc, throwable, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void traceMdcMarkerMessageArgs() {
+    void traceMdcMarkerMessageArgs() {
         LoggingEvent event = trace(mdc, marker, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(TRACE, mdc, marker, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void traceMdcMarkerThrowableMessageArgs() {
+    void traceMdcMarkerThrowableMessageArgs() {
         LoggingEvent event = trace(mdc, marker, throwable, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(TRACE, mdc, marker, throwable, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void debugMessageArgs() {
-        LoggingEvent event = debug(message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(DEBUG, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void debugThrowableMessageArgs() {
-        LoggingEvent event = debug(throwable, message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(DEBUG, throwable, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void debugMarkerMessageArgs() {
-        LoggingEvent event = debug(marker, message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(DEBUG, marker, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void debugMarkerThrowableMessageArgs() {
+    void debugMarkerThrowableMessageArgs() {
         LoggingEvent event = debug(marker, throwable, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(DEBUG, marker, throwable, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void debugMdcMessageArgs() {
-        LoggingEvent event = debug(mdc, message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(DEBUG, mdc, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void debugMdcThrowableMessageArgs() {
+    void debugMdcThrowableMessageArgs() {
         LoggingEvent event = debug(mdc, throwable, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(DEBUG, mdc, throwable, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void debugMdcMarkerMessageArgs() {
+    void debugMdcMarkerMessageArgs() {
         LoggingEvent event = debug(mdc, marker, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(DEBUG, mdc, marker, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void debugMdcMarkerThrowableMessageArgs() {
+    void debugMdcMarkerThrowableMessageArgs() {
         LoggingEvent event = debug(mdc, marker, throwable, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(DEBUG, mdc, marker, throwable, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void infoMessageArgs() {
-        LoggingEvent event = info(message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(INFO, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void infoThrowableMessageArgs() {
-        LoggingEvent event = info(throwable, message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(INFO, throwable, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void infoMarkerMessageArgs() {
-        LoggingEvent event = info(marker, message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(INFO, marker, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void infoMarkerThrowableMessageArgs() {
+    void infoMarkerThrowableMessageArgs() {
         LoggingEvent event = info(marker, throwable, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(INFO, marker, throwable, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void infoMdcMessageArgs() {
-        LoggingEvent event = info(mdc, message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(INFO, mdc, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void infoMdcThrowableMessageArgs() {
+    void infoMdcThrowableMessageArgs() {
         LoggingEvent event = info(mdc, throwable, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(INFO, mdc, throwable, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void infoMdcMarkerMessageArgs() {
+    void infoMdcMarkerMessageArgs() {
         LoggingEvent event = info(mdc, marker, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(INFO, mdc, marker, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void infoMdcMarkerThrowableMessageArgs() {
+    void infoMdcMarkerThrowableMessageArgs() {
         LoggingEvent event = info(mdc, marker, throwable, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(INFO, mdc, marker, throwable, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void warnMessageArgs() {
-        LoggingEvent event = warn(message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(WARN, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void warnThrowableMessageArgs() {
-        LoggingEvent event = warn(throwable, message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(WARN, throwable, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void warnMarkerMessageArgs() {
-        LoggingEvent event = warn(marker, message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(WARN, marker, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void warnMarkerThrowableMessageArgs() {
+    void warnMarkerThrowableMessageArgs() {
         LoggingEvent event = warn(marker, throwable, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(WARN, marker, throwable, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void warnMdcMessageArgs() {
-        LoggingEvent event = warn(mdc, message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(WARN, mdc, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void warnMdcThrowableMessageArgs() {
+    void warnMdcThrowableMessageArgs() {
         LoggingEvent event = warn(mdc, throwable, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(WARN, mdc, throwable, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void warnMdcMarkerMessageArgs() {
+    void warnMdcMarkerMessageArgs() {
         LoggingEvent event = warn(mdc, marker, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(WARN, mdc, marker, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void warnMdcMarkerThrowableMessageArgs() {
+    void warnMdcMarkerThrowableMessageArgs() {
         LoggingEvent event = warn(mdc, marker, throwable, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(WARN, mdc, marker, throwable, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void errorMessageArgs() {
-        LoggingEvent event = error(message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(ERROR, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void errorThrowableMessageArgs() {
-        LoggingEvent event = error(throwable, message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(ERROR, throwable, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void errorMarkerMessageArgs() {
-        LoggingEvent event = error(marker, message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(ERROR, marker, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void errorMarkerThrowableMessageArgs() {
+    void errorMarkerThrowableMessageArgs() {
         LoggingEvent event = error(marker, throwable, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(ERROR, marker, throwable, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void errorMdcMessageArgs() {
-        LoggingEvent event = error(mdc, message, arg1, arg2);
-        LoggingEvent expected = new LoggingEvent(ERROR, mdc, message, arg1, arg2);
-        assertThat(event, is(expected));
-    }
-
-    @Test
-    public void errorMdcThrowableMessageArgs() {
+    void errorMdcThrowableMessageArgs() {
         LoggingEvent event = error(mdc, throwable, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(ERROR, mdc, throwable, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void errorMdcMarkerMessageArgs() {
+    void errorMdcMarkerMessageArgs() {
         LoggingEvent event = error(mdc, marker, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(ERROR, mdc, marker, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void errorMdcMarkerThrowableMessageArgs() {
+    void errorMdcMarkerThrowableMessageArgs() {
         LoggingEvent event = error(mdc, marker, throwable, message, arg1, arg2);
         LoggingEvent expected = new LoggingEvent(ERROR, mdc, marker, throwable, message, arg1, arg2);
         assertThat(event, is(expected));
     }
 
     @Test
-    public void mdcIsSnapshotInTime() {
+    void mdcIsSnapshotInTime() {
         Map<String, String> mdc = new HashMap<>();
         mdc.put("key", "value1");
         Map<String, String> mdcAtStart = new HashMap<>(mdc);
@@ -440,13 +379,13 @@ public class LoggingEventTests {
     }
 
     @Test
-    public void mdcNotModifiable() {
+    void mdcNotModifiable() {
         Map<String, String> mdc = Collections.singletonMap("key", "value1");
         assertThat(new LoggingEvent(level, mdc, message).getMdc(), is(instanceOf(ImmutableMap.class)) );
     }
 
     @Test
-    public void argsIsSnapshotInTime() {
+    void argsIsSnapshotInTime() {
         Object[] args = new Object[]{arg1, arg2};
         Object[] argsAtStart = Arrays.copyOf(args, args.length);
         LoggingEvent event = new LoggingEvent(level, message, args);
@@ -455,23 +394,26 @@ public class LoggingEventTests {
     }
 
     @Test
-    public void argsNotModifiable() {
+    void argsNotModifiable() {
         assertThat(new LoggingEvent(level, message, arg1).getArguments(), is(instanceOf(ImmutableList.class)));
     }
 
     @Test
-    public void timestamp() {
+    void timestamp() {
+        Instant now = Instant.now();
+        DateTimeUtils.setCurrentMillisFixed(now.getMillis());
         LoggingEvent event = info("Message");
-        assertThat(event.getTimestamp(), is(alwaysStartOfEpoch.getInstant()));
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void creatingLoggerNotPresent() {
-        info("message").getCreatingLogger();
+        assertThat(event.getTimestamp(), is(now));
     }
 
     @Test
-    public void creatingLoggerPresent() {
+    void creatingLoggerNotPresent() {
+        LoggingEvent message = info("message");
+        assertThrows(NoSuchElementException.class, message::getCreatingLogger);
+    }
+
+    @Test
+    void creatingLoggerPresent() {
         final TestLogger logger = TestLoggerFactory.getInstance().getLogger("logger");
         logger.info("message");
         final LoggingEvent event = logger.getLoggingEvents().get(0);
@@ -479,52 +421,55 @@ public class LoggingEventTests {
     }
 
     @Test
-    public void printToStandardOutNoThrowable() {
+    void printToStandardOutNoThrowable() {
+        DateTimeUtils.setCurrentMillisFixed(0);
+
         LoggingEvent event = new LoggingEvent(INFO, "message with {}", "argument");
         event.print();
 
-        assertThat(systemOutputRule.getSystemOut(),
+        assertThat(getStdOut(),
                 is("1970-01-01T00:00:00.000Z ["+Thread.currentThread().getName()+"] INFO - message with argument"+lineSeparator()));
     }
 
     @Test
-    public void printToStandardOutWithThrowable() {
+    void printToStandardOutWithThrowable() {
+        DateTimeUtils.setCurrentMillisFixed(0);
+
         LoggingEvent event = new LoggingEvent(INFO, new Exception(), "message");
         event.print();
 
-        assertThat(systemOutputRule.getSystemOut(),
+        assertThat(getStdOut(),
                 startsWith("1970-01-01T00:00:00.000Z ["+Thread.currentThread().getName()+"] INFO - message"+lineSeparator()
                         + "java.lang.Exception"+lineSeparator()
                         + "\tat"
                 ));
     }
 
-    @Test
-    @Parameters({"TRACE", "DEBUG", "INFO"})
-    public void printInfoAndBelow(Level level) {
+    @ParameterizedTest
+    @EnumSource(names = {"TRACE", "DEBUG", "INFO"})
+    void printInfoAndBelow(Level level) {
         LoggingEvent event = new LoggingEvent(level, "message with {}", "argument");
         event.print();
-        assertThat(systemOutputRule.getSystemOut(), is(not("")));
-        assertThat(systemOutputRule.getSystemErr(), is(""));
+        assertThat(getStdOut(), is(not("")));
+        assertThat(getStdErr(), is(""));
+    }
+
+    @ParameterizedTest
+    @EnumSource(names = {"WARN", "ERROR"})
+    void printWarnAndAbove(Level level) {
+        LoggingEvent event = new LoggingEvent(level, "message with {}", "argument");
+        event.print();
+        assertThat(getStdErr(), is(not("")));
+        assertThat(getStdOut(), is(""));
     }
 
     @Test
-    @Parameters({"WARN", "ERROR"})
-    public void printWarnAndAbove(Level level) {
-        LoggingEvent event = new LoggingEvent(level, "message with {}", "argument");
-        event.print();
-        assertThat(systemOutputRule.getSystemErr(), is(not("")));
-        assertThat(systemOutputRule.getSystemOut(), is(""));
-    }
-
-    @Test
-    public void nullArgument() {
+    void nullArgument() {
         LoggingEvent event = new LoggingEvent(level, "message with null arg", null, null);
         assertThat(event, is(new LoggingEvent(level, "message with null arg", empty(), empty())));
     }
 
-    @After
-    public void reset() {
-        TestLoggerFactory.reset();
+    public interface TriFunction<A, B, C, R> {
+        R apply(A a, B b, C c);
     }
 }

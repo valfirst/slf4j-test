@@ -25,11 +25,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 import static uk.org.lidalia.slf4jext.Level.WARN;
-import static uk.org.lidalia.test.ShouldThrow.shouldThrow;
 
 @RunWith(PowerMockRunner.class)
 public class TestLoggerFactoryTests {
@@ -168,10 +168,11 @@ public class TestLoggerFactoryTests {
         assertThat(loggingEvents, is(singletonList(debug("hello"))));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void getLoggingEventsReturnsUnmodifiableList() {
         List<LoggingEvent> loggingEvents = TestLoggerFactory.getLoggingEvents();
-        loggingEvents.add(debug("hello"));
+        LoggingEvent loggingEvent = debug("hello");
+        assertThrows(UnsupportedOperationException.class, () -> loggingEvents.add(loggingEvent));
     }
 
     @Test
@@ -183,10 +184,11 @@ public class TestLoggerFactoryTests {
         assertThat(allTestLoggers, is(Collections.singletonMap("name1", logger1)));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void getAllLoggersReturnsUnmodifiableList() {
         Map<String, TestLogger> allTestLoggers = TestLoggerFactory.getAllTestLoggers();
-        allTestLoggers.put("newlogger", new TestLogger("newlogger", getInstance()));
+        TestLogger newLogger = new TestLogger("newlogger", getInstance());
+        assertThrows(UnsupportedOperationException.class, () -> allTestLoggers.put("newlogger", newLogger));
     }
 
     @Test
@@ -260,7 +262,7 @@ public class TestLoggerFactoryTests {
         final String invalidLevelName = "nonsense";
         when(properties.getProperty("print.level", "OFF")).thenReturn(invalidLevelName);
 
-        final IllegalStateException illegalStateException = shouldThrow(IllegalStateException.class,
+        final IllegalStateException illegalStateException = assertThrows(IllegalStateException.class,
                 TestLoggerFactory::getInstance);
         assertThat(illegalStateException.getMessage(),
                 is("Invalid level name in property print.level of file slf4jtest.properties " +
