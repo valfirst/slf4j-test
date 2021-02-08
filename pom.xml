@@ -262,10 +262,10 @@
             </build>
         </profile>
         <profile>
-            <id>travis</id>
+            <id>ci</id>
             <activation>
                 <property>
-                    <name>env.TRAVIS</name>
+                    <name>env.CI</name>
                     <value>true</value>
                 </property>
             </activation>

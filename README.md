@@ -1,5 +1,5 @@
 # SLF4J Test
-[![Build Status](https://travis-ci.com/valfirst/slf4j-test.svg?branch=master)](https://travis-ci.com/valfirst/slf4j-test)
+[![slf4j-test CI](https://github.com/valfirst/slf4j-test/workflows/slf4j-test%20CI/badge.svg)](https://github.com/valfirst/slf4j-test/actions?query=workflow%3A%22slf4j-test+CI%22)
 [![Coverage Status](https://coveralls.io/repos/github/valfirst/slf4j-test/badge.svg?branch=master)](https://coveralls.io/github/valfirst/slf4j-test?branch=master)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=com.github.valfirst:slf4j-test&metric=alert_status)](https://sonarcloud.io/dashboard/index/com.github.valfirst:slf4j-test)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ac96a0c1a5614c3b93491d10e70b3a36)](https://www.codacy.com/app/valfirst/slf4j-test?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=valfirst/slf4j-test&amp;utm_campaign=Badge_Grade)
