@@ -1,5 +1,7 @@
 package com.github.valfirst.slf4jtest;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -274,6 +276,17 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
+    @PrepareForTest(TestLoggerFactory.class)
+    public void ioExceptionAtPropertiesLoading() throws Exception {
+        IOException ioException = new IOException();
+        whenNew(OverridableProperties.class).withArguments("slf4jtest").thenThrow(ioException);
+
+        final UncheckedIOException uncheckedIOException = assertThrows(UncheckedIOException.class,
+                TestLoggerFactory::getInstance);
+        assertThat(uncheckedIOException.getCause(), is(ioException));
+    }
+
+    @Test
     public void setLevel() {
         for (Level printLevel: Level.values()) {
             getInstance().setPrintLevel(printLevel);
@@ -286,7 +299,7 @@ public class TestLoggerFactoryTests {
         try {
             TestLoggerFactory.reset();
             getInstance().setPrintLevel(Level.OFF);
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException | UncheckedIOException e) {
             // ignore
         }
     }
