@@ -1,5 +1,7 @@
 package com.github.valfirst.slf4jtest;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +30,9 @@ public final class TestLoggerFactory implements ILoggerFactory {
         } catch (IllegalArgumentException e) {
             throw new IllegalStateException("Invalid level name in property print.level of file slf4jtest.properties " +
                     "or System property slf4jtest.print.level", e);
+        }
+        catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     });
 

@@ -11,25 +11,25 @@ class OverridableProperties {
     private final String propertySourceName;
     private final Properties properties;
 
-    OverridableProperties(final String propertySourceName) {
+    OverridableProperties(final String propertySourceName) throws IOException {
         this.propertySourceName = propertySourceName;
         this.properties = getProperties();
     }
 
-    private Properties getProperties() {
-        return Optional.ofNullable(
-                Thread.currentThread().getContextClassLoader().getResourceAsStream(propertySourceName + ".properties"))
-                .map(OverridableProperties::loadProperties)
-                .orElse(EMPTY_PROPERTIES);
+    private Properties getProperties() throws IOException {
+        InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(
+                propertySourceName + ".properties");
+        if (resourceAsStream != null) {
+            return loadProperties(resourceAsStream);
+        }
+        return EMPTY_PROPERTIES;
     }
 
-    private static Properties loadProperties(InputStream propertyResource) {
+    private static Properties loadProperties(InputStream propertyResource) throws IOException {
         try (InputStream closablePropertyResource = propertyResource) {
             final Properties loadedProperties = new Properties();
             loadedProperties.load(closablePropertyResource);
             return loadedProperties;
-        } catch (IOException ioException) {
-            throw new UncheckedIOException(ioException);
         }
     }
 
