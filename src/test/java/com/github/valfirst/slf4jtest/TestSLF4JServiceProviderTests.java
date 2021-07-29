@@ -1,7 +1,12 @@
 package com.github.valfirst.slf4jtest;
 
-import java.util.ServiceLoader;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
+import java.util.ServiceLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
@@ -10,18 +15,10 @@ import org.slf4j.MarkerFactory;
 import org.slf4j.helpers.BasicMarkerFactory;
 import org.slf4j.spi.SLF4JServiceProvider;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-
-/**
- * @author Valery Yatsynovich
- */
+/** @author Valery Yatsynovich */
 class TestSLF4JServiceProviderTests {
-    private SLF4JServiceProvider slf4JServiceProvider = ServiceLoader.load(SLF4JServiceProvider.class).iterator()
-            .next();
+    private SLF4JServiceProvider slf4JServiceProvider =
+            ServiceLoader.load(SLF4JServiceProvider.class).iterator().next();
 
     @BeforeEach
     void setUp() {

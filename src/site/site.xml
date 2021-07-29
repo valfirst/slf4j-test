@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
 
-  <googleAnalyticsAccountId>UA-15938495-2</googleAnalyticsAccountId>
+    <googleAnalyticsAccountId>UA-15938495-2</googleAnalyticsAccountId>
 
-  <skin>
-    <groupId>org.apache.maven.skins</groupId>
-    <artifactId>maven-fluido-skin</artifactId>
-    <version>1.7</version>
-  </skin>
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.7</version>
+    </skin>
 
-  <body>
-    <head>
+    <body>
+        <head>
       <![CDATA[<script type="text/javascript">
         $(document).ready(function () {
           $(".source").addClass("prettyprint");
@@ -18,26 +18,26 @@
         });
       </script>
       ]]>
-    </head>
-    <menu name="Overview">
-      <item name="Introduction" href="index.html" />
-      <item name="Usage" href="usage.html" />
-      <item name="Changelog" href="changelog.html" />
-    </menu>
-    <menu name="Previous Versions">
-      <item name="1.0.1" href="site-versions/1.0.1/"/>
-      <item name="1.0.0" href="site-versions/1.0.0/"/>
-    </menu>
-    <menu ref="reports"/>
-  </body>
+        </head>
+        <menu name="Overview">
+            <item name="Introduction" href="index.html" />
+            <item name="Usage" href="usage.html" />
+            <item name="Changelog" href="changelog.html" />
+        </menu>
+        <menu name="Previous Versions">
+            <item name="1.0.1" href="site-versions/1.0.1/" />
+            <item name="1.0.0" href="site-versions/1.0.0/" />
+        </menu>
+        <menu ref="reports" />
+    </body>
 
-  <custom>
-    <fluidoSkin>
-      <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
-      <gitHub>
-        <projectId>valfirst/${project.artifactId}</projectId>
-        <ribbonOrientation>right</ribbonOrientation>
-      </gitHub>
-    </fluidoSkin>
-  </custom>
+    <custom>
+        <fluidoSkin>
+            <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+            <gitHub>
+                <projectId>valfirst/${project.artifactId}</projectId>
+                <ribbonOrientation>right</ribbonOrientation>
+            </gitHub>
+        </fluidoSkin>
+    </custom>
 </project>

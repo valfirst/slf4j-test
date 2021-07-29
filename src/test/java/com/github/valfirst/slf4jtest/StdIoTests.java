@@ -6,7 +6,6 @@ import java.io.PrintStream;
 import java.io.UncheckedIOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,8 +22,7 @@ public class StdIoTests {
     protected String getStdOut() {
         try {
             return out.toString(CHARSET);
-        }
-        catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             throw new UncheckedIOException(e);
         }
     }
@@ -32,8 +30,7 @@ public class StdIoTests {
     protected String getStdErr() {
         try {
             return err.toString(CHARSET);
-        }
-        catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             throw new UncheckedIOException(e);
         }
     }
@@ -63,8 +60,7 @@ public class StdIoTests {
     private static PrintStream createPrintStream(ByteArrayOutputStream out) {
         try {
             return new PrintStream(out, true, CHARSET);
-        }
-        catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             throw new UncheckedIOException(e);
         }
     }

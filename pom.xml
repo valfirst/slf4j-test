@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.valfirst</groupId>
     <artifactId>slf4j-test</artifactId>
     <version>2.2.1-SNAPSHOT</version>
 
     <name>SLF4J Test</name>
-    <description>An in-memory SLF4J implementation focused on aiding unit testing.</description>
+    <description>An in-memory SLF4J implementation focused on aiding unit
+        testing.</description>
     <url>https://github.com/valfirst/${project.artifactId}</url>
     <licenses>
         <license>
@@ -234,6 +237,49 @@
                 <configuration>
                     <skip>true</skip>
                     <skipDeploy>true</skipDeploy>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.12.2</version>
+                <configuration>
+                    <java>
+                        <googleJavaFormat>
+                            <version>1.7</version>
+                        </googleJavaFormat>
+                        <trimTrailingWhitespace />
+                        <endWithNewline />
+
+                        <!-- https://github.com/diffplug/spotless/issues/420#issuecomment-512350756 -->
+                        <indent>
+                            <tabs>true</tabs>
+                            <spacesPerTab>2</spacesPerTab>
+                        </indent>
+                        <indent>
+                            <spaces>true</spaces>
+                            <spacesPerTab>4</spacesPerTab>
+                        </indent>
+                    </java>
+
+                    <formats>
+                        <format>
+                            <includes>
+                                <include>pom.xml</include>
+                                <include>src/**/*.xml</include>
+                            </includes>
+
+                            <eclipseWtp>
+                                <type>XML</type>
+                            </eclipseWtp>
+                            <trimTrailingWhitespace />
+                            <endWithNewline />
+                            <indent>
+                                <spaces>true</spaces>
+                                <spacesPerTab>4</spacesPerTab>
+                            </indent>
+                        </format>
+                    </formats>
                 </configuration>
             </plugin>
         </plugins>

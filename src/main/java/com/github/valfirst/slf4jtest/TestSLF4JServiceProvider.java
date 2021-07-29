@@ -6,11 +6,8 @@ import org.slf4j.helpers.BasicMarkerFactory;
 import org.slf4j.spi.MDCAdapter;
 import org.slf4j.spi.SLF4JServiceProvider;
 
-/**
- * @author Valery Yatsynovich
- */
-public class TestSLF4JServiceProvider implements SLF4JServiceProvider
-{
+/** @author Valery Yatsynovich */
+public class TestSLF4JServiceProvider implements SLF4JServiceProvider {
     public static final String REQUESTED_API_VERSION = "1.8.99";
 
     private ILoggerFactory loggerFactory;
@@ -25,26 +22,22 @@ public class TestSLF4JServiceProvider implements SLF4JServiceProvider
     }
 
     @Override
-    public ILoggerFactory getLoggerFactory()
-    {
+    public ILoggerFactory getLoggerFactory() {
         return loggerFactory;
     }
 
     @Override
-    public IMarkerFactory getMarkerFactory()
-    {
+    public IMarkerFactory getMarkerFactory() {
         return markerFactory;
     }
 
     @Override
-    public MDCAdapter getMDCAdapter()
-    {
+    public MDCAdapter getMDCAdapter() {
         return mdcAdapter;
     }
 
     @Override
-    public String getRequesteApiVersion()
-    {
+    public String getRequesteApiVersion() {
         return REQUESTED_API_VERSION;
     }
 }

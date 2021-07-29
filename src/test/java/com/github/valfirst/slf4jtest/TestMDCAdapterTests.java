@@ -1,14 +1,13 @@
 package com.github.valfirst.slf4jtest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 class TestMDCAdapterTests {
 
@@ -60,26 +59,30 @@ class TestMDCAdapterTests {
     void testMdcAdapterIsThreadLocal() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(2);
         final Map<String, String> results = new HashMap<>();
-        Thread thread1 = new Thread(() -> {
-            testMDCAdapter.put(key, "value1");
-            latch.countDown();
-            try {
-                latch.await();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            results.put("thread1", testMDCAdapter.get(key));
-        });
-        Thread thread2 = new Thread(() -> {
-            testMDCAdapter.put(key, "value2");
-            latch.countDown();
-            try {
-                latch.await();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            results.put("thread2", testMDCAdapter.get(key));
-        });
+        Thread thread1 =
+                new Thread(
+                        () -> {
+                            testMDCAdapter.put(key, "value1");
+                            latch.countDown();
+                            try {
+                                latch.await();
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                            }
+                            results.put("thread1", testMDCAdapter.get(key));
+                        });
+        Thread thread2 =
+                new Thread(
+                        () -> {
+                            testMDCAdapter.put(key, "value2");
+                            latch.countDown();
+                            try {
+                                latch.await();
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                            }
+                            results.put("thread2", testMDCAdapter.get(key));
+                        });
         thread1.start();
         thread2.start();
         thread1.join();

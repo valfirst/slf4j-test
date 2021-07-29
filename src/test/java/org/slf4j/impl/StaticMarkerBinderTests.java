@@ -1,25 +1,30 @@
 package org.slf4j.impl;
 
-import org.junit.jupiter.api.Test;
-import org.slf4j.MarkerFactory;
-import org.slf4j.helpers.BasicMarkerFactory;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
+import org.junit.jupiter.api.Test;
+import org.slf4j.MarkerFactory;
+import org.slf4j.helpers.BasicMarkerFactory;
+
 class StaticMarkerBinderTests {
 
     @Test
     void getMarkerFactory() {
-        assertSame(BasicMarkerFactory.class, StaticMarkerBinder.SINGLETON.getMarkerFactory().getClass());
-        assertSame(StaticMarkerBinder.SINGLETON.getMarkerFactory(), StaticMarkerBinder.SINGLETON.getMarkerFactory());
+        assertSame(
+                BasicMarkerFactory.class, StaticMarkerBinder.SINGLETON.getMarkerFactory().getClass());
+        assertSame(
+                StaticMarkerBinder.SINGLETON.getMarkerFactory(),
+                StaticMarkerBinder.SINGLETON.getMarkerFactory());
     }
 
     @Test
     void getMarkerFactoryClassStr() {
-        assertEquals("org.slf4j.helpers.BasicMarkerFactory", StaticMarkerBinder.SINGLETON.getMarkerFactoryClassStr());
+        assertEquals(
+                "org.slf4j.helpers.BasicMarkerFactory",
+                StaticMarkerBinder.SINGLETON.getMarkerFactoryClassStr());
     }
 
     @Test

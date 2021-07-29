@@ -1,26 +1,28 @@
 package org.slf4j.impl;
 
-import org.junit.jupiter.api.Test;
-import org.slf4j.ILoggerFactory;
-import org.slf4j.LoggerFactory;
-
-import com.github.valfirst.slf4jtest.TestLoggerFactory;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
+import com.github.valfirst.slf4jtest.TestLoggerFactory;
+import org.junit.jupiter.api.Test;
+import org.slf4j.ILoggerFactory;
+import org.slf4j.LoggerFactory;
+
 class StaticLoggerBinderTests {
 
     @Test
     void getLoggerFactory() {
-        assertSame(TestLoggerFactory.getInstance(), StaticLoggerBinder.getSingleton().getLoggerFactory());
+        assertSame(
+                TestLoggerFactory.getInstance(), StaticLoggerBinder.getSingleton().getLoggerFactory());
     }
 
     @Test
     void getLoggerFactoryClassStr() {
-        assertEquals("com.github.valfirst.slf4jtest.TestLoggerFactory", StaticLoggerBinder.getSingleton().getLoggerFactoryClassStr());
+        assertEquals(
+                "com.github.valfirst.slf4jtest.TestLoggerFactory",
+                StaticLoggerBinder.getSingleton().getLoggerFactoryClassStr());
     }
 
     @Test
