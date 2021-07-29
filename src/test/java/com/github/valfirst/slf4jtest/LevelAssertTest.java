@@ -54,4 +54,61 @@ class LevelAssertTest {
         }
     }
 
+    @Nested
+    class HasMessageContaining {
+
+        @Test
+        void failsWhenDoesNotContainSubstring() {
+            when(logger.getLoggingEvents()).thenReturn(ImmutableList.of());
+
+            assertThatThrownBy(() -> assertions.hasMessageContaining("words"))
+                    .isInstanceOf(AssertionError.class)
+                    .hasMessage("Expected level INFO to contain a log message containing `words`, but it did not");
+        }
+
+        @Test
+        void passesWhenDoesMatch() {
+            when(logger.getLoggingEvents()).thenReturn(ImmutableList.of(LoggingEvent.warn("Ignore me"), LoggingEvent.info("Yay for me!"), LoggingEvent.info("With args {}", "argument")));
+
+            assertThatCode(() -> assertions.hasMessageContaining("me")).doesNotThrowAnyException();
+        }
+
+        @Test
+        void returnsSelfWhenPasses() {
+            when(logger.getLoggingEvents()).thenReturn(ImmutableList.of(LoggingEvent.info("Event")));
+
+            LevelAssert actual = assertions.hasMessageContaining("Event");
+
+            assertThat(actual).isNotNull();
+        }
+    }
+
+    @Nested
+    class HasMessageMatching {
+
+        @Test
+        void failsWhenDoesNotMatchExpected() {
+            when(logger.getLoggingEvents()).thenReturn(ImmutableList.of(LoggingEvent.info("")));
+
+            assertThatThrownBy(() -> assertions.hasMessageMatching(".+"))
+                    .isInstanceOf(AssertionError.class)
+                    .hasMessage("Expected level INFO to contain a log message matching regex `.+`, but it did not");
+        }
+
+        @Test
+        void passesWhenDoesMatch() {
+            when(logger.getLoggingEvents()).thenReturn(ImmutableList.of(LoggingEvent.warn("Ignore me"), LoggingEvent.info("Yay for me!"), LoggingEvent.info("With args {}", "argument")));
+
+            assertThatCode(() -> assertions.hasMessageMatching(".* .*")).doesNotThrowAnyException();
+        }
+
+        @Test
+        void returnsSelfWhenPasses() {
+            when(logger.getLoggingEvents()).thenReturn(ImmutableList.of(LoggingEvent.info("12340")));
+
+            LevelAssert actual = assertions.hasMessageMatching("[0-9]+");
+
+            assertThat(actual).isNotNull();
+        }
+    }
 }
