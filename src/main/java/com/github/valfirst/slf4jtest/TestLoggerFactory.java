@@ -1,5 +1,10 @@
 package com.github.valfirst.slf4jtest;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import com.google.common.base.Suppliers;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
@@ -10,34 +15,31 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Supplier;
-
 import org.slf4j.ILoggerFactory;
-
-import com.google.common.base.Suppliers;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-
 import uk.org.lidalia.slf4jext.Level;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public final class TestLoggerFactory implements ILoggerFactory {
 
-    private static final Supplier<TestLoggerFactory> INSTANCE = Suppliers.memoize(() -> {
-        try {
-            final String level = new OverridableProperties("slf4jtest").getProperty("print.level", "OFF");
-            return new TestLoggerFactory(Level.valueOf(level));
-        } catch (IllegalArgumentException e) {
-            throw new IllegalStateException("Invalid level name in property print.level of file slf4jtest.properties " +
-                    "or System property slf4jtest.print.level", e);
-        }
-        catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    });
+    private static final Supplier<TestLoggerFactory> INSTANCE =
+            Suppliers.memoize(
+                    () -> {
+                        try {
+                            final String level =
+                                    new OverridableProperties("slf4jtest").getProperty("print.level", "OFF");
+                            return new TestLoggerFactory(Level.valueOf(level));
+                        } catch (IllegalArgumentException e) {
+                            throw new IllegalStateException(
+                                    "Invalid level name in property print.level of file slf4jtest.properties "
+                                            + "or System property slf4jtest.print.level",
+                                    e);
+                        } catch (IOException e) {
+                            throw new UncheckedIOException(e);
+                        }
+                    });
 
     private final ConcurrentMap<String, TestLogger> loggers = new ConcurrentHashMap<>();
-    private final List<LoggingEvent> allLoggingEvents = Collections.synchronizedList(new ArrayList<>());
+    private final List<LoggingEvent> allLoggingEvents =
+            Collections.synchronizedList(new ArrayList<>());
     private ThreadLocal<List<LoggingEvent>> loggingEvents = ThreadLocal.withInitial(ArrayList::new);
     private volatile Level printLevel;
 
@@ -103,14 +105,14 @@ public final class TestLoggerFactory implements ILoggerFactory {
     }
 
     public void clearLoggers() {
-        for (final TestLogger testLogger: loggers.values()) {
+        for (final TestLogger testLogger : loggers.values()) {
             testLogger.clear();
         }
         loggingEvents.get().clear();
     }
 
     public void clearAllLoggers() {
-        for (final TestLogger testLogger: loggers.values()) {
+        for (final TestLogger testLogger : loggers.values()) {
             testLogger.clearAll();
         }
         loggingEvents = ThreadLocal.withInitial(ArrayList::new);

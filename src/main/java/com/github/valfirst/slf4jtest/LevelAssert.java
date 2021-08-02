@@ -1,13 +1,13 @@
 package com.github.valfirst.slf4jtest;
 
-import uk.org.lidalia.slf4jext.Level;
-
 import java.util.Objects;
 import java.util.function.Predicate;
+import uk.org.lidalia.slf4jext.Level;
 
 /**
- * A set of assertions to validate that logs have been logged to a {@link TestLogger}, for a specific log level.
- */
+* A set of assertions to validate that logs have been logged to a {@link TestLogger}, for a
+* specific log level.
+*/
 public class LevelAssert extends AbstractTestLoggerAssert<LevelAssert> {
 
     private static Predicate<LoggingEvent> messageWithSubstring(String substring) {
@@ -27,45 +27,51 @@ public class LevelAssert extends AbstractTestLoggerAssert<LevelAssert> {
     }
 
     /**
-     * Assert that the given log level has the expected number of logs, regardless of content.
-     *
-     * @param expected the number of logs expected at this level
-     * @return a {@link LevelAssert} for chaining
-     */
+    * Assert that the given log level has the expected number of logs, regardless of content.
+    *
+    * @param expected the number of logs expected at this level
+    * @return a {@link LevelAssert} for chaining
+    */
     public LevelAssert hasNumberOfLogs(int expected) {
         long count = getLogCount(level, ignored -> true);
         if (count != expected) {
-            failWithMessage("Expected level %s to have %d log messages available, but %d were found", level, expected, count);
+            failWithMessage(
+                    "Expected level %s to have %d log messages available, but %d were found",
+                    level, expected, count);
         }
 
         return this;
     }
 
     /**
-     * Assert that the given log level includes a log message that contains a substring.
-     *
-     * @param substring a substring of a log message that should be present
-     * @return a {@link LevelAssert} for chaining
-     */
+    * Assert that the given log level includes a log message that contains a substring.
+    *
+    * @param substring a substring of a log message that should be present
+    * @return a {@link LevelAssert} for chaining
+    */
     public LevelAssert hasMessageContaining(String substring) {
         long count = getLogCount(level, messageWithSubstring(substring));
         if (count == 0) {
-            failWithMessage("Expected level %s to contain a log message containing `%s`, but it did not", level, substring);
+            failWithMessage(
+                    "Expected level %s to contain a log message containing `%s`, but it did not",
+                    level, substring);
         }
 
         return this;
     }
 
     /**
-     * Assert that the given log level includes a log message that matches a regex.
-     *
-     * @param regex the regular expression to which this string is to be matched
-     * @return a {@link LevelAssert} for chaining
-     */
+    * Assert that the given log level includes a log message that matches a regex.
+    *
+    * @param regex the regular expression to which this string is to be matched
+    * @return a {@link LevelAssert} for chaining
+    */
     public LevelAssert hasMessageMatching(String regex) {
         long count = getLogCount(level, messageForPattern(regex));
         if (count == 0) {
-            failWithMessage("Expected level %s to contain a log message matching regex `%s`, but it did not", level, regex);
+            failWithMessage(
+                    "Expected level %s to contain a log message matching regex `%s`, but it did not",
+                    level, regex);
         }
 
         return this;

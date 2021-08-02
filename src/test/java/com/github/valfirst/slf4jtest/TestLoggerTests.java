@@ -1,26 +1,5 @@
 package com.github.valfirst.slf4jtest;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.slf4j.MDC;
-import org.slf4j.Marker;
-
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-
-import uk.org.lidalia.slf4jext.Level;
-import uk.org.lidalia.slf4jext.Logger;
-
 import static com.github.valfirst.slf4jtest.LoggingEvent.debug;
 import static com.github.valfirst.slf4jtest.LoggingEvent.error;
 import static com.github.valfirst.slf4jtest.LoggingEvent.info;
@@ -47,17 +26,36 @@ import static uk.org.lidalia.slf4jext.Level.TRACE;
 import static uk.org.lidalia.slf4jext.Level.WARN;
 import static uk.org.lidalia.slf4jext.Level.enablableValueSet;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.slf4j.MDC;
+import org.slf4j.Marker;
+import uk.org.lidalia.slf4jext.Level;
+import uk.org.lidalia.slf4jext.Logger;
+
 class TestLoggerTests extends StdIoTests {
 
     private static final String LOGGER_NAME = "uk.org";
-    private final TestLogger testLogger = new TestLogger(LOGGER_NAME, TestLoggerFactory.getInstance());
+    private final TestLogger testLogger =
+            new TestLogger(LOGGER_NAME, TestLoggerFactory.getInstance());
     private final Marker marker = mock(Marker.class);
     private final String message = "message {} {} {}";
     private final Object arg1 = "arg1";
     private final Object arg2 = "arg2";
-    private final Object[] args = new Object[]{arg1, arg2, "arg3"};
+    private final Object[] args = new Object[] {arg1, arg2, "arg3"};
     private final Throwable throwable = new Throwable();
-    private final Object[] argsWithThrowable = new Object[]{arg1, arg2, "arg3", throwable};
+    private final Object[] argsWithThrowable = new Object[] {arg1, arg2, "arg3", throwable};
 
     private final Map<String, String> mdcValues = new HashMap<>();
 
@@ -86,7 +84,9 @@ class TestLoggerTests extends StdIoTests {
     void clearRemovesEvents() {
         testLogger.debug("message1");
         testLogger.debug("message2");
-        assertEquals(asList(debug(mdcValues, "message1"), debug(mdcValues, "message2")), testLogger.getLoggingEvents());
+        assertEquals(
+                asList(debug(mdcValues, "message1"), debug(mdcValues, "message2")),
+                testLogger.getLoggingEvents());
         testLogger.clear();
         assertEquals(emptyList(), testLogger.getLoggingEvents());
     }
@@ -121,7 +121,8 @@ class TestLoggerTests extends StdIoTests {
     void traceMessageTwoArgs() {
         testLogger.trace(message, arg1, arg2);
 
-        assertEquals(singletonList(trace(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(trace(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -135,14 +136,16 @@ class TestLoggerTests extends StdIoTests {
     void traceMessageManyArgsWithThrowable() {
         testLogger.trace(message, argsWithThrowable);
 
-        assertEquals(singletonList(trace(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(trace(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     void traceMessageThrowable() {
         testLogger.trace(message, throwable);
 
-        assertEquals(singletonList(trace(mdcValues, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(trace(mdcValues, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -161,35 +164,42 @@ class TestLoggerTests extends StdIoTests {
     void traceMarkerMessageOneArg() {
         testLogger.trace(marker, message, arg1);
 
-        assertEquals(singletonList(trace(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(trace(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
     void traceMarkerMessageTwoArgs() {
         testLogger.trace(marker, message, arg1, arg2);
 
-        assertEquals(singletonList(trace(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(trace(mdcValues, marker, message, arg1, arg2)),
+                testLogger.getLoggingEvents());
     }
 
     @Test
     void traceMarkerMessageManyArgs() {
         testLogger.trace(marker, message, args);
 
-        assertEquals(singletonList(trace(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(trace(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     void traceMarkerMessageManyArgsWithThrowable() {
         testLogger.trace(marker, message, argsWithThrowable);
 
-        assertEquals(singletonList(trace(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(trace(mdcValues, marker, throwable, message, args)),
+                testLogger.getLoggingEvents());
     }
 
     @Test
     void traceMarkerMessageThrowable() {
         testLogger.trace(marker, message, throwable);
 
-        assertEquals(singletonList(trace(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(trace(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -215,7 +225,8 @@ class TestLoggerTests extends StdIoTests {
     void debugMessageTwoArgs() {
         testLogger.debug(message, arg1, arg2);
 
-        assertEquals(singletonList(debug(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(debug(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -229,14 +240,16 @@ class TestLoggerTests extends StdIoTests {
     void debugMessageManyArgsWithThrowable() {
         testLogger.debug(message, argsWithThrowable);
 
-        assertEquals(singletonList(debug(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(debug(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     void debugMessageThrowable() {
         testLogger.debug(message, throwable);
 
-        assertEquals(singletonList(debug(mdcValues, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(debug(mdcValues, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -255,35 +268,42 @@ class TestLoggerTests extends StdIoTests {
     void debugMarkerMessageOneArg() {
         testLogger.debug(marker, message, arg1);
 
-        assertEquals(singletonList(debug(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(debug(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
     void debugMarkerMessageTwoArgs() {
         testLogger.debug(marker, message, arg1, arg2);
 
-        assertEquals(singletonList(debug(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(debug(mdcValues, marker, message, arg1, arg2)),
+                testLogger.getLoggingEvents());
     }
 
     @Test
     void debugMarkerMessageManyArgs() {
         testLogger.debug(marker, message, args);
 
-        assertEquals(singletonList(debug(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(debug(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     void debugMarkerMessageManyArgsWithThrowable() {
         testLogger.debug(marker, message, argsWithThrowable);
 
-        assertEquals(singletonList(debug(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(debug(mdcValues, marker, throwable, message, args)),
+                testLogger.getLoggingEvents());
     }
 
     @Test
     void debugMarkerMessageThrowable() {
         testLogger.debug(marker, message, throwable);
 
-        assertEquals(singletonList(debug(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(debug(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -309,7 +329,8 @@ class TestLoggerTests extends StdIoTests {
     void infoMessageTwoArgs() {
         testLogger.info(message, arg1, arg2);
 
-        assertEquals(singletonList(info(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(info(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -323,7 +344,8 @@ class TestLoggerTests extends StdIoTests {
     void infoMessageManyArgsWithThrowable() {
         testLogger.info(message, argsWithThrowable);
 
-        assertEquals(singletonList(info(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(info(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -349,35 +371,41 @@ class TestLoggerTests extends StdIoTests {
     void infoMarkerMessageOneArg() {
         testLogger.info(marker, message, arg1);
 
-        assertEquals(singletonList(info(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(info(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
     void infoMarkerMessageTwoArgs() {
         testLogger.info(marker, message, arg1, arg2);
 
-        assertEquals(singletonList(info(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(info(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
     void infoMarkerMessageManyArgs() {
         testLogger.info(marker, message, args);
 
-        assertEquals(singletonList(info(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(info(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     void infoMarkerMessageManyArgsWithThrowable() {
         testLogger.info(marker, message, argsWithThrowable);
 
-        assertEquals(singletonList(info(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(info(mdcValues, marker, throwable, message, args)),
+                testLogger.getLoggingEvents());
     }
 
     @Test
     void infoMarkerMessageThrowable() {
         testLogger.info(marker, message, throwable);
 
-        assertEquals(singletonList(info(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(info(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -403,7 +431,8 @@ class TestLoggerTests extends StdIoTests {
     void warnMessageTwoArgs() {
         testLogger.warn(message, arg1, arg2);
 
-        assertEquals(singletonList(warn(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(warn(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -417,7 +446,8 @@ class TestLoggerTests extends StdIoTests {
     void warnMessageManyArgsWithThrowable() {
         testLogger.warn(message, argsWithThrowable);
 
-        assertEquals(singletonList(warn(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(warn(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -443,35 +473,41 @@ class TestLoggerTests extends StdIoTests {
     void warnMarkerMessageOneArg() {
         testLogger.warn(marker, message, arg1);
 
-        assertEquals(singletonList(warn(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(warn(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
     void warnMarkerMessageTwoArgs() {
         testLogger.warn(marker, message, arg1, arg2);
 
-        assertEquals(singletonList(warn(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(warn(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
     void warnMarkerMessageManyArgs() {
         testLogger.warn(marker, message, args);
 
-        assertEquals(singletonList(warn(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(warn(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     void warnMarkerMessageManyArgsWithThrowable() {
         testLogger.warn(marker, message, argsWithThrowable);
 
-        assertEquals(singletonList(warn(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(warn(mdcValues, marker, throwable, message, args)),
+                testLogger.getLoggingEvents());
     }
 
     @Test
     void warnMarkerMessageThrowable() {
         testLogger.warn(marker, message, throwable);
 
-        assertEquals(singletonList(warn(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(warn(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -497,7 +533,8 @@ class TestLoggerTests extends StdIoTests {
     void errorMessageTwoArgs() {
         testLogger.error(message, arg1, arg2);
 
-        assertEquals(singletonList(error(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(error(mdcValues, message, arg1, arg2)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -511,14 +548,16 @@ class TestLoggerTests extends StdIoTests {
     void errorMessageManyArgsWithThrowable() {
         testLogger.error(message, argsWithThrowable);
 
-        assertEquals(singletonList(error(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(error(mdcValues, throwable, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     void errorMessageThrowable() {
         testLogger.error(message, throwable);
 
-        assertEquals(singletonList(error(mdcValues, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(error(mdcValues, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -537,35 +576,42 @@ class TestLoggerTests extends StdIoTests {
     void errorMarkerMessageOneArg() {
         testLogger.error(marker, message, arg1);
 
-        assertEquals(singletonList(error(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(error(mdcValues, marker, message, arg1)), testLogger.getLoggingEvents());
     }
 
     @Test
     void errorMarkerMessageTwoArgs() {
         testLogger.error(marker, message, arg1, arg2);
 
-        assertEquals(singletonList(error(mdcValues, marker, message, arg1, arg2)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(error(mdcValues, marker, message, arg1, arg2)),
+                testLogger.getLoggingEvents());
     }
 
     @Test
     void errorMarkerMessageManyArgs() {
         testLogger.error(marker, message, args);
 
-        assertEquals(singletonList(error(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(error(mdcValues, marker, message, args)), testLogger.getLoggingEvents());
     }
 
     @Test
     void errorMarkerMessageManyArgsWithThrowable() {
         testLogger.error(marker, message, argsWithThrowable);
 
-        assertEquals(singletonList(error(mdcValues, marker, throwable, message, args)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(error(mdcValues, marker, throwable, message, args)),
+                testLogger.getLoggingEvents());
     }
 
     @Test
     void errorMarkerMessageThrowable() {
         testLogger.error(marker, message, throwable);
 
-        assertEquals(singletonList(error(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
+        assertEquals(
+                singletonList(error(mdcValues, marker, throwable, message)), testLogger.getLoggingEvents());
     }
 
     @Test
@@ -606,8 +652,10 @@ class TestLoggerTests extends StdIoTests {
         testLogger.debug(message);
         testLogger.trace(message);
 
-        List<LoggingEvent> expectedEvents = Arrays.stream(shouldLog).map(
-                level -> new LoggingEvent(level, mdcValues, message)).collect(Collectors.toList());
+        List<LoggingEvent> expectedEvents =
+                Arrays.stream(shouldLog)
+                        .map(level -> new LoggingEvent(level, mdcValues, message))
+                        .collect(Collectors.toList());
 
         assertEquals(expectedEvents, testLogger.getLoggingEvents());
         testLogger.clear();
@@ -658,10 +706,12 @@ class TestLoggerTests extends StdIoTests {
     @Test
     void clearAllClearsEventsLoggedInAllThreads() throws InterruptedException {
         testLogger.info(message);
-        Thread t = new Thread(() -> {
-            testLogger.info(message);
-            testLogger.clearAll();
-        });
+        Thread t =
+                new Thread(
+                        () -> {
+                            testLogger.info(message);
+                            testLogger.clearAll();
+                        });
         t.start();
         t.join();
         assertEquals(emptyList(), testLogger.getAllLoggingEvents());
@@ -671,10 +721,12 @@ class TestLoggerTests extends StdIoTests {
     @Test
     void setEnabledLevelOnlyChangesLevelForCurrentThread() throws Exception {
         final AtomicReference<ImmutableSet<Level>> inThreadEnabledLevels = new AtomicReference<>();
-        Thread t = new Thread(() -> {
-            testLogger.setEnabledLevels(WARN, ERROR);
-            inThreadEnabledLevels.set(testLogger.getEnabledLevels());
-        });
+        Thread t =
+                new Thread(
+                        () -> {
+                            testLogger.setEnabledLevels(WARN, ERROR);
+                            inThreadEnabledLevels.set(testLogger.getEnabledLevels());
+                        });
         t.start();
         t.join();
         assertEquals(ImmutableSet.of(WARN, ERROR), inThreadEnabledLevels.get());
@@ -693,10 +745,12 @@ class TestLoggerTests extends StdIoTests {
     @Test
     void setEnabledLevelsForAllThreads() throws Exception {
         final AtomicReference<ImmutableSet<Level>> inThreadEnabledLevels = new AtomicReference<>();
-        Thread t = new Thread(() -> {
-            testLogger.setEnabledLevelsForAllThreads(WARN, ERROR);
-            inThreadEnabledLevels.set(testLogger.getEnabledLevels());
-        });
+        Thread t =
+                new Thread(
+                        () -> {
+                            testLogger.setEnabledLevelsForAllThreads(WARN, ERROR);
+                            inThreadEnabledLevels.set(testLogger.getEnabledLevels());
+                        });
         t.start();
         t.join();
         assertEquals(ImmutableSet.of(WARN, ERROR), inThreadEnabledLevels.get());
@@ -746,30 +800,35 @@ class TestLoggerTests extends StdIoTests {
 
         testLogger.info(message);
 
-        assertThat(testLogger.getLoggingEvents(), is(
-                singletonList(info(ImmutableMap.of("key", "null"), message))));
+        assertThat(
+                testLogger.getLoggingEvents(),
+                is(singletonList(info(ImmutableMap.of("key", "null"), message))));
     }
 
     private void assertEnabledReturnsCorrectly(Level levelToTest) {
         testLogger.setEnabledLevels(levelToTest);
-        assertTrue(new Logger(testLogger).isEnabled(levelToTest),
+        assertTrue(
+                new Logger(testLogger).isEnabled(levelToTest),
                 "Logger level set to " + levelToTest + " means " + levelToTest + " should be enabled");
 
         Set<Level> disabledLevels = difference(enablableValueSet(), newHashSet(levelToTest));
-        for (Level disabledLevel: disabledLevels) {
-            assertFalse(new Logger(testLogger).isEnabled(disabledLevel),
+        for (Level disabledLevel : disabledLevels) {
+            assertFalse(
+                    new Logger(testLogger).isEnabled(disabledLevel),
                     "Logger level set to " + levelToTest + " means " + levelToTest + " should be disabled");
         }
     }
 
     private void assertEnabledReturnsCorrectly(Level levelToTest, Marker marker) {
         testLogger.setEnabledLevels(levelToTest);
-        assertTrue(new Logger(testLogger).isEnabled(levelToTest, marker),
+        assertTrue(
+                new Logger(testLogger).isEnabled(levelToTest, marker),
                 "Logger level set to " + levelToTest + " means " + levelToTest + " should be enabled");
 
         Set<Level> disabledLevels = difference(enablableValueSet(), newHashSet(levelToTest));
-        for (Level disabledLevel: disabledLevels) {
-            assertFalse(new Logger(testLogger).isEnabled(disabledLevel, marker),
+        for (Level disabledLevel : disabledLevels) {
+            assertFalse(
+                    new Logger(testLogger).isEnabled(disabledLevel, marker),
                     "Logger level set to " + levelToTest + " means " + levelToTest + " should be disabled");
         }
     }

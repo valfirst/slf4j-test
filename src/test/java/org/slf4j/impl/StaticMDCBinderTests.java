@@ -1,14 +1,13 @@
 package org.slf4j.impl;
 
-import org.junit.jupiter.api.Test;
-import org.slf4j.MDC;
-
-import com.github.valfirst.slf4jtest.TestMDCAdapter;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+
+import com.github.valfirst.slf4jtest.TestMDCAdapter;
+import org.junit.jupiter.api.Test;
+import org.slf4j.MDC;
 
 class StaticMDCBinderTests {
 
@@ -20,7 +19,9 @@ class StaticMDCBinderTests {
 
     @Test
     void getMDCAdapterClassStr() {
-        assertEquals("com.github.valfirst.slf4jtest.TestMDCAdapter", StaticMDCBinder.SINGLETON.getMDCAdapterClassStr());
+        assertEquals(
+                "com.github.valfirst.slf4jtest.TestMDCAdapter",
+                StaticMDCBinder.SINGLETON.getMDCAdapterClassStr());
     }
 
     @Test

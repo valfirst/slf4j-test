@@ -1,11 +1,9 @@
 package com.github.valfirst.slf4jtest;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.slf4j.spi.MDCAdapter;
-
-import com.google.common.collect.ImmutableMap;
 
 public class TestMDCAdapter implements MDCAdapter {
 

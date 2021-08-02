@@ -1,9 +1,8 @@
 package org.slf4j.impl;
 
+import com.github.valfirst.slf4jtest.TestLoggerFactory;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.spi.LoggerFactoryBinder;
-
-import com.github.valfirst.slf4jtest.TestLoggerFactory;
 
 public final class StaticLoggerBinder implements LoggerFactoryBinder {
 
@@ -15,7 +14,7 @@ public final class StaticLoggerBinder implements LoggerFactoryBinder {
         return SINGLETON;
     }
 
-    private StaticLoggerBinder() { }
+    private StaticLoggerBinder() {}
 
     public ILoggerFactory getLoggerFactory() {
         return TestLoggerFactory.getInstance();

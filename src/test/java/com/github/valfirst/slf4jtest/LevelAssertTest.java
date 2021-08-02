@@ -1,5 +1,8 @@
 package com.github.valfirst.slf4jtest;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.when;
+
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -9,14 +12,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.org.lidalia.slf4jext.Level;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 class LevelAssertTest {
 
-    @Mock
-    private TestLogger logger;
+    @Mock private TestLogger logger;
 
     private LevelAssert assertions;
 
@@ -39,7 +38,12 @@ class LevelAssertTest {
 
         @Test
         void passesWhenDoesMatch() {
-            when(logger.getLoggingEvents()).thenReturn(ImmutableList.of(LoggingEvent.warn("Ignore me"), LoggingEvent.info("Yay for me!"), LoggingEvent.info("With args {}", "argument")));
+            when(logger.getLoggingEvents())
+                    .thenReturn(
+                            ImmutableList.of(
+                                    LoggingEvent.warn("Ignore me"),
+                                    LoggingEvent.info("Yay for me!"),
+                                    LoggingEvent.info("With args {}", "argument")));
 
             assertThatCode(() -> assertions.hasNumberOfLogs(2)).doesNotThrowAnyException();
         }
@@ -63,12 +67,18 @@ class LevelAssertTest {
 
             assertThatThrownBy(() -> assertions.hasMessageContaining("words"))
                     .isInstanceOf(AssertionError.class)
-                    .hasMessage("Expected level INFO to contain a log message containing `words`, but it did not");
+                    .hasMessage(
+                            "Expected level INFO to contain a log message containing `words`, but it did not");
         }
 
         @Test
         void passesWhenDoesMatch() {
-            when(logger.getLoggingEvents()).thenReturn(ImmutableList.of(LoggingEvent.warn("Ignore me"), LoggingEvent.info("Yay for me!"), LoggingEvent.info("With args {}", "argument")));
+            when(logger.getLoggingEvents())
+                    .thenReturn(
+                            ImmutableList.of(
+                                    LoggingEvent.warn("Ignore me"),
+                                    LoggingEvent.info("Yay for me!"),
+                                    LoggingEvent.info("With args {}", "argument")));
 
             assertThatCode(() -> assertions.hasMessageContaining("me")).doesNotThrowAnyException();
         }
@@ -92,12 +102,18 @@ class LevelAssertTest {
 
             assertThatThrownBy(() -> assertions.hasMessageMatching(".+"))
                     .isInstanceOf(AssertionError.class)
-                    .hasMessage("Expected level INFO to contain a log message matching regex `.+`, but it did not");
+                    .hasMessage(
+                            "Expected level INFO to contain a log message matching regex `.+`, but it did not");
         }
 
         @Test
         void passesWhenDoesMatch() {
-            when(logger.getLoggingEvents()).thenReturn(ImmutableList.of(LoggingEvent.warn("Ignore me"), LoggingEvent.info("Yay for me!"), LoggingEvent.info("With args {}", "argument")));
+            when(logger.getLoggingEvents())
+                    .thenReturn(
+                            ImmutableList.of(
+                                    LoggingEvent.warn("Ignore me"),
+                                    LoggingEvent.info("Yay for me!"),
+                                    LoggingEvent.info("With args {}", "argument")));
 
             assertThatCode(() -> assertions.hasMessageMatching(".* .*")).doesNotThrowAnyException();
         }

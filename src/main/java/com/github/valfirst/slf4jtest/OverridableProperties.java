@@ -2,8 +2,6 @@ package com.github.valfirst.slf4jtest;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
-import java.util.Optional;
 import java.util.Properties;
 
 class OverridableProperties {
@@ -17,8 +15,10 @@ class OverridableProperties {
     }
 
     private Properties getProperties() throws IOException {
-        InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(
-                propertySourceName + ".properties");
+        InputStream resourceAsStream =
+                Thread.currentThread()
+                        .getContextClassLoader()
+                        .getResourceAsStream(propertySourceName + ".properties");
         if (resourceAsStream != null) {
             return loadProperties(resourceAsStream);
         }

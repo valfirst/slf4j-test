@@ -1,31 +1,7 @@
 package com.github.valfirst.slf4jtest;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.function.BiFunction;
-import java.util.stream.Stream;
-
-import org.joda.time.DateTimeUtils;
-import org.joda.time.Instant;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.slf4j.Marker;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-
-import uk.org.lidalia.slf4jext.Level;
-
-import static com.github.valfirst.slf4jtest.LoggingEvent.error;
 import static com.github.valfirst.slf4jtest.LoggingEvent.debug;
+import static com.github.valfirst.slf4jtest.LoggingEvent.error;
 import static com.github.valfirst.slf4jtest.LoggingEvent.info;
 import static com.github.valfirst.slf4jtest.LoggingEvent.trace;
 import static com.github.valfirst.slf4jtest.LoggingEvent.warn;
@@ -47,6 +23,27 @@ import static uk.org.lidalia.slf4jext.Level.INFO;
 import static uk.org.lidalia.slf4jext.Level.TRACE;
 import static uk.org.lidalia.slf4jext.Level.WARN;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.function.BiFunction;
+import java.util.stream.Stream;
+import org.joda.time.DateTimeUtils;
+import org.joda.time.Instant;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.slf4j.Marker;
+import uk.org.lidalia.slf4jext.Level;
+
 class LoggingEventTests extends StdIoTests {
 
     private static final ImmutableMap<String, String> emptyMap = ImmutableMap.of();
@@ -61,8 +58,7 @@ class LoggingEventTests extends StdIoTests {
     private final List<Object> args = asList(arg1, arg2);
 
     @AfterEach
-    void afterEach()
-    {
+    void afterEach() {
         super.after();
         DateTimeUtils.setCurrentMillisSystem();
         TestLoggerFactory.reset();
@@ -158,12 +154,11 @@ class LoggingEventTests extends StdIoTests {
 
     static Stream<Arguments> messageArgs() {
         return Stream.of(
-            arguments((BiFunction<String, Object[], LoggingEvent>) LoggingEvent::trace, TRACE),
-            arguments((BiFunction<String, Object[], LoggingEvent>) LoggingEvent::debug, DEBUG),
-            arguments((BiFunction<String, Object[], LoggingEvent>) LoggingEvent::info,  INFO),
-            arguments((BiFunction<String, Object[], LoggingEvent>) LoggingEvent::warn,  WARN),
-            arguments((BiFunction<String, Object[], LoggingEvent>) LoggingEvent::error, ERROR)
-        );
+                arguments((BiFunction<String, Object[], LoggingEvent>) LoggingEvent::trace, TRACE),
+                arguments((BiFunction<String, Object[], LoggingEvent>) LoggingEvent::debug, DEBUG),
+                arguments((BiFunction<String, Object[], LoggingEvent>) LoggingEvent::info, INFO),
+                arguments((BiFunction<String, Object[], LoggingEvent>) LoggingEvent::warn, WARN),
+                arguments((BiFunction<String, Object[], LoggingEvent>) LoggingEvent::error, ERROR));
     }
 
     @ParameterizedTest
@@ -176,17 +171,22 @@ class LoggingEventTests extends StdIoTests {
 
     static Stream<Arguments> throwableMessageArgs() {
         return Stream.of(
-            arguments((TriFunction<Throwable, String, Object[], LoggingEvent>) LoggingEvent::trace, TRACE),
-            arguments((TriFunction<Throwable, String, Object[], LoggingEvent>) LoggingEvent::debug, DEBUG),
-            arguments((TriFunction<Throwable, String, Object[], LoggingEvent>) LoggingEvent::info,  INFO),
-            arguments((TriFunction<Throwable, String, Object[], LoggingEvent>) LoggingEvent::warn,  WARN),
-            arguments((TriFunction<Throwable, String, Object[], LoggingEvent>) LoggingEvent::error, ERROR)
-        );
+                arguments(
+                        (TriFunction<Throwable, String, Object[], LoggingEvent>) LoggingEvent::trace, TRACE),
+                arguments(
+                        (TriFunction<Throwable, String, Object[], LoggingEvent>) LoggingEvent::debug, DEBUG),
+                arguments(
+                        (TriFunction<Throwable, String, Object[], LoggingEvent>) LoggingEvent::info, INFO),
+                arguments(
+                        (TriFunction<Throwable, String, Object[], LoggingEvent>) LoggingEvent::warn, WARN),
+                arguments(
+                        (TriFunction<Throwable, String, Object[], LoggingEvent>) LoggingEvent::error, ERROR));
     }
 
     @ParameterizedTest
     @MethodSource("throwableMessageArgs")
-    void throwableMessageArgs(TriFunction<Throwable, String, Object[], LoggingEvent> producer, Level level) {
+    void throwableMessageArgs(
+            TriFunction<Throwable, String, Object[], LoggingEvent> producer, Level level) {
         LoggingEvent event = producer.apply(throwable, message, new Object[] {arg1, arg2});
         LoggingEvent expected = new LoggingEvent(level, throwable, message, arg1, arg2);
         assertThat(event, is(expected));
@@ -194,17 +194,18 @@ class LoggingEventTests extends StdIoTests {
 
     static Stream<Arguments> markerMessageArgs() {
         return Stream.of(
-            arguments((TriFunction<Marker, String, Object[], LoggingEvent>) LoggingEvent::trace, TRACE),
-            arguments((TriFunction<Marker, String, Object[], LoggingEvent>) LoggingEvent::debug, DEBUG),
-            arguments((TriFunction<Marker, String, Object[], LoggingEvent>) LoggingEvent::info,  INFO),
-            arguments((TriFunction<Marker, String, Object[], LoggingEvent>) LoggingEvent::warn,  WARN),
-            arguments((TriFunction<Marker, String, Object[], LoggingEvent>) LoggingEvent::error, ERROR)
-        );
+                arguments((TriFunction<Marker, String, Object[], LoggingEvent>) LoggingEvent::trace, TRACE),
+                arguments((TriFunction<Marker, String, Object[], LoggingEvent>) LoggingEvent::debug, DEBUG),
+                arguments((TriFunction<Marker, String, Object[], LoggingEvent>) LoggingEvent::info, INFO),
+                arguments((TriFunction<Marker, String, Object[], LoggingEvent>) LoggingEvent::warn, WARN),
+                arguments(
+                        (TriFunction<Marker, String, Object[], LoggingEvent>) LoggingEvent::error, ERROR));
     }
 
     @ParameterizedTest
     @MethodSource("markerMessageArgs")
-    void markerMessageArgs(TriFunction<Marker, String, Object[], LoggingEvent> producer, Level level) {
+    void markerMessageArgs(
+            TriFunction<Marker, String, Object[], LoggingEvent> producer, Level level) {
         LoggingEvent event = producer.apply(marker, message, new Object[] {arg1, arg2});
         LoggingEvent expected = new LoggingEvent(level, marker, message, arg1, arg2);
         assertThat(event, is(expected));
@@ -212,17 +213,27 @@ class LoggingEventTests extends StdIoTests {
 
     static Stream<Arguments> mdcMessageArgs() {
         return Stream.of(
-            arguments((TriFunction<Map<String, String>, String, Object[], LoggingEvent>) LoggingEvent::trace, TRACE),
-            arguments((TriFunction<Map<String, String>, String, Object[], LoggingEvent>) LoggingEvent::debug, DEBUG),
-            arguments((TriFunction<Map<String, String>, String, Object[], LoggingEvent>) LoggingEvent::info,  INFO),
-            arguments((TriFunction<Map<String, String>, String, Object[], LoggingEvent>) LoggingEvent::warn,  WARN),
-            arguments((TriFunction<Map<String, String>, String, Object[], LoggingEvent>) LoggingEvent::error, ERROR)
-        );
+                arguments(
+                        (TriFunction<Map<String, String>, String, Object[], LoggingEvent>) LoggingEvent::trace,
+                        TRACE),
+                arguments(
+                        (TriFunction<Map<String, String>, String, Object[], LoggingEvent>) LoggingEvent::debug,
+                        DEBUG),
+                arguments(
+                        (TriFunction<Map<String, String>, String, Object[], LoggingEvent>) LoggingEvent::info,
+                        INFO),
+                arguments(
+                        (TriFunction<Map<String, String>, String, Object[], LoggingEvent>) LoggingEvent::warn,
+                        WARN),
+                arguments(
+                        (TriFunction<Map<String, String>, String, Object[], LoggingEvent>) LoggingEvent::error,
+                        ERROR));
     }
 
     @ParameterizedTest
     @MethodSource("mdcMessageArgs")
-    void mdcMessageArgs(TriFunction<Map<String, String>, String, Object[], LoggingEvent> producer, Level level) {
+    void mdcMessageArgs(
+            TriFunction<Map<String, String>, String, Object[], LoggingEvent> producer, Level level) {
         LoggingEvent event = producer.apply(mdc, message, new Object[] {arg1, arg2});
         LoggingEvent expected = new LoggingEvent(level, mdc, message, arg1, arg2);
         assertThat(event, is(expected));
@@ -381,12 +392,12 @@ class LoggingEventTests extends StdIoTests {
     @Test
     void mdcNotModifiable() {
         Map<String, String> mdc = Collections.singletonMap("key", "value1");
-        assertThat(new LoggingEvent(level, mdc, message).getMdc(), is(instanceOf(ImmutableMap.class)) );
+        assertThat(new LoggingEvent(level, mdc, message).getMdc(), is(instanceOf(ImmutableMap.class)));
     }
 
     @Test
     void argsIsSnapshotInTime() {
-        Object[] args = new Object[]{arg1, arg2};
+        Object[] args = new Object[] {arg1, arg2};
         Object[] argsAtStart = Arrays.copyOf(args, args.length);
         LoggingEvent event = new LoggingEvent(level, message, args);
         args[0] = "differentArg";
@@ -395,7 +406,8 @@ class LoggingEventTests extends StdIoTests {
 
     @Test
     void argsNotModifiable() {
-        assertThat(new LoggingEvent(level, message, arg1).getArguments(), is(instanceOf(ImmutableList.class)));
+        assertThat(
+                new LoggingEvent(level, message, arg1).getArguments(), is(instanceOf(ImmutableList.class)));
     }
 
     @Test
@@ -427,8 +439,13 @@ class LoggingEventTests extends StdIoTests {
         LoggingEvent event = new LoggingEvent(INFO, "message with {}", "argument");
         event.print();
 
-        assertThat(getStdOut(),
-                is("1970-01-01T00:00:00.000Z ["+Thread.currentThread().getName()+"] INFO - message with argument"+lineSeparator()));
+        assertThat(
+                getStdOut(),
+                is(
+                        "1970-01-01T00:00:00.000Z ["
+                                + Thread.currentThread().getName()
+                                + "] INFO - message with argument"
+                                + lineSeparator()));
     }
 
     @Test
@@ -438,11 +455,16 @@ class LoggingEventTests extends StdIoTests {
         LoggingEvent event = new LoggingEvent(INFO, new Exception(), "message");
         event.print();
 
-        assertThat(getStdOut(),
-                startsWith("1970-01-01T00:00:00.000Z ["+Thread.currentThread().getName()+"] INFO - message"+lineSeparator()
-                        + "java.lang.Exception"+lineSeparator()
-                        + "\tat"
-                ));
+        assertThat(
+                getStdOut(),
+                startsWith(
+                        "1970-01-01T00:00:00.000Z ["
+                                + Thread.currentThread().getName()
+                                + "] INFO - message"
+                                + lineSeparator()
+                                + "java.lang.Exception"
+                                + lineSeparator()
+                                + "\tat"));
     }
 
     @ParameterizedTest

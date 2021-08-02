@@ -1,8 +1,7 @@
 package org.slf4j.impl;
 
-import org.slf4j.spi.MDCAdapter;
-
 import com.github.valfirst.slf4jtest.TestMDCAdapter;
+import org.slf4j.spi.MDCAdapter;
 
 public final class StaticMDCBinder {
 
@@ -10,8 +9,7 @@ public final class StaticMDCBinder {
 
     private final TestMDCAdapter testMDCAdapter = new TestMDCAdapter();
 
-    private StaticMDCBinder() {
-    }
+    private StaticMDCBinder() {}
 
     public MDCAdapter getMDCA() {
         return testMDCAdapter;

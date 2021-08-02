@@ -1,20 +1,5 @@
 package com.github.valfirst.slf4jtest;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-
-import uk.org.lidalia.slf4jext.Level;
-
 import static com.github.valfirst.slf4jtest.LoggingEvent.debug;
 import static com.github.valfirst.slf4jtest.LoggingEvent.info;
 import static com.github.valfirst.slf4jtest.LoggingEvent.trace;
@@ -32,6 +17,19 @@ import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 import static uk.org.lidalia.slf4jext.Level.WARN;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.junit.After;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import uk.org.lidalia.slf4jext.Level;
 
 @RunWith(PowerMockRunner.class)
 public class TestLoggerFactoryTests {
@@ -93,12 +91,9 @@ public class TestLoggerFactoryTests {
         logger1.trace("here");
         logger2.trace("I am");
 
-        assertThat(TestLoggerFactory.getLoggingEvents(),
-                is(asList(
-                        trace("hello"),
-                        trace("world"),
-                        trace("here"),
-                        trace("I am"))));
+        assertThat(
+                TestLoggerFactory.getLoggingEvents(),
+                is(asList(trace("hello"), trace("world"), trace("here"), trace("I am"))));
     }
 
     @Test
@@ -108,12 +103,8 @@ public class TestLoggerFactoryTests {
         logger1.trace("hello");
         logger2.trace("world");
 
-        assertThat(logger1.getLoggingEvents(),
-                is(singletonList(trace("hello"))
-                ));
-        assertThat(logger2.getLoggingEvents(),
-                is(singletonList(trace("world"))
-                ));
+        assertThat(logger1.getLoggingEvents(), is(singletonList(trace("hello"))));
+        assertThat(logger2.getLoggingEvents(), is(singletonList(trace("world"))));
     }
 
     @Test
@@ -140,7 +131,8 @@ public class TestLoggerFactoryTests {
         TestLogger logger1 = getInstance().getLogger("name1");
         TestLoggerFactory.clear();
 
-        assertThat(TestLoggerFactory.getAllTestLoggers(), is(Collections.singletonMap("name1", logger1)));
+        assertThat(
+                TestLoggerFactory.getAllTestLoggers(), is(Collections.singletonMap("name1", logger1)));
     }
 
     @Test
@@ -190,7 +182,8 @@ public class TestLoggerFactoryTests {
     public void getAllLoggersReturnsUnmodifiableList() {
         Map<String, TestLogger> allTestLoggers = TestLoggerFactory.getAllTestLoggers();
         TestLogger newLogger = new TestLogger("newlogger", getInstance());
-        assertThrows(UnsupportedOperationException.class, () -> allTestLoggers.put("newlogger", newLogger));
+        assertThrows(
+                UnsupportedOperationException.class, () -> allTestLoggers.put("newlogger", newLogger));
     }
 
     @Test
@@ -207,7 +200,8 @@ public class TestLoggerFactoryTests {
         t.start();
         t.join();
         TestLoggerFactory.getTestLogger("name1").info("message2");
-        assertThat(TestLoggerFactory.getAllLoggingEvents(), is(asList(info("message1"), info("message2"))));
+        assertThat(
+                TestLoggerFactory.getAllLoggingEvents(), is(asList(info("message1"), info("message2"))));
     }
 
     @Test
@@ -226,11 +220,13 @@ public class TestLoggerFactoryTests {
         final TestLogger logger2 = TestLoggerFactory.getTestLogger("name2");
         logger1.info("hello11");
         logger2.info("hello21");
-        Thread t = new Thread(() -> {
-            logger1.info("hello12");
-            logger2.info("hello22");
-            TestLoggerFactory.clearAll();
-        });
+        Thread t =
+                new Thread(
+                        () -> {
+                            logger1.info("hello12");
+                            logger2.info("hello22");
+                            TestLoggerFactory.clearAll();
+                        });
         t.start();
         t.join();
         assertThat(TestLoggerFactory.getLoggingEvents(), is(empty()));
@@ -264,15 +260,17 @@ public class TestLoggerFactoryTests {
         final String invalidLevelName = "nonsense";
         when(properties.getProperty("print.level", "OFF")).thenReturn(invalidLevelName);
 
-        final IllegalStateException illegalStateException = assertThrows(IllegalStateException.class,
-                TestLoggerFactory::getInstance);
-        assertThat(illegalStateException.getMessage(),
-                is("Invalid level name in property print.level of file slf4jtest.properties " +
-                        "or System property slf4jtest.print.level"));
+        final IllegalStateException illegalStateException =
+                assertThrows(IllegalStateException.class, TestLoggerFactory::getInstance);
+        assertThat(
+                illegalStateException.getMessage(),
+                is(
+                        "Invalid level name in property print.level of file slf4jtest.properties "
+                                + "or System property slf4jtest.print.level"));
         assertThat(illegalStateException.getCause(), instanceOf(IllegalArgumentException.class));
-        assertThat(illegalStateException.getCause().getMessage(),
-                is("No enum constant "+Level.class.getName()+"."+invalidLevelName));
-
+        assertThat(
+                illegalStateException.getCause().getMessage(),
+                is("No enum constant " + Level.class.getName() + "." + invalidLevelName));
     }
 
     @Test
@@ -281,14 +279,14 @@ public class TestLoggerFactoryTests {
         IOException ioException = new IOException();
         whenNew(OverridableProperties.class).withArguments("slf4jtest").thenThrow(ioException);
 
-        final UncheckedIOException uncheckedIOException = assertThrows(UncheckedIOException.class,
-                TestLoggerFactory::getInstance);
+        final UncheckedIOException uncheckedIOException =
+                assertThrows(UncheckedIOException.class, TestLoggerFactory::getInstance);
         assertThat(uncheckedIOException.getCause(), is(ioException));
     }
 
     @Test
     public void setLevel() {
-        for (Level printLevel: Level.values()) {
+        for (Level printLevel : Level.values()) {
             getInstance().setPrintLevel(printLevel);
             assertThat(getInstance().getPrintLevel(), is(printLevel));
         }
