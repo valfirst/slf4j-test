@@ -10,7 +10,7 @@
     <name>SLF4J Test</name>
     <description>An in-memory SLF4J implementation focused on aiding unit
         testing.</description>
-    <url>https://github.com/valfirst/${project.artifactId}</url>
+    <url>https://github.com/valfirst/slf4j-test</url>
     <licenses>
         <license>
             <name>MIT License</name>
@@ -27,9 +27,9 @@
     </developers>
 
     <scm>
-        <url>https://github.com/valfirst/${project.artifactId}</url>
-        <connection>scm:git:git@github.com:valfirst/${project.artifactId}.git</connection>
-        <developerConnection>scm:git:git@github.com:valfirst/${project.artifactId}.git</developerConnection>
+        <url>https://github.com/valfirst/slf4j-test</url>
+        <connection>scm:git:git@github.com:valfirst/slf4j-test.git</connection>
+        <developerConnection>scm:git:git@github.com:valfirst/slf4j-test.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
