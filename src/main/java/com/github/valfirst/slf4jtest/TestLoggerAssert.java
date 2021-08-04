@@ -1,6 +1,5 @@
 package com.github.valfirst.slf4jtest;
 
-import java.util.Optional;
 import uk.org.lidalia.slf4jext.Level;
 
 /**
@@ -23,15 +22,7 @@ public class TestLoggerAssert extends AbstractTestLoggerAssert<TestLoggerAssert>
     * @return a {@link TestLoggerAssert} for chaining
     */
     public TestLoggerAssert hasLogged(Level level, String message, Object... arguments) {
-        long count = getLogCount(level, logWithMessage(message, arguments));
-        if (count == 0) {
-            if (arguments.length == 0) {
-                failWithMessage("Failed to find %s log with message `%s`", level, message);
-            } else {
-                failWithMessage("Failed to find %s log with message `%s` (with arguments)", level, message);
-            }
-        }
-        return this;
+        return hasLogged(event(level, message, arguments));
     }
 
     /**
@@ -46,16 +37,18 @@ public class TestLoggerAssert extends AbstractTestLoggerAssert<TestLoggerAssert>
     */
     public TestLoggerAssert hasLogged(
             Throwable throwable, Level level, String message, Object... arguments) {
-        long count = getLogCount(level, logWithMessage(message, Optional.of(throwable), arguments));
-        if (count == 0) {
-            if (arguments.length == 0) {
-                failWithMessage(
-                        "Failed to find %s log message with message `%s` (with throwable)", level, message);
-            } else {
-                failWithMessage(
-                        "Failed to find %s log message with message `%s` (with throwable and arguments)",
-                        level, message);
-            }
+        return hasLogged(event(throwable, level, message, arguments));
+    }
+
+    /**
+    * Verify that a {@link LoggingEvent} has been logged by the test logger.
+    *
+    * @param event the event to verify presence of
+    * @return a {@link TestLoggerAssert} for chaining
+    */
+    public TestLoggerAssert hasLogged(LoggingEvent event) {
+        if (!actual.getLoggingEvents().contains(event)) {
+            failWithMessage("Failed to find %s", event);
         }
         return this;
     }
@@ -69,18 +62,7 @@ public class TestLoggerAssert extends AbstractTestLoggerAssert<TestLoggerAssert>
     * @return a {@link TestLoggerAssert} for chaining
     */
     public TestLoggerAssert hasNotLogged(Level level, String message, Object... arguments) {
-        long count = getLogCount(level, logWithMessage(message, arguments));
-        if (count != 0) {
-            if (arguments.length == 0) {
-                failWithMessage(
-                        "Found %s log with message `%s`, even though we expected not to", level, message);
-            } else {
-                failWithMessage(
-                        "Found %s log with message `%s` (with arguments), even though we expected not to",
-                        level, message);
-            }
-        }
-        return this;
+        return hasNotLogged(event(level, message, arguments));
     }
 
     /**
@@ -95,17 +77,18 @@ public class TestLoggerAssert extends AbstractTestLoggerAssert<TestLoggerAssert>
     */
     public TestLoggerAssert hasNotLogged(
             Throwable throwable, Level level, String message, Object... arguments) {
-        long count = getLogCount(level, logWithMessage(message, Optional.of(throwable), arguments));
-        if (count != 0) {
-            if (arguments.length == 0) {
-                failWithMessage(
-                        "Found %s log with message `%s` (with throwable), even though we expected not to",
-                        level, message);
-            } else {
-                failWithMessage(
-                        "Found %s log with message `%s` (with throwable and arguments), even though we expected not to",
-                        level, message);
-            }
+        return hasNotLogged(event(throwable, level, message, arguments));
+    }
+
+    /**
+    * Verify that a {@link LoggingEvent} has not been logged by the test logger.
+    *
+    * @param event the event to verify absence of
+    * @return a {@link TestLoggerAssert} for chaining
+    */
+    public TestLoggerAssert hasNotLogged(LoggingEvent event) {
+        if (actual.getLoggingEvents().contains(event)) {
+            failWithMessage("Found %s, even though we expected not to", event);
         }
         return this;
     }
