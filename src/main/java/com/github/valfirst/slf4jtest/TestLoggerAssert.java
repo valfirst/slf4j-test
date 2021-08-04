@@ -93,6 +93,12 @@ public class TestLoggerAssert extends AbstractTestLoggerAssert<TestLoggerAssert>
         return this;
     }
 
+    /**
+    * Convenience method for a {@link LevelAssert} from a provided test logger.
+    *
+    * @param level the {@link Level} to assert against
+    * @return the {@link LevelAssert} bound to the given {@link Level}
+    */
     public LevelAssert hasLevel(Level level) {
         return new LevelAssert(actual, level);
     }
