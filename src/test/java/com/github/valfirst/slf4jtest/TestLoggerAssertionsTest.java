@@ -42,6 +42,21 @@ class TestLoggerAssertionsTest {
             }
         }
 
+        @Nested
+        class AsLoggingEvent extends TestCase {
+
+            @Override
+            TestLoggerAssert performAssert(Level level, String message, Object... arguments) {
+                return assertions.hasLogged(event(level, message, arguments));
+            }
+
+            @Override
+            TestLoggerAssert performAssert(
+                    Throwable throwable, Level level, String message, Object... arguments) {
+                return assertions.hasLogged(event(throwable, level, message, arguments));
+            }
+        }
+
         abstract class TestCase {
             abstract TestLoggerAssert performAssert(Level level, String message, Object... arguments);
 
@@ -56,7 +71,8 @@ class TestLoggerAssertionsTest {
 
                     assertThatThrownBy(() -> performAssert(Level.WARN, "Something may be wrong"))
                             .isInstanceOf(AssertionError.class)
-                            .hasMessage("Failed to find WARN log with message `Something may be wrong`");
+                            .hasMessage(
+                                    "Failed to find LoggingEvent{level=WARN, mdc={}, marker=Optional.empty, throwable=Optional.empty, message='Something may be wrong', arguments=[]}");
                 }
 
                 @Test
@@ -68,7 +84,7 @@ class TestLoggerAssertionsTest {
                                     () -> performAssert(Level.WARN, "Something may be wrong", "Extra context"))
                             .isInstanceOf(AssertionError.class)
                             .hasMessage(
-                                    "Failed to find WARN log with message `Something may be wrong` (with arguments)");
+                                    "Failed to find LoggingEvent{level=WARN, mdc={}, marker=Optional.empty, throwable=Optional.empty, message='Something may be wrong', arguments=[Extra context]}");
                 }
 
                 @Test
@@ -82,7 +98,7 @@ class TestLoggerAssertionsTest {
                                     () -> performAssert(Level.WARN, "Something may be wrong", "Extra context"))
                             .isInstanceOf(AssertionError.class)
                             .hasMessage(
-                                    "Failed to find WARN log with message `Something may be wrong` (with arguments)");
+                                    "Failed to find LoggingEvent{level=WARN, mdc={}, marker=Optional.empty, throwable=Optional.empty, message='Something may be wrong', arguments=[Extra context]}");
                 }
 
                 @Test
@@ -98,7 +114,7 @@ class TestLoggerAssertionsTest {
                                                     Level.WARN, "Something may be wrong", "Extra context", "Another"))
                             .isInstanceOf(AssertionError.class)
                             .hasMessage(
-                                    "Failed to find WARN log with message `Something may be wrong` (with arguments)");
+                                    "Failed to find LoggingEvent{level=WARN, mdc={}, marker=Optional.empty, throwable=Optional.empty, message='Something may be wrong', arguments=[Extra context, Another]}");
                 }
 
                 @Test
@@ -143,7 +159,7 @@ class TestLoggerAssertionsTest {
                                     () -> performAssert(throwable, Level.ERROR, "There was a problem!", "context"))
                             .isInstanceOf(AssertionError.class)
                             .hasMessage(
-                                    "Failed to find ERROR log message with message `There was a problem!` (with throwable and arguments)");
+                                    "Failed to find LoggingEvent{level=ERROR, mdc={}, marker=Optional.empty, throwable=Optional[throwable], message='There was a problem!', arguments=[context]}");
                 }
 
                 @Test
@@ -154,7 +170,7 @@ class TestLoggerAssertionsTest {
                     assertThatThrownBy(() -> performAssert(throwable, Level.ERROR, "There was a problem!"))
                             .isInstanceOf(AssertionError.class)
                             .hasMessage(
-                                    "Failed to find ERROR log message with message `There was a problem!` (with throwable)");
+                                    "Failed to find LoggingEvent{level=ERROR, mdc={}, marker=Optional.empty, throwable=Optional[throwable], message='There was a problem!', arguments=[]}");
                 }
 
                 @Test
@@ -188,6 +204,21 @@ class TestLoggerAssertionsTest {
             }
         }
 
+        @Nested
+        class AsLoggingEvent extends TestCase {
+
+            @Override
+            TestLoggerAssert performAssert(Level level, String message, Object... arguments) {
+                return assertions.hasNotLogged(event(level, message, arguments));
+            }
+
+            @Override
+            TestLoggerAssert performAssert(
+                    Throwable throwable, Level level, String message, Object... arguments) {
+                return assertions.hasNotLogged(event(throwable, level, message, arguments));
+            }
+        }
+
         abstract class TestCase {
             abstract TestLoggerAssert performAssert(Level level, String message, Object... arguments);
 
@@ -202,7 +233,7 @@ class TestLoggerAssertionsTest {
                 assertThatThrownBy(() -> performAssert(Level.WARN, "Something may be wrong"))
                         .isInstanceOf(AssertionError.class)
                         .hasMessage(
-                                "Found WARN log with message `Something may be wrong`, even though we expected not to");
+                                "Found LoggingEvent{level=WARN, mdc={}, marker=Optional.empty, throwable=Optional.empty, message='Something may be wrong', arguments=[]}, even though we expected not to");
             }
 
             @Test
@@ -295,7 +326,7 @@ class TestLoggerAssertionsTest {
                                     () -> performAssert(throwable, Level.ERROR, "There was a problem!", "context"))
                             .isInstanceOf(AssertionError.class)
                             .hasMessage(
-                                    "Found ERROR log with message `There was a problem!` (with throwable and arguments), even though we expected not to");
+                                    "Found LoggingEvent{level=ERROR, mdc={}, marker=Optional.empty, throwable=Optional[throwable], message='There was a problem!', arguments=[context]}, even though we expected not to");
                 }
 
                 @Test
@@ -306,7 +337,7 @@ class TestLoggerAssertionsTest {
                     assertThatThrownBy(() -> performAssert(throwable, Level.ERROR, "There was a problem!"))
                             .isInstanceOf(AssertionError.class)
                             .hasMessage(
-                                    "Found ERROR log with message `There was a problem!` (with throwable), even though we expected not to");
+                                    "Found LoggingEvent{level=ERROR, mdc={}, marker=Optional.empty, throwable=Optional[throwable], message='There was a problem!', arguments=[]}, even though we expected not to");
                 }
 
                 @Test
@@ -328,6 +359,41 @@ class TestLoggerAssertionsTest {
             LevelAssert actual = assertions.hasLevel(Level.ERROR);
 
             assertThat(actual).isNotNull();
+        }
+    }
+
+    private static LoggingEvent event(Level level, String message, Object... arguments) {
+        switch (level) {
+            case WARN:
+                return LoggingEvent.warn(message, arguments);
+            case ERROR:
+                return LoggingEvent.error(message, arguments);
+            case INFO:
+                return LoggingEvent.info(message, arguments);
+            case DEBUG:
+                return LoggingEvent.debug(message, arguments);
+            case TRACE:
+                return LoggingEvent.trace(message, arguments);
+            default:
+                throw new IllegalStateException("Unmatched level " + level + " provided");
+        }
+    }
+
+    private static LoggingEvent event(
+            Throwable throwable, Level level, String message, Object... arguments) {
+        switch (level) {
+            case WARN:
+                return LoggingEvent.warn(throwable, message, arguments);
+            case ERROR:
+                return LoggingEvent.error(throwable, message, arguments);
+            case INFO:
+                return LoggingEvent.info(throwable, message, arguments);
+            case DEBUG:
+                return LoggingEvent.debug(throwable, message, arguments);
+            case TRACE:
+                return LoggingEvent.trace(throwable, message, arguments);
+            default:
+                throw new IllegalStateException("Unmatched level " + level + " provided");
         }
     }
 }

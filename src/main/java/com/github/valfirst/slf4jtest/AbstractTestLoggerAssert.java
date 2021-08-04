@@ -31,4 +31,39 @@ abstract class AbstractTestLoggerAssert<C extends AbstractAssert<C, TestLogger>>
                         && event.getArguments().equals(Arrays.asList(arguments))
                         && event.getThrowable().equals(maybeThrowable);
     }
+
+    protected static LoggingEvent event(Level level, String message, Object... arguments) {
+        switch (level) {
+            case WARN:
+                return LoggingEvent.warn(message, arguments);
+            case ERROR:
+                return LoggingEvent.error(message, arguments);
+            case INFO:
+                return LoggingEvent.info(message, arguments);
+            case DEBUG:
+                return LoggingEvent.debug(message, arguments);
+            case TRACE:
+                return LoggingEvent.trace(message, arguments);
+            default:
+                throw new IllegalStateException("Unmatched level " + level + " provided");
+        }
+    }
+
+    protected static LoggingEvent event(
+            Throwable throwable, Level level, String message, Object... arguments) {
+        switch (level) {
+            case WARN:
+                return LoggingEvent.warn(throwable, message, arguments);
+            case ERROR:
+                return LoggingEvent.error(throwable, message, arguments);
+            case INFO:
+                return LoggingEvent.info(throwable, message, arguments);
+            case DEBUG:
+                return LoggingEvent.debug(throwable, message, arguments);
+            case TRACE:
+                return LoggingEvent.trace(throwable, message, arguments);
+            default:
+                throw new IllegalStateException("Unmatched level " + level + " provided");
+        }
+    }
 }
