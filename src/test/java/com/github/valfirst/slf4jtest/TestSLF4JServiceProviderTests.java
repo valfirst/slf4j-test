@@ -43,7 +43,7 @@ class TestSLF4JServiceProviderTests {
 
     @Test
     void getRequestedApiVersion() {
-        assertEquals("1.8.99", slf4JServiceProvider.getRequesteApiVersion());
+        assertEquals("2.0.99", slf4JServiceProvider.getRequestedApiVersion());
     }
 
     @Test
