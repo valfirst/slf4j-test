@@ -24,6 +24,13 @@ all available from Maven Central.
 </dependency>
 ```
 
+## Compatiblity Matrix
+|`org.slf4j:slf4j-api`           | `com.github.valfirst:slf4j-test` |
+|--------------------------------|----------------------------------| 
+| `1.8.0-beta0` - `2.0.0-alpha3` | `1.3.0` - `2.3.0`                |
+| `2.0.0-alpha4`                 | `2.4.0`                          |
+
+
 ## JUnit 5 Support
 ### Declarative Extension Registration
 SLF4J Test provides JUnit Platform extension which can registered via annotation:
