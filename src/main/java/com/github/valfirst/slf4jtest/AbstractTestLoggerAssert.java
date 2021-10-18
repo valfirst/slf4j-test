@@ -1,19 +1,24 @@
 package com.github.valfirst.slf4jtest;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import org.assertj.core.api.AbstractAssert;
 import uk.org.lidalia.slf4jext.Level;
 
 abstract class AbstractTestLoggerAssert<C extends AbstractAssert<C, TestLogger>>
         extends AbstractAssert<C, TestLogger> {
+    protected Supplier<List<LoggingEvent>> loggingEventsSupplier;
+
     protected AbstractTestLoggerAssert(TestLogger testLogger, Class clazz) {
         super(testLogger, clazz);
+        loggingEventsSupplier = testLogger::getLoggingEvents;
     }
 
     protected long getLogCount(Level level, Predicate<LoggingEvent> predicate) {
-        return actual.getLoggingEvents().stream()
+        return loggingEventsSupplier.get().stream()
                 .filter(event -> level.equals(event.getLevel()) && predicate.test(event))
                 .count();
     }
