@@ -20,7 +20,7 @@ all available from Maven Central.
 <dependency>
     <groupId>com.github.valfirst</groupId>
     <artifactId>slf4j-test</artifactId>
-    <version>2.4.0</version>
+    <version>2.4.1</version>
 </dependency>
 ```
 
@@ -28,7 +28,7 @@ all available from Maven Central.
 |`org.slf4j:slf4j-api`            | `com.github.valfirst:slf4j-test` |
 |---------------------------------|----------------------------------| 
 | `1.8.0-beta0` - `2.0.0-alpha2`  | `1.3.0` - `2.3.0`                |
-| `2.0.0-alpha3` - `2.0.0-alpha5` | `2.4.0`                          |
+| `2.0.0-alpha3` - `2.0.0-alpha5` | `2.4.0` - `2.4.1`                |
 
 
 ## JUnit 5 Support
