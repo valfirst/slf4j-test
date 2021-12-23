@@ -24,7 +24,7 @@ all available from Maven Central.
 </dependency>
 ```
 
-## Compatiblity Matrix
+## Compatibility Matrix
 |`org.slf4j:slf4j-api`            | `com.github.valfirst:slf4j-test` |
 |---------------------------------|----------------------------------| 
 | `1.8.0-beta0` - `2.0.0-alpha2`  | `1.3.0` - `2.3.0`                |
@@ -51,7 +51,7 @@ SLF4J Test supports automatic extension registration via ServiceLoader mechanism
 ## Credits
 This project is based on the original implementation by [Robert Elliot](https://github.com/Mahoney), located at https://github.com/Mahoney/slf4j-test which worked with SLF4J prior to version 1.8.X.
 
-See http://projects.lidalia.org.uk/slf4j-test for details.
+See https://projects.lidalia.org.uk/slf4j-test for details.
 
 
 ## License Scan
