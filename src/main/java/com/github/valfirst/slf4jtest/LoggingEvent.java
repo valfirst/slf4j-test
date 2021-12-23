@@ -476,7 +476,9 @@ public class LoggingEvent {
     }
 
     public String getFormattedMessage() {
-        return MessageFormatter.arrayFormat(getMessage(), getArguments().toArray()).getMessage();
+        Object[] argumentsWithNulls =
+                getArguments().stream().map(a -> a.equals(Optional.empty()) ? null : a).toArray();
+        return MessageFormatter.arrayFormat(getMessage(), argumentsWithNulls).getMessage();
     }
 
     private PrintStream printStreamForLevel() {
