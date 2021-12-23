@@ -491,6 +491,12 @@ class LoggingEventTests extends StdIoTests {
         assertThat(event, is(new LoggingEvent(level, "message with null arg", empty(), empty())));
     }
 
+    @Test
+    public void nullArgumentIsFormattedLikeSlf4j() {
+        LoggingEvent event = new LoggingEvent(level, "message with {}, {}", null, "value");
+        assertThat(event.getFormattedMessage(), is("message with null, value"));
+    }
+
     public interface TriFunction<A, B, C, R> {
         R apply(A a, B b, C c);
     }
