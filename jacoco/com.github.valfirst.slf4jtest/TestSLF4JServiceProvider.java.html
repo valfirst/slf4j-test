@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestSLF4JServiceProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SLF4J Test</a> &gt; <a href="index.source.html" class="el_package">com.github.valfirst.slf4jtest</a> &gt; <span class="el_source">TestSLF4JServiceProvider.java</span></div><h1>TestSLF4JServiceProvider.java</h1><pre class="source lang-java linenums">package com.github.valfirst.slf4jtest;
+
+import org.slf4j.ILoggerFactory;
+import org.slf4j.IMarkerFactory;
+import org.slf4j.helpers.BasicMarkerFactory;
+import org.slf4j.spi.MDCAdapter;
+import org.slf4j.spi.SLF4JServiceProvider;
+
+/** @author Valery Yatsynovich */
+<span class="fc" id="L10">public class TestSLF4JServiceProvider implements SLF4JServiceProvider {</span>
+    public static final String REQUESTED_API_VERSION = &quot;2.0.99&quot;;
+
+    private ILoggerFactory loggerFactory;
+    private IMarkerFactory markerFactory;
+    private MDCAdapter mdcAdapter;
+
+    @Override
+    public void initialize() {
+<span class="fc" id="L19">        loggerFactory = TestLoggerFactory.getInstance();</span>
+<span class="fc" id="L20">        markerFactory = new BasicMarkerFactory();</span>
+<span class="fc" id="L21">        mdcAdapter = new TestMDCAdapter();</span>
+<span class="fc" id="L22">    }</span>
+
+    @Override
+    public ILoggerFactory getLoggerFactory() {
+<span class="fc" id="L26">        return loggerFactory;</span>
+    }
+
+    @Override
+    public IMarkerFactory getMarkerFactory() {
+<span class="fc" id="L31">        return markerFactory;</span>
+    }
+
+    @Override
+    public MDCAdapter getMDCAdapter() {
+<span class="fc" id="L36">        return mdcAdapter;</span>
+    }
+
+    @Override
+    public String getRequestedApiVersion() {
+<span class="fc" id="L41">        return REQUESTED_API_VERSION;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

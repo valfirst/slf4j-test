@@ -20,19 +20,19 @@ under the License.
 <rss version="0.91">
   <channel>
     <title>SLF4J Test - Checkstyle report</title>
-    <link>http://projects.lidalia.org.uk/slf4j-test</link>
+    <link>https://github.com/valfirst/slf4j-test</link>
     <description>SLF4J Test - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2014</copyright>
+    <copyright>&#169;2021</copyright>
     <item>
-      <title>File: 10,
-             Errors: 0,
+      <title>File: 15,
+             Errors: 494,
              Warnings: 0,
              Infos: 0
       </title>
-            <link>http://projects.lidalia.org.uk/slf4j-test/checkstyle.html</link>
+            <link>https://github.com/valfirst/slf4j-test/checkstyle.html</link>
       <description>
-        <p>Click <a href="http://projects.lidalia.org.uk/slf4j-test/checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="https://github.com/valfirst/slf4j-test/checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -46,7 +46,7 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://projects.lidalia.org.uk/slf4j-test/checkstyle.html#uk.org.lidalia.slf4jtest.TestLogger.java">uk/org/lidalia/slf4jtest/TestLogger.java</a>
+                  <a href="https://github.com/valfirst/slf4j-test/checkstyle.html#com.github.valfirst.slf4jtest.LoggingEvent.java">com/github/valfirst/slf4jtest/LoggingEvent.java</a>
                 </td>
                 <td>
                   0
@@ -55,12 +55,12 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  173
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://projects.lidalia.org.uk/slf4j-test/checkstyle.html#uk.org.lidalia.slf4jtest.TestLoggerFactoryResetRule.java">uk/org/lidalia/slf4jtest/TestLoggerFactoryResetRule.java</a>
+                  <a href="https://github.com/valfirst/slf4j-test/checkstyle.html#com.github.valfirst.slf4jtest.TestLoggerAssert.java">com/github/valfirst/slf4jtest/TestLoggerAssert.java</a>
                 </td>
                 <td>
                   0
@@ -69,12 +69,12 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  35
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://projects.lidalia.org.uk/slf4j-test/checkstyle.html#org.slf4j.impl.StaticMDCBinder.java">org/slf4j/impl/StaticMDCBinder.java</a>
+                  <a href="https://github.com/valfirst/slf4j-test/checkstyle.html#com.github.valfirst.slf4jtest.TestMDCAdapter.java">com/github/valfirst/slf4jtest/TestMDCAdapter.java</a>
                 </td>
                 <td>
                   0
@@ -83,12 +83,12 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  14
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://projects.lidalia.org.uk/slf4j-test/checkstyle.html#uk.org.lidalia.slf4jtest.TestMDCAdapter.java">uk/org/lidalia/slf4jtest/TestMDCAdapter.java</a>
+                  <a href="https://github.com/valfirst/slf4j-test/checkstyle.html#com.github.valfirst.slf4jtest.LevelAssert.java">com/github/valfirst/slf4jtest/LevelAssert.java</a>
                 </td>
                 <td>
                   0
@@ -97,12 +97,12 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  24
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://projects.lidalia.org.uk/slf4j-test/checkstyle.html#uk.org.lidalia.slf4jtest.Suppliers.java">uk/org/lidalia/slf4jtest/Suppliers.java</a>
+                  <a href="https://github.com/valfirst/slf4j-test/checkstyle.html#org.slf4j.impl.StaticMDCBinder.java">org/slf4j/impl/StaticMDCBinder.java</a>
                 </td>
                 <td>
                   0
@@ -111,12 +111,12 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  6
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://projects.lidalia.org.uk/slf4j-test/checkstyle.html#org.slf4j.impl.StaticLoggerBinder.java">org/slf4j/impl/StaticLoggerBinder.java</a>
+                  <a href="https://github.com/valfirst/slf4j-test/checkstyle.html#com.github.valfirst.slf4jtest.Assertions.java">com/github/valfirst/slf4jtest/Assertions.java</a>
                 </td>
                 <td>
                   0
@@ -125,12 +125,12 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  4
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://projects.lidalia.org.uk/slf4j-test/checkstyle.html#uk.org.lidalia.slf4jtest.LoggingEvent.java">uk/org/lidalia/slf4jtest/LoggingEvent.java</a>
+                  <a href="https://github.com/valfirst/slf4j-test/checkstyle.html#com.github.valfirst.slf4jtest.OverridableProperties.java">com/github/valfirst/slf4jtest/OverridableProperties.java</a>
                 </td>
                 <td>
                   0
@@ -139,12 +139,12 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  9
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://projects.lidalia.org.uk/slf4j-test/checkstyle.html#org.slf4j.impl.StaticMarkerBinder.java">org/slf4j/impl/StaticMarkerBinder.java</a>
+                  <a href="https://github.com/valfirst/slf4j-test/checkstyle.html#com.github.valfirst.slf4jtest.TestLogger.java">com/github/valfirst/slf4jtest/TestLogger.java</a>
                 </td>
                 <td>
                   0
@@ -153,12 +153,12 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  140
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://projects.lidalia.org.uk/slf4j-test/checkstyle.html#uk.org.lidalia.slf4jtest.TestLoggerFactory.java">uk/org/lidalia/slf4jtest/TestLoggerFactory.java</a>
+                  <a href="https://github.com/valfirst/slf4j-test/checkstyle.html#com.github.valfirst.slf4jtest.TestSLF4JServiceProvider.java">com/github/valfirst/slf4jtest/TestSLF4JServiceProvider.java</a>
                 </td>
                 <td>
                   0
@@ -167,12 +167,12 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  9
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://projects.lidalia.org.uk/slf4j-test/checkstyle.html#uk.org.lidalia.slf4jtest.OverridableProperties.java">uk/org/lidalia/slf4jtest/OverridableProperties.java</a>
+                  <a href="https://github.com/valfirst/slf4j-test/checkstyle.html#com.github.valfirst.slf4jtest.TestLoggerFactoryExtension.java">com/github/valfirst/slf4jtest/TestLoggerFactoryExtension.java</a>
                 </td>
                 <td>
                   0
@@ -181,7 +181,77 @@ under the License.
                   0
                 </td>
                 <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/valfirst/slf4j-test/checkstyle.html#com.github.valfirst.slf4jtest.TestLoggerFactoryResetRule.java">com/github/valfirst/slf4jtest/TestLoggerFactoryResetRule.java</a>
+                </td>
+                <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/valfirst/slf4j-test/checkstyle.html#com.github.valfirst.slf4jtest.TestLoggerFactory.java">com/github/valfirst/slf4jtest/TestLoggerFactory.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  32
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/valfirst/slf4j-test/checkstyle.html#org.slf4j.impl.StaticLoggerBinder.java">org/slf4j/impl/StaticLoggerBinder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/valfirst/slf4j-test/checkstyle.html#com.github.valfirst.slf4jtest.AbstractTestLoggerAssert.java">com/github/valfirst/slf4jtest/AbstractTestLoggerAssert.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  25
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/valfirst/slf4j-test/checkstyle.html#org.slf4j.impl.StaticMarkerBinder.java">org/slf4j/impl/StaticMarkerBinder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
                 </td>
               </tr>
                       </tbody>

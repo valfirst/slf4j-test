@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestLoggerAssert.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SLF4J Test</a> &gt; <a href="index.source.html" class="el_package">com.github.valfirst.slf4jtest</a> &gt; <span class="el_source">TestLoggerAssert.java</span></div><h1>TestLoggerAssert.java</h1><pre class="source lang-java linenums">package com.github.valfirst.slf4jtest;
+
+import uk.org.lidalia.slf4jext.Level;
+
+/**
+* A set of assertions to validate that logs have been logged to a {@link TestLogger}.
+*
+* &lt;p&gt;Should be thread safe, as this uses &lt;code&gt;testLogger.getLoggingEvents()&lt;/code&gt; by default. The
+* assertion mode can be switched to use &lt;code&gt;testLogger.getAllLoggingEvents()&lt;/code&gt; by calling
+* {@link #anyThread()}.
+*/
+public class TestLoggerAssert extends AbstractTestLoggerAssert&lt;TestLoggerAssert&gt; {
+
+    protected TestLoggerAssert(TestLogger testLogger) {
+<span class="fc" id="L15">        super(testLogger, TestLoggerAssert.class);</span>
+<span class="fc" id="L16">    }</span>
+
+    /**
+    * Changes the assertion mode to verify that log messages have been logged regardless of which
+    * thread actually logged the message.
+    *
+    * @return a {@link TestLoggerAssert} for chaining
+    */
+    public TestLoggerAssert anyThread() {
+<span class="fc" id="L25">        loggingEventsSupplier = actual::getAllLoggingEvents;</span>
+<span class="fc" id="L26">        return this;</span>
+    }
+
+    /**
+    * Verify that a log message, at a specific level, has been logged by the test logger.
+    *
+    * @param level the level of the log message to look for
+    * @param message the expected message
+    * @param arguments any optional arguments that may be provided to the log message
+    * @return a {@link TestLoggerAssert} for chaining
+    */
+    public TestLoggerAssert hasLogged(Level level, String message, Object... arguments) {
+<span class="fc" id="L38">        return hasLogged(event(level, message, arguments));</span>
+    }
+
+    /**
+    * Verify that a log message, at a specific level, has been logged by the test logger in the
+    * presence of a {@link Throwable}.
+    *
+    * @param throwable the throwable that is attached to the log message
+    * @param level the level of the log message to look for
+    * @param message the expected message
+    * @param arguments any optional arguments that may be provided to the log message
+    * @return a {@link TestLoggerAssert} for chaining
+    */
+    public TestLoggerAssert hasLogged(
+            Throwable throwable, Level level, String message, Object... arguments) {
+<span class="fc" id="L53">        return hasLogged(event(throwable, level, message, arguments));</span>
+    }
+
+    /**
+    * Verify that a {@link LoggingEvent} has been logged by the test logger.
+    *
+    * @param event the event to verify presence of
+    * @return a {@link TestLoggerAssert} for chaining
+    */
+    public TestLoggerAssert hasLogged(LoggingEvent event) {
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (!loggingEventsSupplier.get().contains(event)) {</span>
+<span class="nc" id="L64">            failWithMessage(&quot;Failed to find %s&quot;, event);</span>
+        }
+<span class="fc" id="L66">        return this;</span>
+    }
+
+    /**
+    * Verify that a log message, at a specific level, has not been logged by the test logger.
+    *
+    * @param level the level of the log message to look for
+    * @param message the expected message
+    * @param arguments any optional arguments that may be provided to the log message
+    * @return a {@link TestLoggerAssert} for chaining
+    */
+    public TestLoggerAssert hasNotLogged(Level level, String message, Object... arguments) {
+<span class="fc" id="L78">        return hasNotLogged(event(level, message, arguments));</span>
+    }
+
+    /**
+    * Verify that a log message, at a specific level, has not been logged by the test logger in the
+    * presence of a {@link Throwable}.
+    *
+    * @param throwable the throwable that is attached to the log message
+    * @param level the level of the log message to look for
+    * @param message the expected message
+    * @param arguments any optional arguments that may be provided to the log message
+    * @return a {@link TestLoggerAssert} for chaining
+    */
+    public TestLoggerAssert hasNotLogged(
+            Throwable throwable, Level level, String message, Object... arguments) {
+<span class="fc" id="L93">        return hasNotLogged(event(throwable, level, message, arguments));</span>
+    }
+
+    /**
+    * Verify that a {@link LoggingEvent} has not been logged by the test logger.
+    *
+    * @param event the event to verify absence of
+    * @return a {@link TestLoggerAssert} for chaining
+    */
+    public TestLoggerAssert hasNotLogged(LoggingEvent event) {
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (loggingEventsSupplier.get().contains(event)) {</span>
+<span class="nc" id="L104">            failWithMessage(&quot;Found %s, even though we expected not to&quot;, event);</span>
+        }
+<span class="fc" id="L106">        return this;</span>
+    }
+
+    /**
+    * Convenience method for a {@link LevelAssert} from a provided test logger.
+    *
+    * @param level the {@link Level} to assert against
+    * @return the {@link LevelAssert} bound to the given {@link Level}
+    */
+    public LevelAssert hasLevel(Level level) {
+<span class="fc" id="L116">        LevelAssert levelAssert = new LevelAssert(actual, level);</span>
+<span class="fc" id="L117">        levelAssert.loggingEventsSupplier = loggingEventsSupplier;</span>
+<span class="fc" id="L118">        return levelAssert;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
