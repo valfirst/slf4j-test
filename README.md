@@ -48,11 +48,11 @@ class BasicJUnit5Test {
 ### Automatic Extension Registration
 SLF4J Test supports automatic extension registration via ServiceLoader mechanism. This feature is considered advanced in JUnit Platform and [it requires explicit enabling](https://junit.org/junit5/docs/current/user-guide/#extensions-registration-automatic-enabling).
 
+## Documentation
+See https://valfirst.github.io/slf4j-test/ for details.
+
 ## Credits
 This project is based on the original implementation by [Robert Elliot](https://github.com/Mahoney), located at https://github.com/Mahoney/slf4j-test which worked with SLF4J prior to version 1.8.X.
-
-See https://projects.lidalia.org.uk/slf4j-test for details.
-
 
 ## License Scan
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fvalfirst%2Fslf4j-test.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fvalfirst%2Fslf4j-test?ref=badge_large)
