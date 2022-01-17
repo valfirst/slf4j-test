@@ -5,9 +5,9 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 /**
-* A <a href="https://github.com/junit-team/junit/wiki">JUnit</a> rule that clears the ThreadLocal
-* state of all the TestLoggers and the TestLoggerFactory.
-*/
+ * A <a href="https://github.com/junit-team/junit/wiki">JUnit</a> rule that clears the ThreadLocal
+ * state of all the TestLoggers and the TestLoggerFactory.
+ */
 public class TestLoggerFactoryResetRule implements TestRule {
 
     @Override

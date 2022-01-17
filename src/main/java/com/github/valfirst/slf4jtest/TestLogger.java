@@ -27,25 +27,25 @@ import org.slf4j.helpers.MessageFormatter;
 import uk.org.lidalia.slf4jext.Level;
 
 /**
-* Implementation of {@link Logger} which stores {@link LoggingEvent}s in memory and provides
-* methods to access and remove them in order to facilitate writing tests that assert particular
-* logging calls were made.
-*
-* <p>{@link LoggingEvent}s are stored in both an {@link ThreadLocal} and a normal {@link List}. The
-* {@link #getLoggingEvents()} and {@link #clear()} methods reference the {@link ThreadLocal}
-* events. The {@link #getAllLoggingEvents()} and {@link #clearAll()} methods reference all events
-* logged on this Logger. This is in order to facilitate parallelising tests - tests that use the
-* thread local methods can be parallelised.
-*
-* <p>By default all Levels are enabled. It is important to note that the conventional hierarchical
-* notion of Levels, where info being enabled implies warn and error being enabled, is not a
-* requirement of the SLF4J API, so the {@link #setEnabledLevels(ImmutableSet)}, {@link
-* #setEnabledLevels(Level...)}, {@link #setEnabledLevelsForAllThreads(ImmutableSet)}, {@link
-* #setEnabledLevelsForAllThreads(Level...)} and the various isXxxxxEnabled() methods make no
-* assumptions about this hierarchy. If you wish to use traditional hierarchical setups you may do
-* so by passing the constants in {@link uk.org.lidalia.slf4jext.ConventionalLevelHierarchy} to
-* {@link #setEnabledLevels(ImmutableSet)} or {@link #setEnabledLevelsForAllThreads(ImmutableSet)}.
-*/
+ * Implementation of {@link Logger} which stores {@link LoggingEvent}s in memory and provides
+ * methods to access and remove them in order to facilitate writing tests that assert particular
+ * logging calls were made.
+ *
+ * <p>{@link LoggingEvent}s are stored in both an {@link ThreadLocal} and a normal {@link List}. The
+ * {@link #getLoggingEvents()} and {@link #clear()} methods reference the {@link ThreadLocal}
+ * events. The {@link #getAllLoggingEvents()} and {@link #clearAll()} methods reference all events
+ * logged on this Logger. This is in order to facilitate parallelising tests - tests that use the
+ * thread local methods can be parallelised.
+ *
+ * <p>By default all Levels are enabled. It is important to note that the conventional hierarchical
+ * notion of Levels, where info being enabled implies warn and error being enabled, is not a
+ * requirement of the SLF4J API, so the {@link #setEnabledLevels(ImmutableSet)}, {@link
+ * #setEnabledLevels(Level...)}, {@link #setEnabledLevelsForAllThreads(ImmutableSet)}, {@link
+ * #setEnabledLevelsForAllThreads(Level...)} and the various isXxxxxEnabled() methods make no
+ * assumptions about this hierarchy. If you wish to use traditional hierarchical setups you may do
+ * so by passing the constants in {@link uk.org.lidalia.slf4jext.ConventionalLevelHierarchy} to
+ * {@link #setEnabledLevels(ImmutableSet)} or {@link #setEnabledLevelsForAllThreads(ImmutableSet)}.
+ */
 @SuppressWarnings({"PMD.ExcessivePublicCount", "PMD.TooManyMethods"})
 public class TestLogger implements Logger {
 
@@ -67,18 +67,18 @@ public class TestLogger implements Logger {
     }
 
     /**
-    * Removes all {@link LoggingEvent}s logged by this thread and resets the enabled levels of the
-    * logger to {@link Level#enablableValueSet()} for this thread.
-    */
+     * Removes all {@link LoggingEvent}s logged by this thread and resets the enabled levels of the
+     * logger to {@link Level#enablableValueSet()} for this thread.
+     */
     public void clear() {
         loggingEvents.get().clear();
         enabledLevels.remove();
     }
 
     /**
-    * Removes ALL {@link LoggingEvent}s logged on this logger, regardless of thread, and resets the
-    * enabled levels of the logger to {@link Level#enablableValueSet()} for ALL threads.
-    */
+     * Removes ALL {@link LoggingEvent}s logged on this logger, regardless of thread, and resets the
+     * enabled levels of the logger to {@link Level#enablableValueSet()} for ALL threads.
+     */
     public void clearAll() {
         allLoggingEvents.clear();
         loggingEvents = ThreadLocal.withInitial(ArrayList::new);
@@ -468,58 +468,58 @@ public class TestLogger implements Logger {
     }
 
     /**
-    * The conventional hierarchical notion of Levels, where info being enabled implies warn and error
-    * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be
-    * passed explicitly to this method. If you wish to use traditional hierarchical setups you may
-    * conveniently do so by using the constants in {@link
-    * uk.org.lidalia.slf4jext.ConventionalLevelHierarchy}
-    *
-    * @param enabledLevels levels which will be considered enabled for this logger IN THIS THREAD;
-    *     does not affect enabled levels for this logger in other threads
-    */
+     * The conventional hierarchical notion of Levels, where info being enabled implies warn and error
+     * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be
+     * passed explicitly to this method. If you wish to use traditional hierarchical setups you may
+     * conveniently do so by using the constants in {@link
+     * uk.org.lidalia.slf4jext.ConventionalLevelHierarchy}
+     *
+     * @param enabledLevels levels which will be considered enabled for this logger IN THIS THREAD;
+     *     does not affect enabled levels for this logger in other threads
+     */
     public void setEnabledLevels(final ImmutableSet<Level> enabledLevels) {
         this.enabledLevels.set(enabledLevels);
     }
 
     /**
-    * The conventional hierarchical notion of Levels, where info being enabled implies warn and error
-    * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be
-    * passed explicitly to this method. If you wish to use traditional hierarchical setups you may
-    * conveniently do so by passing the constants in {@link
-    * uk.org.lidalia.slf4jext.ConventionalLevelHierarchy} to {@link #setEnabledLevels(ImmutableSet)}
-    *
-    * @param enabledLevels levels which will be considered enabled for this logger IN THIS THREAD;
-    *     does not affect enabled levels for this logger in other threads
-    */
+     * The conventional hierarchical notion of Levels, where info being enabled implies warn and error
+     * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be
+     * passed explicitly to this method. If you wish to use traditional hierarchical setups you may
+     * conveniently do so by passing the constants in {@link
+     * uk.org.lidalia.slf4jext.ConventionalLevelHierarchy} to {@link #setEnabledLevels(ImmutableSet)}
+     *
+     * @param enabledLevels levels which will be considered enabled for this logger IN THIS THREAD;
+     *     does not affect enabled levels for this logger in other threads
+     */
     public void setEnabledLevels(final Level... enabledLevels) {
         setEnabledLevels(immutableEnumSet(asList(enabledLevels)));
     }
 
     /**
-    * The conventional hierarchical notion of Levels, where info being enabled implies warn and error
-    * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be
-    * passed explicitly to this method. If you wish to use traditional hierarchical setups you may
-    * conveniently do so by using the constants in {@link
-    * uk.org.lidalia.slf4jext.ConventionalLevelHierarchy}
-    *
-    * @param enabledLevelsForAllThreads levels which will be considered enabled for this logger IN
-    *     ALL THREADS
-    */
+     * The conventional hierarchical notion of Levels, where info being enabled implies warn and error
+     * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be
+     * passed explicitly to this method. If you wish to use traditional hierarchical setups you may
+     * conveniently do so by using the constants in {@link
+     * uk.org.lidalia.slf4jext.ConventionalLevelHierarchy}
+     *
+     * @param enabledLevelsForAllThreads levels which will be considered enabled for this logger IN
+     *     ALL THREADS
+     */
     public void setEnabledLevelsForAllThreads(final ImmutableSet<Level> enabledLevelsForAllThreads) {
         this.enabledLevels = ThreadLocal.withInitial(() -> enabledLevelsForAllThreads);
     }
 
     /**
-    * The conventional hierarchical notion of Levels, where info being enabled implies warn and error
-    * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be
-    * passed explicitly to this method. If you wish to use traditional hierarchical setups you may
-    * conveniently do so by passing the constants in {@link
-    * uk.org.lidalia.slf4jext.ConventionalLevelHierarchy} to {@link
-    * #setEnabledLevelsForAllThreads(ImmutableSet)}
-    *
-    * @param enabledLevelsForAllThreads levels which will be considered enabled for this logger IN
-    *     ALL THREADS
-    */
+     * The conventional hierarchical notion of Levels, where info being enabled implies warn and error
+     * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be
+     * passed explicitly to this method. If you wish to use traditional hierarchical setups you may
+     * conveniently do so by passing the constants in {@link
+     * uk.org.lidalia.slf4jext.ConventionalLevelHierarchy} to {@link
+     * #setEnabledLevelsForAllThreads(ImmutableSet)}
+     *
+     * @param enabledLevelsForAllThreads levels which will be considered enabled for this logger IN
+     *     ALL THREADS
+     */
     public void setEnabledLevelsForAllThreads(final Level... enabledLevelsForAllThreads) {
         setEnabledLevelsForAllThreads(ImmutableSet.copyOf(enabledLevelsForAllThreads));
     }
