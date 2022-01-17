@@ -19,25 +19,25 @@ import org.slf4j.helpers.MessageFormatter;
 import uk.org.lidalia.slf4jext.Level;
 
 /**
-* Representation of a call to a logger for test assertion purposes. The contract of {@link
-* #equals(Object)} and {@link #hashCode} is that they compare the results of:
-*
-* <ul>
-*   <li>{@link #getLevel()}
-*   <li>{@link #getMdc()}
-*   <li>{@link #getMarker()}
-*   <li>{@link #getThrowable()}
-*   <li>{@link #getMessage()}
-*   <li>{@link #getArguments()}
-* </ul>
-*
-* <p>They do NOT compare the results of {@link #getTimestamp()} or {@link #getCreatingLogger()} as
-* this would render it impractical to create appropriate expected {@link LoggingEvent}s to compare
-* against.
-*
-* <p>Constructors and convenient static factory methods exist to create {@link LoggingEvent}s with
-* appropriate defaults. These are not documented further as they should be self-evident.
-*/
+ * Representation of a call to a logger for test assertion purposes. The contract of {@link
+ * #equals(Object)} and {@link #hashCode} is that they compare the results of:
+ *
+ * <ul>
+ *   <li>{@link #getLevel()}
+ *   <li>{@link #getMdc()}
+ *   <li>{@link #getMarker()}
+ *   <li>{@link #getThrowable()}
+ *   <li>{@link #getMessage()}
+ *   <li>{@link #getArguments()}
+ * </ul>
+ *
+ * <p>They do NOT compare the results of {@link #getTimestamp()} or {@link #getCreatingLogger()} as
+ * this would render it impractical to create appropriate expected {@link LoggingEvent}s to compare
+ * against.
+ *
+ * <p>Constructors and convenient static factory methods exist to create {@link LoggingEvent}s with
+ * appropriate defaults. These are not documented further as they should be self-evident.
+ */
 @SuppressWarnings({"PMD.ExcessivePublicCount", "PMD.TooManyMethods"})
 public class LoggingEvent {
 
@@ -437,9 +437,9 @@ public class LoggingEvent {
     }
 
     /**
-    * @return the logger that created this logging event.
-    * @throws IllegalStateException if this logging event was not created by a logger
-    */
+     * @return the logger that created this logging event.
+     * @throws IllegalStateException if this logging event was not created by a logger
+     */
     public TestLogger getCreatingLogger() {
         return creatingLogger.get();
     }
