@@ -3,9 +3,9 @@ package com.github.valfirst.slf4jtest;
 import com.google.common.collect.ImmutableMap;
 import java.util.HashMap;
 import java.util.Map;
-import org.slf4j.spi.MDCAdapter;
+import org.slf4j.helpers.BasicMDCAdapter;
 
-public class TestMDCAdapter implements MDCAdapter {
+public class TestMDCAdapter extends BasicMDCAdapter {
 
     private final ThreadLocal<Map<String, String>> value = ThreadLocal.withInitial(HashMap::new);
 
@@ -23,6 +23,7 @@ public class TestMDCAdapter implements MDCAdapter {
 
     public void clear() {
         value.get().clear();
+        value.remove();
     }
 
     public ImmutableMap<String, String> getCopyOfContextMap() {
