@@ -416,15 +416,6 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-                <version>1.7.4</version>
-                <configuration>
-                    <maxMutationsPerClass>-1</maxMutationsPerClass>
-                    <mutateStaticInitializers>true</mutateStaticInitializers>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
@@ -472,10 +463,6 @@
                         </reports>
                     </reportSet>
                 </reportSets>
-            </plugin>
-            <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
