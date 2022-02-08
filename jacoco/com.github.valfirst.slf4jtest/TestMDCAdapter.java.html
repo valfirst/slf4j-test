@@ -3,9 +3,9 @@
 import com.google.common.collect.ImmutableMap;
 import java.util.HashMap;
 import java.util.Map;
-import org.slf4j.spi.MDCAdapter;
+import org.slf4j.helpers.BasicMDCAdapter;
 
-<span class="fc" id="L8">public class TestMDCAdapter implements MDCAdapter {</span>
+<span class="fc" id="L8">public class TestMDCAdapter extends BasicMDCAdapter {</span>
 
 <span class="fc" id="L10">    private final ThreadLocal&lt;Map&lt;String, String&gt;&gt; value = ThreadLocal.withInitial(HashMap::new);</span>
 
@@ -23,15 +23,16 @@ import org.slf4j.spi.MDCAdapter;
 
     public void clear() {
 <span class="fc" id="L25">        value.get().clear();</span>
-<span class="fc" id="L26">    }</span>
+<span class="fc" id="L26">        value.remove();</span>
+<span class="fc" id="L27">    }</span>
 
     public ImmutableMap&lt;String, String&gt; getCopyOfContextMap() {
-<span class="fc" id="L29">        return ImmutableMap.copyOf(value.get());</span>
+<span class="fc" id="L30">        return ImmutableMap.copyOf(value.get());</span>
     }
 
     @SuppressWarnings(&quot;unchecked&quot;)
     public void setContextMap(final Map contextMap) {
-<span class="fc" id="L34">        value.set(new HashMap&lt;String, String&gt;(contextMap));</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L35">        value.set(new HashMap&lt;String, String&gt;(contextMap));</span>
+<span class="fc" id="L36">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -5,9 +5,9 @@ import java.util.function.Predicate;
 import uk.org.lidalia.slf4jext.Level;
 
 /**
-* A set of assertions to validate that logs have been logged to a {@link TestLogger}, for a
-* specific log level.
-*/
+ * A set of assertions to validate that logs have been logged to a {@link TestLogger}, for a
+ * specific log level.
+ */
 public class LevelAssert extends AbstractTestLoggerAssert&lt;LevelAssert&gt; {
 
     private static Predicate&lt;LoggingEvent&gt; messageWithSubstring(String substring) {
@@ -27,11 +27,11 @@ public class LevelAssert extends AbstractTestLoggerAssert&lt;LevelAssert&gt; {
 <span class="fc" id="L27">    }</span>
 
     /**
-    * Assert that the given log level has the expected number of logs, regardless of content.
-    *
-    * @param expected the number of logs expected at this level
-    * @return a {@link LevelAssert} for chaining
-    */
+     * Assert that the given log level has the expected number of logs, regardless of content.
+     *
+     * @param expected the number of logs expected at this level
+     * @return a {@link LevelAssert} for chaining
+     */
     public LevelAssert hasNumberOfLogs(int expected) {
 <span class="fc" id="L36">        long count = getLogCount(level, ignored -&gt; true);</span>
 <span class="fc bfc" id="L37" title="All 2 branches covered.">        if (count != expected) {</span>
@@ -44,11 +44,11 @@ public class LevelAssert extends AbstractTestLoggerAssert&lt;LevelAssert&gt; {
     }
 
     /**
-    * Assert that the given log level includes a log message that contains a substring.
-    *
-    * @param substring a substring of a log message that should be present
-    * @return a {@link LevelAssert} for chaining
-    */
+     * Assert that the given log level includes a log message that contains a substring.
+     *
+     * @param substring a substring of a log message that should be present
+     * @return a {@link LevelAssert} for chaining
+     */
     public LevelAssert hasMessageContaining(String substring) {
 <span class="fc" id="L53">        long count = getLogCount(level, messageWithSubstring(substring));</span>
 <span class="fc bfc" id="L54" title="All 2 branches covered.">        if (count == 0) {</span>
@@ -61,11 +61,11 @@ public class LevelAssert extends AbstractTestLoggerAssert&lt;LevelAssert&gt; {
     }
 
     /**
-    * Assert that the given log level includes a log message that matches a regex.
-    *
-    * @param regex the regular expression to which this string is to be matched
-    * @return a {@link LevelAssert} for chaining
-    */
+     * Assert that the given log level includes a log message that matches a regex.
+     *
+     * @param regex the regular expression to which this string is to be matched
+     * @return a {@link LevelAssert} for chaining
+     */
     public LevelAssert hasMessageMatching(String regex) {
 <span class="fc" id="L70">        long count = getLogCount(level, messageForPattern(regex));</span>
 <span class="fc bfc" id="L71" title="All 2 branches covered.">        if (count == 0) {</span>

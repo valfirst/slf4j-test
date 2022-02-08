@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<title>/Users/valery_yatsynovich/work/projects/os/slf4j-test/src/main/java/com/github/valfirst/slf4jtest/TestLogger.java xref</title>
+<title>/Users/valery_yatsynovich/work/projects/os/slf4j-test/target/checkout/src/main/java/com/github/valfirst/slf4jtest/TestLogger.java xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
 </head>
 <body>
@@ -35,25 +35,25 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> uk.org.lidalia.slf4jext.Level;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">* Implementation of {@link Logger} which stores {@link LoggingEvent}s in memory and provides</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">* methods to access and remove them in order to facilitate writing tests that assert particular</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">* logging calls were made.</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">*</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">* &lt;p&gt;{@link LoggingEvent}s are stored in both an {@link ThreadLocal} and a normal {@link List}. The</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">* {@link #getLoggingEvents()} and {@link #clear()} methods reference the {@link ThreadLocal}</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">* events. The {@link #getAllLoggingEvents()} and {@link #clearAll()} methods reference all events</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">* logged on this Logger. This is in order to facilitate parallelising tests - tests that use the</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">* thread local methods can be parallelised.</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">*</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">* &lt;p&gt;By default all Levels are enabled. It is important to note that the conventional hierarchical</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">* notion of Levels, where info being enabled implies warn and error being enabled, is not a</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">* requirement of the SLF4J API, so the {@link #setEnabledLevels(ImmutableSet)}, {@link</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">* #setEnabledLevels(Level...)}, {@link #setEnabledLevelsForAllThreads(ImmutableSet)}, {@link</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">* #setEnabledLevelsForAllThreads(Level...)} and the various isXxxxxEnabled() methods make no</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">* assumptions about this hierarchy. If you wish to use traditional hierarchical setups you may do</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">* so by passing the constants in {@link uk.org.lidalia.slf4jext.ConventionalLevelHierarchy} to</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">* {@link #setEnabledLevels(ImmutableSet)} or {@link #setEnabledLevelsForAllThreads(ImmutableSet)}.</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">*/</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Implementation of {@link Logger} which stores {@link LoggingEvent}s in memory and provides</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * methods to access and remove them in order to facilitate writing tests that assert particular</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * logging calls were made.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;{@link LoggingEvent}s are stored in both an {@link ThreadLocal} and a normal {@link List}. The</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * {@link #getLoggingEvents()} and {@link #clear()} methods reference the {@link ThreadLocal}</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * events. The {@link #getAllLoggingEvents()} and {@link #clearAll()} methods reference all events</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * logged on this Logger. This is in order to facilitate parallelising tests - tests that use the</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * thread local methods can be parallelised.</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;By default all Levels are enabled. It is important to note that the conventional hierarchical</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * notion of Levels, where info being enabled implies warn and error being enabled, is not a</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * requirement of the SLF4J API, so the {@link #setEnabledLevels(ImmutableSet)}, {@link</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * #setEnabledLevels(Level...)}, {@link #setEnabledLevelsForAllThreads(ImmutableSet)}, {@link</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * #setEnabledLevelsForAllThreads(Level...)} and the various isXxxxxEnabled() methods make no</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * assumptions about this hierarchy. If you wish to use traditional hierarchical setups you may do</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * so by passing the constants in {@link uk.org.lidalia.slf4jext.ConventionalLevelHierarchy} to</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * {@link #setEnabledLevels(ImmutableSet)} or {@link #setEnabledLevelsForAllThreads(ImmutableSet)}.</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  @SuppressWarnings({<span class="jxr_string">"PMD.ExcessivePublicCount"</span>, <span class="jxr_string">"PMD.TooManyMethods"</span>})
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> TestLogger <strong class="jxr_keyword">implements</strong> Logger {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
@@ -75,18 +75,18 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>      }
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">    * Removes all {@link LoggingEvent}s logged by this thread and resets the enabled levels of the</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">    * logger to {@link Level#enablableValueSet()} for this thread.</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">    */</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">     * Removes all {@link LoggingEvent}s logged by this thread and resets the enabled levels of the</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">     * logger to {@link Level#enablableValueSet()} for this thread.</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> clear() {
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          loggingEvents.get().clear();
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>          enabledLevels.remove();
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>      }
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">    * Removes ALL {@link LoggingEvent}s logged on this logger, regardless of thread, and resets the</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">    * enabled levels of the logger to {@link Level#enablableValueSet()} for ALL threads.</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">    */</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">     * Removes ALL {@link LoggingEvent}s logged on this logger, regardless of thread, and resets the</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">     * enabled levels of the logger to {@link Level#enablableValueSet()} for ALL threads.</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> clearAll() {
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>          allLoggingEvents.clear();
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>          loggingEvents = ThreadLocal.withInitial(ArrayList::<strong class="jxr_keyword">new</strong>);
@@ -476,64 +476,64 @@
 <a class="jxr_linenumber" name="L468" href="#L468">468</a>     }
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 
 <a class="jxr_linenumber" name="L470" href="#L470">470</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">    * The conventional hierarchical notion of Levels, where info being enabled implies warn and error</em>
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">    * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be</em>
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">    * passed explicitly to this method. If you wish to use traditional hierarchical setups you may</em>
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">    * conveniently do so by using the constants in {@link</em>
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">    * uk.org.lidalia.slf4jext.ConventionalLevelHierarchy}</em>
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">    *</em>
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">    * @param enabledLevels levels which will be considered enabled for this logger IN THIS THREAD;</em>
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">    *     does not affect enabled levels for this logger in other threads</em>
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">    */</em>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">     * The conventional hierarchical notion of Levels, where info being enabled implies warn and error</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">     * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">     * passed explicitly to this method. If you wish to use traditional hierarchical setups you may</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">     * conveniently do so by using the constants in {@link</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">     * uk.org.lidalia.slf4jext.ConventionalLevelHierarchy}</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">     * @param enabledLevels levels which will be considered enabled for this logger IN THIS THREAD;</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">     *     does not affect enabled levels for this logger in other threads</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L480" href="#L480">480</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setEnabledLevels(<strong class="jxr_keyword">final</strong> ImmutableSet&lt;Level&gt; enabledLevels) {
 <a class="jxr_linenumber" name="L481" href="#L481">481</a>         <strong class="jxr_keyword">this</strong>.enabledLevels.set(enabledLevels);
 <a class="jxr_linenumber" name="L482" href="#L482">482</a>     }
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 
 <a class="jxr_linenumber" name="L484" href="#L484">484</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">    * The conventional hierarchical notion of Levels, where info being enabled implies warn and error</em>
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">    * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be</em>
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">    * passed explicitly to this method. If you wish to use traditional hierarchical setups you may</em>
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">    * conveniently do so by passing the constants in {@link</em>
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">    * uk.org.lidalia.slf4jext.ConventionalLevelHierarchy} to {@link #setEnabledLevels(ImmutableSet)}</em>
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">    *</em>
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">    * @param enabledLevels levels which will be considered enabled for this logger IN THIS THREAD;</em>
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">    *     does not affect enabled levels for this logger in other threads</em>
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">    */</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">     * The conventional hierarchical notion of Levels, where info being enabled implies warn and error</em>
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">     * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be</em>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">     * passed explicitly to this method. If you wish to use traditional hierarchical setups you may</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">     * conveniently do so by passing the constants in {@link</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">     * uk.org.lidalia.slf4jext.ConventionalLevelHierarchy} to {@link #setEnabledLevels(ImmutableSet)}</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">     * @param enabledLevels levels which will be considered enabled for this logger IN THIS THREAD;</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">     *     does not affect enabled levels for this logger in other threads</em>
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L494" href="#L494">494</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setEnabledLevels(<strong class="jxr_keyword">final</strong> Level... enabledLevels) {
 <a class="jxr_linenumber" name="L495" href="#L495">495</a>         setEnabledLevels(immutableEnumSet(asList(enabledLevels)));
 <a class="jxr_linenumber" name="L496" href="#L496">496</a>     }
 <a class="jxr_linenumber" name="L497" href="#L497">497</a> 
 <a class="jxr_linenumber" name="L498" href="#L498">498</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">    * The conventional hierarchical notion of Levels, where info being enabled implies warn and error</em>
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">    * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be</em>
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">    * passed explicitly to this method. If you wish to use traditional hierarchical setups you may</em>
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">    * conveniently do so by using the constants in {@link</em>
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">    * uk.org.lidalia.slf4jext.ConventionalLevelHierarchy}</em>
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">    *</em>
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">    * @param enabledLevelsForAllThreads levels which will be considered enabled for this logger IN</em>
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">    *     ALL THREADS</em>
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">    */</em>
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">     * The conventional hierarchical notion of Levels, where info being enabled implies warn and error</em>
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">     * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">     * passed explicitly to this method. If you wish to use traditional hierarchical setups you may</em>
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">     * conveniently do so by using the constants in {@link</em>
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">     * uk.org.lidalia.slf4jext.ConventionalLevelHierarchy}</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">     * @param enabledLevelsForAllThreads levels which will be considered enabled for this logger IN</em>
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">     *     ALL THREADS</em>
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L508" href="#L508">508</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setEnabledLevelsForAllThreads(<strong class="jxr_keyword">final</strong> ImmutableSet&lt;Level&gt; enabledLevelsForAllThreads) {
 <a class="jxr_linenumber" name="L509" href="#L509">509</a>         <strong class="jxr_keyword">this</strong>.enabledLevels = ThreadLocal.withInitial(() -&gt; enabledLevelsForAllThreads);
 <a class="jxr_linenumber" name="L510" href="#L510">510</a>     }
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> 
 <a class="jxr_linenumber" name="L512" href="#L512">512</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">    * The conventional hierarchical notion of Levels, where info being enabled implies warn and error</em>
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">    * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be</em>
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">    * passed explicitly to this method. If you wish to use traditional hierarchical setups you may</em>
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">    * conveniently do so by passing the constants in {@link</em>
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">    * uk.org.lidalia.slf4jext.ConventionalLevelHierarchy} to {@link</em>
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">    * #setEnabledLevelsForAllThreads(ImmutableSet)}</em>
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">    *</em>
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">    * @param enabledLevelsForAllThreads levels which will be considered enabled for this logger IN</em>
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">    *     ALL THREADS</em>
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">    */</em>
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">     * The conventional hierarchical notion of Levels, where info being enabled implies warn and error</em>
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">     * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be</em>
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">     * passed explicitly to this method. If you wish to use traditional hierarchical setups you may</em>
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">     * conveniently do so by passing the constants in {@link</em>
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">     * uk.org.lidalia.slf4jext.ConventionalLevelHierarchy} to {@link</em>
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">     * #setEnabledLevelsForAllThreads(ImmutableSet)}</em>
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">     * @param enabledLevelsForAllThreads levels which will be considered enabled for this logger IN</em>
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">     *     ALL THREADS</em>
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L523" href="#L523">523</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setEnabledLevelsForAllThreads(<strong class="jxr_keyword">final</strong> Level... enabledLevelsForAllThreads) {
 <a class="jxr_linenumber" name="L524" href="#L524">524</a>         setEnabledLevelsForAllThreads(ImmutableSet.copyOf(enabledLevelsForAllThreads));
 <a class="jxr_linenumber" name="L525" href="#L525">525</a>     }
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2021. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2022. All rights reserved.</div>
 </body>
 </html>
