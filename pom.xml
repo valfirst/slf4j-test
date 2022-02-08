@@ -238,6 +238,9 @@
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.10.0</version>
+                <configuration>
+                    <skipDeploy>true</skipDeploy>
+                </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.doxia</groupId>
@@ -252,9 +255,6 @@
                             <goal>stage</goal>
                         </goals>
                         <phase>post-site</phase>
-                        <configuration>
-                            <skipDeploy>false</skipDeploy>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
