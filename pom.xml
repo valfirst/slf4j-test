@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.valfirst</groupId>
     <artifactId>slf4j-test</artifactId>
@@ -27,27 +25,27 @@
     </developers>
 
     <scm>
-        <url>https://github.com/valfirst/slf4j-test</url>
         <connection>scm:git:git@github.com:valfirst/slf4j-test.git</connection>
         <developerConnection>scm:git:git@github.com:valfirst/slf4j-test.git</developerConnection>
         <tag>HEAD</tag>
+        <url>https://github.com/valfirst/slf4j-test</url>
     </scm>
 
     <distributionManagement>
-        <site>
-            <id>gh-pages</id>
-            <url>scm:git:git@github.com:valfirst/${project.artifactId}.git</url>
-        </site>
-        <snapshotRepository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>Sonatype Nexus Snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-        </snapshotRepository>
         <repository>
             <id>sonatype-nexus-staging</id>
             <name>Nexus Release Repository</name>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </snapshotRepository>
+        <site>
+            <id>gh-pages</id>
+            <url>scm:git:git@github.com:valfirst/${project.artifactId}.git</url>
+        </site>
     </distributionManagement>
 
     <properties>
@@ -200,6 +198,16 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.3.1</version>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <detectLinks/>
+                    <links combine.children="append">
+                        <link>https://www.slf4j.org/apidocs</link>
+                        <link>http://projects.lidalia.org.uk/lidalia-lang/apidocs</link>
+                        <link>http://projects.lidalia.org.uk/lidalia-test/apidocs</link>
+                        <link>http://projects.lidalia.org.uk/lidalia-slf4j-ext/apidocs</link>
+                    </links>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -208,16 +216,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <source>${jdk.version}</source>
-                    <detectLinks />
-                    <links combine.children="append">
-                        <link>https://www.slf4j.org/apidocs</link>
-                        <link>http://projects.lidalia.org.uk/lidalia-lang/apidocs</link>
-                        <link>http://projects.lidalia.org.uk/lidalia-test/apidocs</link>
-                        <link>http://projects.lidalia.org.uk/lidalia-slf4j-ext/apidocs</link>
-                    </links>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -250,10 +248,10 @@
                 <executions>
                     <execution>
                         <id>stage-for-scm-publish</id>
-                        <phase>post-site</phase>
                         <goals>
                             <goal>stage</goal>
                         </goals>
+                        <phase>post-site</phase>
                         <configuration>
                             <skipDeploy>false</skipDeploy>
                         </configuration>
@@ -265,16 +263,15 @@
                 <executions>
                     <execution>
                         <id>stage-for-scm-publish</id>
-                        <phase>post-site</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
+                        <phase>post-site</phase>
                         <configuration>
                             <target>
-                                <copy
-                                    todir="${project.build.directory}/site/site-versions/${project.version}">
+                                <copy todir="${project.build.directory}/site/site-versions/${project.version}">
                                     <fileset dir="${project.build.directory}/site">
-                                        <exclude name="site-versions" />
+                                        <exclude name="site-versions"/>
                                     </fileset>
                                 </copy>
                             </target>
@@ -296,10 +293,10 @@
                 <executions>
                     <execution>
                         <id>scm-publish</id>
-                        <phase>site-deploy</phase>
                         <goals>
                             <goal>publish-scm</goal>
                         </goals>
+                        <phase>site-deploy</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -312,8 +309,8 @@
                         <googleJavaFormat>
                             <version>1.7</version>
                         </googleJavaFormat>
-                        <trimTrailingWhitespace />
-                        <endWithNewline />
+                        <trimTrailingWhitespace/>
+                        <endWithNewline/>
 
                         <!-- https://github.com/diffplug/spotless/issues/420#issuecomment-512350756 -->
                         <indent>
@@ -326,18 +323,27 @@
                         </indent>
                     </java>
 
+                    <pom>
+                        <includes>
+                            <include>pom.xml</include>
+                        </includes>
+                        <sortPom>
+                            <expandEmptyElements>false</expandEmptyElements>
+                            <nrOfIndentSpace>4</nrOfIndentSpace>
+                        </sortPom>
+                    </pom>
+
                     <formats>
                         <format>
                             <includes>
-                                <include>pom.xml</include>
                                 <include>src/**/*.xml</include>
                             </includes>
 
                             <eclipseWtp>
                                 <type>XML</type>
                             </eclipseWtp>
-                            <trimTrailingWhitespace />
-                            <endWithNewline />
+                            <trimTrailingWhitespace/>
+                            <endWithNewline/>
                             <indent>
                                 <spaces>true</spaces>
                                 <spacesPerTab>4</spacesPerTab>
@@ -377,6 +383,11 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.7</version>
+                <configuration>
+                    <excludes>
+                        <exclude>*</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <!-- Prepares the property pointing to the JaCoCo runtime agent which
                         is passed as VM argument when Maven the Surefire plugin is executed. -->
@@ -394,27 +405,22 @@
                     </execution>
                     <execution>
                         <id>jacoco-restore-instrumented-classes</id>
-                        <phase>test</phase>
                         <goals>
                             <goal>restore-instrumented-classes</goal>
                         </goals>
+                        <phase>test</phase>
                     </execution>
 
                     <!-- Ensures that the code coverage report for unit tests is created
                         after unit tests have been run. -->
                     <execution>
                         <id>post-unit-test</id>
-                        <phase>test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <phase>test</phase>
                     </execution>
                 </executions>
-                <configuration>
-                    <excludes>
-                        <exclude>*</exclude>
-                    </excludes>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -521,10 +527,10 @@
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
-                                <phase>verify</phase>
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
+                                <phase>verify</phase>
                             </execution>
                         </executions>
                     </plugin>
