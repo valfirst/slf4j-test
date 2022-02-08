@@ -200,7 +200,7 @@
                 <version>3.3.1</version>
                 <configuration>
                     <source>${jdk.version}</source>
-                    <detectLinks/>
+                    <detectLinks />
                     <links combine.children="append">
                         <link>https://www.slf4j.org/apidocs</link>
                         <link>http://projects.lidalia.org.uk/lidalia-lang/apidocs</link>
@@ -271,7 +271,7 @@
                             <target>
                                 <copy todir="${project.build.directory}/site/site-versions/${project.version}">
                                     <fileset dir="${project.build.directory}/site">
-                                        <exclude name="site-versions"/>
+                                        <exclude name="site-versions" />
                                     </fileset>
                                 </copy>
                             </target>
@@ -309,8 +309,8 @@
                         <googleJavaFormat>
                             <version>1.7</version>
                         </googleJavaFormat>
-                        <trimTrailingWhitespace/>
-                        <endWithNewline/>
+                        <trimTrailingWhitespace />
+                        <endWithNewline />
 
                         <!-- https://github.com/diffplug/spotless/issues/420#issuecomment-512350756 -->
                         <indent>
@@ -329,6 +329,7 @@
                         </includes>
                         <sortPom>
                             <expandEmptyElements>false</expandEmptyElements>
+                            <spaceBeforeCloseEmptyElement>true</spaceBeforeCloseEmptyElement>
                             <nrOfIndentSpace>4</nrOfIndentSpace>
                         </sortPom>
                     </pom>
@@ -342,8 +343,8 @@
                             <eclipseWtp>
                                 <type>XML</type>
                             </eclipseWtp>
-                            <trimTrailingWhitespace/>
-                            <endWithNewline/>
+                            <trimTrailingWhitespace />
+                            <endWithNewline />
                             <indent>
                                 <spaces>true</spaces>
                                 <spacesPerTab>4</spacesPerTab>
