@@ -1,7 +1,7 @@
 # SLF4J Test
 [![slf4j-test CI](https://github.com/valfirst/slf4j-test/workflows/slf4j-test%20CI/badge.svg)](https://github.com/valfirst/slf4j-test/actions?query=workflow%3A%22slf4j-test+CI%22)
 [![Coverage Status](https://coveralls.io/repos/github/valfirst/slf4j-test/badge.svg?branch=master)](https://coveralls.io/github/valfirst/slf4j-test?branch=master)
-[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=com.github.valfirst:slf4j-test&metric=alert_status)](https://sonarcloud.io/dashboard/index/com.github.valfirst:slf4j-test)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=com.github.valfirst%3Aslf4j-test&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=com.github.valfirst%3Aslf4j-test)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ac96a0c1a5614c3b93491d10e70b3a36)](https://www.codacy.com/app/valfirst/slf4j-test?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=valfirst/slf4j-test&amp;utm_campaign=Badge_Grade)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.valfirst/slf4j-test.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3Acom.github.valfirst%20a%3Aslf4j-test)
 [![Javadocs](http://www.javadoc.io/badge/com.github.valfirst/slf4j-test.svg)](http://www.javadoc.io/doc/com.github.valfirst/slf4j-test)
