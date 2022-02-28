@@ -2,11 +2,11 @@
 [![slf4j-test CI](https://github.com/valfirst/slf4j-test/workflows/slf4j-test%20CI/badge.svg)](https://github.com/valfirst/slf4j-test/actions?query=workflow%3A%22slf4j-test+CI%22)
 [![Coverage Status](https://coveralls.io/repos/github/valfirst/slf4j-test/badge.svg?branch=master)](https://coveralls.io/github/valfirst/slf4j-test?branch=master)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=com.github.valfirst%3Aslf4j-test&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=com.github.valfirst%3Aslf4j-test)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ac96a0c1a5614c3b93491d10e70b3a36)](https://www.codacy.com/app/valfirst/slf4j-test?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=valfirst/slf4j-test&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ac96a0c1a5614c3b93491d10e70b3a36)](https://www.codacy.com/gh/valfirst/slf4j-test/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=valfirst/slf4j-test&amp;utm_campaign=Badge_Grade)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.valfirst/slf4j-test.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3Acom.github.valfirst%20a%3Aslf4j-test)
 [![Javadocs](http://www.javadoc.io/badge/com.github.valfirst/slf4j-test.svg)](http://www.javadoc.io/doc/com.github.valfirst/slf4j-test)
 [![Known Vulnerabilities](https://snyk.io/test/github/valfirst/slf4j-test/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/valfirst/slf4j-test?targetFile=pom.xml)
-[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/valfirst/jbehave-junit-runner/master/LICENSE.txt)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/valfirst/jbehave-junit-runner/master/LICENSE)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fvalfirst%2Fslf4j-test.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fvalfirst%2Fslf4j-test?ref=badge_shield)
 
 A test implementation of [SLF4J](https://www.slf4j.org/) that stores log messages in memory and provides methods for retrieving them. This implementation supports all versions of SLF4J including 1.8.X which have [a new binding mechanism](https://www.slf4j.org/faq.html#changesInVersion18).
