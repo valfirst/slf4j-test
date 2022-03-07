@@ -2,6 +2,7 @@ package com.github.valfirst.slf4jtest;
 
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import uk.org.lidalia.slf4jext.Level;
 
 /**
@@ -53,8 +54,8 @@ public class LevelAssert extends AbstractTestLoggerAssert<LevelAssert> {
         long count = getLogCount(level, messageWithSubstring(substring));
         if (count == 0) {
             failWithMessage(
-                    "Expected level %s to contain a log message containing `%s`, but it did not",
-                    level, substring);
+                    "Expected level %s to contain a log message containing `%s`, but it did not.\n\nLog messages found:%n%s",
+                    level, substring, eventsToLogMessage(level));
         }
 
         return this;
@@ -70,8 +71,8 @@ public class LevelAssert extends AbstractTestLoggerAssert<LevelAssert> {
         long count = getLogCount(level, messageForPattern(regex));
         if (count == 0) {
             failWithMessage(
-                    "Expected level %s to contain a log message matching regex `%s`, but it did not",
-                    level, regex);
+                    "Expected level %s to contain a log message matching regex `%s`, but it did not.\n\nLog messages found:%n%s",
+                    level, regex, eventsToLogMessage());
         }
 
         return this;
@@ -89,5 +90,18 @@ public class LevelAssert extends AbstractTestLoggerAssert<LevelAssert> {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), level);
+    }
+
+    private String eventsToLogMessage() {
+        return loggingEventsSupplier.get().stream()
+                .map(e -> "- " + e)
+                .collect(Collectors.joining("\n"));
+    }
+
+    private String eventsToLogMessage(Level level) {
+        return loggingEventsSupplier.get().stream()
+                .filter(event -> level.equals(event.getLevel()))
+                .map(e -> "- " + e)
+                .collect(Collectors.joining("\n"));
     }
 }
