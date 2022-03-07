@@ -67,8 +67,8 @@ class LevelAssertTest {
 
             assertThatThrownBy(() -> assertions.hasMessageContaining("words"))
                     .isInstanceOf(AssertionError.class)
-                    .hasMessage(
-                            "Expected level INFO to contain a log message containing `words`, but it did not");
+                    .hasMessageStartingWith(
+                            "Expected level INFO to contain a log message containing `words`, but it did not.\n\nLog messages found:");
         }
 
         @Test
@@ -102,8 +102,8 @@ class LevelAssertTest {
 
             assertThatThrownBy(() -> assertions.hasMessageMatching(".+"))
                     .isInstanceOf(AssertionError.class)
-                    .hasMessage(
-                            "Expected level INFO to contain a log message matching regex `.+`, but it did not");
+                    .hasMessageStartingWith(
+                            "Expected level INFO to contain a log message matching regex `.+`, but it did not.\n\nLog messages found:");
         }
 
         @Test
