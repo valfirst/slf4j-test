@@ -32,8 +32,8 @@ import uk.org.lidalia.slf4jext.Level;
  * </ul>
  *
  * <p>They do NOT compare the results of {@link #getTimestamp()}, {@link #getCreatingLogger()} or
- * {@link #getThreadContextClassLoader()} ()} as this would render it impractical to create
- * appropriate expected {@link LoggingEvent}s to compare against.
+ * {@link #getThreadContextClassLoader()} as this would render it impractical to create appropriate
+ * expected {@link LoggingEvent}s to compare against.
  *
  * <p>Constructors and convenient static factory methods exist to create {@link LoggingEvent}s with
  * appropriate defaults. These are not documented further as they should be self-evident.
