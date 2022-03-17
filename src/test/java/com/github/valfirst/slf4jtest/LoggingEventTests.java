@@ -154,7 +154,7 @@ class LoggingEventTests extends StdIoTests {
 
     @Test
     void constructorAndCheckThreadContextClassloader() {
-        LoggingEvent event = new LoggingEvent(level, mdc, marker, throwable, message, arg1, arg2);
+        LoggingEvent event = new LoggingEvent(level, mdc, marker, throwable, message, arg1);
         assertThat(
                 event.getThreadContextClassLoader(), is(Thread.currentThread().getContextClassLoader()));
     }
