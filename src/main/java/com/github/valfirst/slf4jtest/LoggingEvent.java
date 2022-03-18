@@ -31,9 +31,9 @@ import uk.org.lidalia.slf4jext.Level;
  *   <li>{@link #getArguments()}
  * </ul>
  *
- * <p>They do NOT compare the results of {@link #getTimestamp()} or {@link #getCreatingLogger()} as
- * this would render it impractical to create appropriate expected {@link LoggingEvent}s to compare
- * against.
+ * <p>They do NOT compare the results of {@link #getTimestamp()}, {@link #getCreatingLogger()} or
+ * {@link #getThreadContextClassLoader()} as this would render it impractical to create appropriate
+ * expected {@link LoggingEvent}s to compare against.
  *
  * <p>Constructors and convenient static factory methods exist to create {@link LoggingEvent}s with
  * appropriate defaults. These are not documented further as they should be self-evident.
@@ -51,6 +51,8 @@ public class LoggingEvent {
     private final Optional<TestLogger> creatingLogger;
     private final Instant timestamp = new Instant();
     private final String threadName = Thread.currentThread().getName();
+    private final ClassLoader threadContextClassLoader =
+            Thread.currentThread().getContextClassLoader();
 
     public static LoggingEvent trace(final String message, final Object... arguments) {
         return new LoggingEvent(Level.TRACE, message, arguments);
@@ -452,6 +454,11 @@ public class LoggingEvent {
     /** @return the name of the thread that created this logging event */
     public String getThreadName() {
         return threadName;
+    }
+
+    /** @return the Thread Context Classloader used when this logging event was created */
+    public ClassLoader getThreadContextClassLoader() {
+        return threadContextClassLoader;
     }
 
     void print() {
