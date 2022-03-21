@@ -2,6 +2,7 @@
 
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import uk.org.lidalia.slf4jext.Level;
 
 /**
@@ -11,20 +12,20 @@ import uk.org.lidalia.slf4jext.Level;
 public class LevelAssert extends AbstractTestLoggerAssert&lt;LevelAssert&gt; {
 
     private static Predicate&lt;LoggingEvent&gt; messageWithSubstring(String substring) {
-<span class="fc" id="L14">        return event -&gt; event.getMessage().contains(substring);</span>
+<span class="fc" id="L15">        return event -&gt; event.getMessage().contains(substring);</span>
     }
 
     private static Predicate&lt;LoggingEvent&gt; messageForPattern(String regex) {
-<span class="fc" id="L18">        return event -&gt; event.getMessage().matches(regex);</span>
+<span class="fc" id="L19">        return event -&gt; event.getMessage().matches(regex);</span>
     }
 
     private final Level level;
 
     public LevelAssert(TestLogger logger, Level level) {
-<span class="fc" id="L24">        super(logger, LevelAssert.class);</span>
+<span class="fc" id="L25">        super(logger, LevelAssert.class);</span>
 
-<span class="fc" id="L26">        this.level = level;</span>
-<span class="fc" id="L27">    }</span>
+<span class="fc" id="L27">        this.level = level;</span>
+<span class="fc" id="L28">    }</span>
 
     /**
      * Assert that the given log level has the expected number of logs, regardless of content.
@@ -33,14 +34,14 @@ public class LevelAssert extends AbstractTestLoggerAssert&lt;LevelAssert&gt; {
      * @return a {@link LevelAssert} for chaining
      */
     public LevelAssert hasNumberOfLogs(int expected) {
-<span class="fc" id="L36">        long count = getLogCount(level, ignored -&gt; true);</span>
-<span class="fc bfc" id="L37" title="All 2 branches covered.">        if (count != expected) {</span>
-<span class="pc" id="L38">            failWithMessage(</span>
+<span class="fc" id="L37">        long count = getLogCount(level, ignored -&gt; true);</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (count != expected) {</span>
+<span class="pc" id="L39">            failWithMessage(</span>
                     &quot;Expected level %s to have %d log messages available, but %d were found&quot;,
-<span class="fc" id="L40">                    level, expected, count);</span>
+<span class="fc" id="L41">                    level, expected, count);</span>
         }
 
-<span class="fc" id="L43">        return this;</span>
+<span class="fc" id="L44">        return this;</span>
     }
 
     /**
@@ -50,14 +51,14 @@ public class LevelAssert extends AbstractTestLoggerAssert&lt;LevelAssert&gt; {
      * @return a {@link LevelAssert} for chaining
      */
     public LevelAssert hasMessageContaining(String substring) {
-<span class="fc" id="L53">        long count = getLogCount(level, messageWithSubstring(substring));</span>
-<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (count == 0) {</span>
-<span class="nc" id="L55">            failWithMessage(</span>
-                    &quot;Expected level %s to contain a log message containing `%s`, but it did not&quot;,
-                    level, substring);
+<span class="fc" id="L54">        long count = getLogCount(level, messageWithSubstring(substring));</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (count == 0) {</span>
+<span class="pc" id="L56">            failWithMessage(</span>
+                    &quot;Expected level %s to contain a log message containing `%s`, but it did not.\n\nLog messages found:%n%s&quot;,
+<span class="fc" id="L58">                    level, substring, eventsToLogMessage(level));</span>
         }
 
-<span class="fc" id="L60">        return this;</span>
+<span class="fc" id="L61">        return this;</span>
     }
 
     /**
@@ -67,28 +68,41 @@ public class LevelAssert extends AbstractTestLoggerAssert&lt;LevelAssert&gt; {
      * @return a {@link LevelAssert} for chaining
      */
     public LevelAssert hasMessageMatching(String regex) {
-<span class="fc" id="L70">        long count = getLogCount(level, messageForPattern(regex));</span>
-<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (count == 0) {</span>
-<span class="nc" id="L72">            failWithMessage(</span>
-                    &quot;Expected level %s to contain a log message matching regex `%s`, but it did not&quot;,
-                    level, regex);
+<span class="fc" id="L71">        long count = getLogCount(level, messageForPattern(regex));</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (count == 0) {</span>
+<span class="pc" id="L73">            failWithMessage(</span>
+                    &quot;Expected level %s to contain a log message matching regex `%s`, but it did not.\n\nLog messages found:%n%s&quot;,
+<span class="fc" id="L75">                    level, regex, eventsToLogMessage());</span>
         }
 
-<span class="fc" id="L77">        return this;</span>
+<span class="fc" id="L78">        return this;</span>
     }
 
     @Override
     public boolean equals(Object o) {
-<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (this == o) return true;</span>
-<span class="nc bnc" id="L83" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
-<span class="nc bnc" id="L84" title="All 2 branches missed.">        if (!super.equals(o)) return false;</span>
-<span class="nc" id="L85">        LevelAssert that = (LevelAssert) o;</span>
-<span class="nc bnc" id="L86" title="All 2 branches missed.">        return level == that.level;</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (this == o) return true;</span>
+<span class="nc bnc" id="L84" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (!super.equals(o)) return false;</span>
+<span class="nc" id="L86">        LevelAssert that = (LevelAssert) o;</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        return level == that.level;</span>
     }
 
     @Override
     public int hashCode() {
-<span class="nc" id="L91">        return Objects.hash(super.hashCode(), level);</span>
+<span class="nc" id="L92">        return Objects.hash(super.hashCode(), level);</span>
+    }
+
+    private String eventsToLogMessage() {
+<span class="fc" id="L96">        return loggingEventsSupplier.get().stream()</span>
+<span class="fc" id="L97">                .map(e -&gt; &quot;- &quot; + e)</span>
+<span class="fc" id="L98">                .collect(Collectors.joining(&quot;\n&quot;));</span>
+    }
+
+    private String eventsToLogMessage(Level level) {
+<span class="fc" id="L102">        return loggingEventsSupplier.get().stream()</span>
+<span class="pc" id="L103">                .filter(event -&gt; level.equals(event.getLevel()))</span>
+<span class="pc" id="L104">                .map(e -&gt; &quot;- &quot; + e)</span>
+<span class="fc" id="L105">                .collect(Collectors.joining(&quot;\n&quot;));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
