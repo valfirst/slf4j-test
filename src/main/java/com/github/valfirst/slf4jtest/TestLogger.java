@@ -10,6 +10,7 @@ import static uk.org.lidalia.slf4jext.Level.ERROR;
 import static uk.org.lidalia.slf4jext.Level.INFO;
 import static uk.org.lidalia.slf4jext.Level.TRACE;
 import static uk.org.lidalia.slf4jext.Level.WARN;
+import static uk.org.lidalia.slf4jext.Level.enablableValueSet;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -24,6 +25,7 @@ import org.slf4j.MDC;
 import org.slf4j.Marker;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
+import uk.org.lidalia.lang.ThreadLocal;
 import uk.org.lidalia.slf4jext.Level;
 
 /**
@@ -51,11 +53,11 @@ public class TestLogger implements Logger {
 
     private final String name;
     private final TestLoggerFactory testLoggerFactory;
-    private ThreadLocal<List<LoggingEvent>> loggingEvents = ThreadLocal.withInitial(ArrayList::new);
+    private final ThreadLocal<List<LoggingEvent>> loggingEvents = new ThreadLocal<>(ArrayList::new);
 
     private final List<LoggingEvent> allLoggingEvents = new CopyOnWriteArrayList<>();
     private volatile ThreadLocal<ImmutableSet<Level>> enabledLevels =
-            ThreadLocal.withInitial(Level::enablableValueSet);
+        new ThreadLocal<>(enablableValueSet());
 
     TestLogger(final String name, final TestLoggerFactory testLoggerFactory) {
         this.name = name;
@@ -81,8 +83,8 @@ public class TestLogger implements Logger {
      */
     public void clearAll() {
         allLoggingEvents.clear();
-        loggingEvents = ThreadLocal.withInitial(ArrayList::new);
-        enabledLevels = ThreadLocal.withInitial(Level::enablableValueSet);
+        loggingEvents.reset();
+        enabledLevels.reset();
     }
 
     /** @return all {@link LoggingEvent}s logged on this logger by this thread */
@@ -143,7 +145,7 @@ public class TestLogger implements Logger {
 
     @Override
     public void trace(
-            final Marker marker, final String format, final Object arg1, final Object arg2) {
+        final Marker marker, final String format, final Object arg1, final Object arg2) {
         log(TRACE, marker, format, arg1, arg2);
     }
 
@@ -205,7 +207,7 @@ public class TestLogger implements Logger {
 
     @Override
     public void debug(
-            final Marker marker, final String format, final Object arg1, final Object arg2) {
+        final Marker marker, final String format, final Object arg1, final Object arg2) {
         log(DEBUG, marker, format, arg1, arg2);
     }
 
@@ -389,7 +391,7 @@ public class TestLogger implements Logger {
 
     @Override
     public void error(
-            final Marker marker, final String format, final Object arg1, final Object arg2) {
+        final Marker marker, final String format, final Object arg1, final Object arg2) {
         log(ERROR, marker, format, arg1, arg2);
     }
 
@@ -408,42 +410,42 @@ public class TestLogger implements Logger {
     }
 
     private void log(
-            final Level level,
-            final String msg,
-            final Throwable throwable) { // NOPMD PMD wrongly thinks unused...
+        final Level level,
+        final String msg,
+        final Throwable throwable) { // NOPMD PMD wrongly thinks unused...
         addLoggingEvent(level, Optional.empty(), ofNullable(throwable), msg);
     }
 
     private void log(
-            final Level level, final Marker marker, final String format, final Object... args) {
+        final Level level, final Marker marker, final String format, final Object... args) {
         log(level, format, ofNullable(marker), args);
     }
 
     private void log(
-            final Level level, final Marker marker, final String msg, final Throwable throwable) {
+        final Level level, final Marker marker, final String msg, final Throwable throwable) {
         addLoggingEvent(level, ofNullable(marker), ofNullable(throwable), msg);
     }
 
     private void log(
-            final Level level, final String format, final Optional<Marker> marker, final Object[] args) {
+        final Level level, final String format, final Optional<Marker> marker, final Object[] args) {
         final FormattingTuple formattedArgs = MessageFormatter.arrayFormat(format, args);
         addLoggingEvent(
-                level,
-                marker,
-                ofNullable(formattedArgs.getThrowable()),
-                format,
-                formattedArgs.getArgArray());
+            level,
+            marker,
+            ofNullable(formattedArgs.getThrowable()),
+            format,
+            formattedArgs.getArgArray());
     }
 
     private void addLoggingEvent(
-            final Level level,
-            final Optional<Marker> marker,
-            final Optional<Throwable> throwable,
-            final String format,
-            final Object... args) {
+        final Level level,
+        final Optional<Marker> marker,
+        final Optional<Throwable> throwable,
+        final String format,
+        final Object... args) {
         if (enabledLevels.get().contains(level)) {
             final LoggingEvent event =
-                    new LoggingEvent(of(this), level, mdc(), marker, throwable, format, args);
+                new LoggingEvent(of(this), level, mdc(), marker, throwable, format, args);
             allLoggingEvents.add(event);
             loggingEvents.get().add(event);
             testLoggerFactory.addLoggingEvent(event);
@@ -506,7 +508,7 @@ public class TestLogger implements Logger {
      *     ALL THREADS
      */
     public void setEnabledLevelsForAllThreads(final ImmutableSet<Level> enabledLevelsForAllThreads) {
-        this.enabledLevels = ThreadLocal.withInitial(() -> enabledLevelsForAllThreads);
+        this.enabledLevels = new ThreadLocal<>(enabledLevelsForAllThreads);
     }
 
     /**
