@@ -22,25 +22,25 @@ import uk.org.lidalia.slf4jext.Level;
 public final class TestLoggerFactory implements ILoggerFactory {
 
     private static final Supplier<TestLoggerFactory> INSTANCE =
-        Suppliers.memoize(
-            () -> {
-                try {
-                    final String level =
-                        new OverridableProperties("slf4jtest").getProperty("print.level", "OFF");
-                    return new TestLoggerFactory(Level.valueOf(level));
-                } catch (IllegalArgumentException e) {
-                    throw new IllegalStateException(
-                        "Invalid level name in property print.level of file slf4jtest.properties "
-                            + "or System property slf4jtest.print.level",
-                        e);
-                } catch (IOException e) {
-                    throw new UncheckedIOException(e);
-                }
-            });
+            Suppliers.memoize(
+                    () -> {
+                        try {
+                            final String level =
+                                    new OverridableProperties("slf4jtest").getProperty("print.level", "OFF");
+                            return new TestLoggerFactory(Level.valueOf(level));
+                        } catch (IllegalArgumentException e) {
+                            throw new IllegalStateException(
+                                    "Invalid level name in property print.level of file slf4jtest.properties "
+                                            + "or System property slf4jtest.print.level",
+                                    e);
+                        } catch (IOException e) {
+                            throw new UncheckedIOException(e);
+                        }
+                    });
 
     private final ConcurrentMap<String, TestLogger> loggers = new ConcurrentHashMap<>();
     private final List<LoggingEvent> allLoggingEvents =
-        Collections.synchronizedList(new ArrayList<>());
+            Collections.synchronizedList(new ArrayList<>());
     private final ThreadLocal<List<LoggingEvent>> loggingEvents = new ThreadLocal<>(ArrayList::new);
     private volatile Level printLevel;
 

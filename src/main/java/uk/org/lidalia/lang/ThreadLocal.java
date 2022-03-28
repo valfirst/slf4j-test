@@ -22,68 +22,68 @@ import java.util.function.Supplier;
  */
 public class ThreadLocal<T> {
 
-  private final Map<Thread, T> contents = new ConcurrentHashMap<>();
-  private final Supplier<T> initialValueCreator;
-  private final Supplier<T> threadValueInitialiser =
-      new Supplier<T>() {
-        @Override
-        public T get() {
-          final T initialValue = initialValueCreator.get();
-          set(initialValue);
-          return initialValue;
-        }
-      };
+    private final Map<Thread, T> contents = new ConcurrentHashMap<>();
+    private final Supplier<T> initialValueCreator;
+    private final Supplier<T> threadValueInitialiser =
+            new Supplier<T>() {
+                @Override
+                public T get() {
+                    final T initialValue = initialValueCreator.get();
+                    set(initialValue);
+                    return initialValue;
+                }
+            };
 
-  /**
-   * @param initialValue the value this thread local will initially have for all {@link Thread}s.
-   *     This should not be mutable, as it will be shared between all {@link Thread}s.
-   */
-  public ThreadLocal(final T initialValue) {
-    this(() -> requireNonNull(initialValue));
-  }
+    /**
+     * @param initialValue the value this thread local will initially have for all {@link Thread}s.
+     *     This should not be mutable, as it will be shared between all {@link Thread}s.
+     */
+    public ThreadLocal(final T initialValue) {
+        this(() -> requireNonNull(initialValue));
+    }
 
-  /**
-   * @param initialValueCreator a {@link Supplier} whose get method is called on a per {@link
-   *     Thread} basis in order to establish the initial value for that {@link Thread}, allowing a
-   *     different initial instance per {@link Thread}.
-   */
-  public ThreadLocal(final Supplier<T> initialValueCreator) {
-    this.initialValueCreator = requireNonNull(initialValueCreator);
-  }
+    /**
+     * @param initialValueCreator a {@link Supplier} whose get method is called on a per {@link
+     *     Thread} basis in order to establish the initial value for that {@link Thread}, allowing a
+     *     different initial instance per {@link Thread}.
+     */
+    public ThreadLocal(final Supplier<T> initialValueCreator) {
+        this.initialValueCreator = requireNonNull(initialValueCreator);
+    }
 
-  /**
-   * @param value the new value for the calling {@link Thread} - does not affect the value for any
-   *     other {@link Thread}.
-   */
-  public void set(final T value) {
-    contents.put(currentThread(), requireNonNull(value));
-  }
+    /**
+     * @param value the new value for the calling {@link Thread} - does not affect the value for any
+     *     other {@link Thread}.
+     */
+    public void set(final T value) {
+        contents.put(currentThread(), requireNonNull(value));
+    }
 
-  /**
-   * @return the value for the calling {@link Thread}, or the initial value if this has not been set
-   *     or has been removed.
-   */
-  public T get() {
-    return ofNullable(contents.get(currentThread())).orElseGet(threadValueInitialiser);
-  }
+    /**
+     * @return the value for the calling {@link Thread}, or the initial value if this has not been set
+     *     or has been removed.
+     */
+    public T get() {
+        return ofNullable(contents.get(currentThread())).orElseGet(threadValueInitialiser);
+    }
 
-  /**
-   * Removes the value for the calling {@link Thread}. A subsequent call to {@link #get()} will
-   * return the initial value.
-   */
-  public void remove() {
-    contents.remove(currentThread());
-  }
+    /**
+     * Removes the value for the calling {@link Thread}. A subsequent call to {@link #get()} will
+     * return the initial value.
+     */
+    public void remove() {
+        contents.remove(currentThread());
+    }
 
-  /**
-   * Removes the values for ALL {@link Thread}s. Subsequent calls to {@link #get()} will return the
-   * initial value.
-   */
-  public void reset() {
-    contents.clear();
-  }
+    /**
+     * Removes the values for ALL {@link Thread}s. Subsequent calls to {@link #get()} will return the
+     * initial value.
+     */
+    public void reset() {
+        contents.clear();
+    }
 
-  public Collection<T> allValues() {
-    return contents.values();
-  }
+    public Collection<T> allValues() {
+        return contents.values();
+    }
 }
