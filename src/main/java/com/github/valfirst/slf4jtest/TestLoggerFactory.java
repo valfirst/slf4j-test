@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Supplier;
 import org.slf4j.ILoggerFactory;
+import uk.org.lidalia.lang.ThreadLocal;
 import uk.org.lidalia.slf4jext.Level;
 
 public final class TestLoggerFactory implements ILoggerFactory {
@@ -40,7 +41,7 @@ public final class TestLoggerFactory implements ILoggerFactory {
     private final ConcurrentMap<String, TestLogger> loggers = new ConcurrentHashMap<>();
     private final List<LoggingEvent> allLoggingEvents =
             Collections.synchronizedList(new ArrayList<>());
-    private ThreadLocal<List<LoggingEvent>> loggingEvents = ThreadLocal.withInitial(ArrayList::new);
+    private final ThreadLocal<List<LoggingEvent>> loggingEvents = new ThreadLocal<>(ArrayList::new);
     private volatile Level printLevel;
 
     public static TestLoggerFactory getInstance() {
@@ -115,7 +116,7 @@ public final class TestLoggerFactory implements ILoggerFactory {
         for (final TestLogger testLogger : loggers.values()) {
             testLogger.clearAll();
         }
-        loggingEvents = ThreadLocal.withInitial(ArrayList::new);
+        loggingEvents.reset();
         allLoggingEvents.clear();
     }
 

@@ -10,6 +10,7 @@ import static uk.org.lidalia.slf4jext.Level.ERROR;
 import static uk.org.lidalia.slf4jext.Level.INFO;
 import static uk.org.lidalia.slf4jext.Level.TRACE;
 import static uk.org.lidalia.slf4jext.Level.WARN;
+import static uk.org.lidalia.slf4jext.Level.enablableValueSet;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -24,6 +25,7 @@ import org.slf4j.MDC;
 import org.slf4j.Marker;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
+import uk.org.lidalia.lang.ThreadLocal;
 import uk.org.lidalia.slf4jext.Level;
 
 /**
@@ -51,11 +53,11 @@ public class TestLogger implements Logger {
 
     private final String name;
     private final TestLoggerFactory testLoggerFactory;
-    private ThreadLocal<List<LoggingEvent>> loggingEvents = ThreadLocal.withInitial(ArrayList::new);
+    private final ThreadLocal<List<LoggingEvent>> loggingEvents = new ThreadLocal<>(ArrayList::new);
 
     private final List<LoggingEvent> allLoggingEvents = new CopyOnWriteArrayList<>();
     private volatile ThreadLocal<ImmutableSet<Level>> enabledLevels =
-            ThreadLocal.withInitial(Level::enablableValueSet);
+            new ThreadLocal<>(enablableValueSet());
 
     TestLogger(final String name, final TestLoggerFactory testLoggerFactory) {
         this.name = name;
@@ -81,8 +83,8 @@ public class TestLogger implements Logger {
      */
     public void clearAll() {
         allLoggingEvents.clear();
-        loggingEvents = ThreadLocal.withInitial(ArrayList::new);
-        enabledLevels = ThreadLocal.withInitial(Level::enablableValueSet);
+        loggingEvents.reset();
+        enabledLevels.reset();
     }
 
     /** @return all {@link LoggingEvent}s logged on this logger by this thread */
@@ -506,7 +508,7 @@ public class TestLogger implements Logger {
      *     ALL THREADS
      */
     public void setEnabledLevelsForAllThreads(final ImmutableSet<Level> enabledLevelsForAllThreads) {
-        this.enabledLevels = ThreadLocal.withInitial(() -> enabledLevelsForAllThreads);
+        this.enabledLevels = new ThreadLocal<>(enabledLevelsForAllThreads);
     }
 
     /**
