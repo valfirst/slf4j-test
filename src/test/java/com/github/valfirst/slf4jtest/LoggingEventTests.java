@@ -152,6 +152,13 @@ class LoggingEventTests extends StdIoTests {
         assertThat(event.getArguments(), is(args));
     }
 
+    @Test
+    void constructorAndCheckThreadContextClassloader() {
+        LoggingEvent event = new LoggingEvent(level, mdc, marker, throwable, message, arg1);
+        assertThat(
+                event.getThreadContextClassLoader(), is(Thread.currentThread().getContextClassLoader()));
+    }
+
     static Stream<Arguments> messageArgs() {
         return Stream.of(
                 arguments((BiFunction<String, Object[], LoggingEvent>) LoggingEvent::trace, TRACE),
