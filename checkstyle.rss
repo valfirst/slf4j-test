@@ -25,8 +25,8 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2022</copyright>
     <item>
-      <title>File: 15,
-             Errors: 499,
+      <title>File: 16,
+             Errors: 515,
              Warnings: 0,
              Infos: 0
       </title>
@@ -116,6 +116,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="https://github.com/valfirst/slf4j-test/checkstyle.html#uk.org.lidalia.lang.ThreadLocal.java">uk/org/lidalia/lang/ThreadLocal.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  17
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://github.com/valfirst/slf4j-test/checkstyle.html#com.github.valfirst.slf4jtest.Assertions.java">com/github/valfirst/slf4jtest/Assertions.java</a>
                 </td>
                 <td>
@@ -153,7 +167,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  140
+                  139
                 </td>
               </tr>
                           <tr>
