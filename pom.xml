@@ -56,6 +56,7 @@
         <junit5.version>5.9.0</junit5.version>
         <mockito.version>4.0.0</mockito.version>
         <powermock.version>2.0.9</powermock.version>
+        <jacoco.version>0.8.8</jacoco.version>
         <pmd.version>6.48.0</pmd.version>
         <maven.surefire.version>2.22.2</maven.surefire.version>
     </properties>
@@ -159,6 +160,14 @@
             <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <!--  must be on the classpath, see: https://www.eclemma.org/jacoco/trunk/doc/examples/build/pom-offline.xml  -->
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.agent</artifactId>
+            <version>${jacoco.version}</version>
+            <classifier>runtime</classifier>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -170,15 +179,6 @@
                     <source>${jdk.version}</source>
                     <target>${jdk.version}</target>
                     <showWarnings>true</showWarnings>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven.surefire.version}</version>
-                <configuration>
-                    <includes>
-                        <include>**/*.java</include>
-                    </includes>
                 </configuration>
             </plugin>
             <plugin>
@@ -383,7 +383,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version>
+                <version>${jacoco.version}</version>
                 <configuration>
                     <excludes>
                         <exclude>*</exclude>
@@ -559,6 +559,45 @@
                                 <version>2.3.1</version>
                             </dependency>
                         </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>surefire-java-8-15</id>
+            <activation>
+                <jdk>(,16)</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${maven.surefire.version}</version>
+                        <configuration>
+                            <includes>
+                                <include>**/*.java</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>surefire-java-16</id>
+            <activation>
+                <jdk>16</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${maven.surefire.version}</version>
+                        <configuration>
+                            <includes>
+                                <include>**/*.java</include>
+                            </includes>
+                            <argLine>--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.util.concurrent=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED</argLine>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
