@@ -446,17 +446,23 @@ public class LoggingEvent {
         return creatingLogger.get();
     }
 
-    /** @return the time at which this logging event was created */
+    /**
+     * @return the time at which this logging event was created
+     */
     public Instant getTimestamp() {
         return timestamp;
     }
 
-    /** @return the name of the thread that created this logging event */
+    /**
+     * @return the name of the thread that created this logging event
+     */
     public String getThreadName() {
         return threadName;
     }
 
-    /** @return the Thread Context Classloader used when this logging event was created */
+    /**
+     * @return the Thread Context Classloader used when this logging event was created
+     */
     public ClassLoader getThreadContextClassLoader() {
         return threadContextClassLoader;
     }

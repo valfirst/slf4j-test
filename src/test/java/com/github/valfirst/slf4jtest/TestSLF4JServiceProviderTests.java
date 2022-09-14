@@ -15,7 +15,9 @@ import org.slf4j.MarkerFactory;
 import org.slf4j.helpers.BasicMarkerFactory;
 import org.slf4j.spi.SLF4JServiceProvider;
 
-/** @author Valery Yatsynovich */
+/**
+ * @author Valery Yatsynovich
+ */
 class TestSLF4JServiceProviderTests {
     private SLF4JServiceProvider slf4JServiceProvider =
             ServiceLoader.load(SLF4JServiceProvider.class).iterator().next();

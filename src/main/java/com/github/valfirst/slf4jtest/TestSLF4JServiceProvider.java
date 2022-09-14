@@ -6,7 +6,9 @@ import org.slf4j.helpers.BasicMarkerFactory;
 import org.slf4j.spi.MDCAdapter;
 import org.slf4j.spi.SLF4JServiceProvider;
 
-/** @author Valery Yatsynovich */
+/**
+ * @author Valery Yatsynovich
+ */
 public class TestSLF4JServiceProvider implements SLF4JServiceProvider {
     public static final String REQUESTED_API_VERSION = "2.0.99";
 

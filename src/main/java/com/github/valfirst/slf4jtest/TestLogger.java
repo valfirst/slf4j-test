@@ -87,17 +87,23 @@ public class TestLogger implements Logger {
         enabledLevels.reset();
     }
 
-    /** @return all {@link LoggingEvent}s logged on this logger by this thread */
+    /**
+     * @return all {@link LoggingEvent}s logged on this logger by this thread
+     */
     public ImmutableList<LoggingEvent> getLoggingEvents() {
         return copyOf(loggingEvents.get());
     }
 
-    /** @return all {@link LoggingEvent}s logged on this logger by ANY thread */
+    /**
+     * @return all {@link LoggingEvent}s logged on this logger by ANY thread
+     */
     public ImmutableList<LoggingEvent> getAllLoggingEvents() {
         return copyOf(allLoggingEvents);
     }
 
-    /** @return whether this logger is trace enabled in this thread */
+    /**
+     * @return whether this logger is trace enabled in this thread
+     */
     @Override
     public boolean isTraceEnabled() {
         return enabledLevels.get().contains(TRACE);
@@ -159,7 +165,9 @@ public class TestLogger implements Logger {
         log(TRACE, marker, msg, throwable);
     }
 
-    /** @return whether this logger is debug enabled in this thread */
+    /**
+     * @return whether this logger is debug enabled in this thread
+     */
     @Override
     public boolean isDebugEnabled() {
         return enabledLevels.get().contains(DEBUG);
@@ -221,7 +229,9 @@ public class TestLogger implements Logger {
         log(DEBUG, marker, msg, throwable);
     }
 
-    /** @return whether this logger is info enabled in this thread */
+    /**
+     * @return whether this logger is info enabled in this thread
+     */
     @Override
     public boolean isInfoEnabled() {
         return enabledLevels.get().contains(INFO);
@@ -282,7 +292,9 @@ public class TestLogger implements Logger {
         log(INFO, marker, msg, throwable);
     }
 
-    /** @return whether this logger is warn enabled in this thread */
+    /**
+     * @return whether this logger is warn enabled in this thread
+     */
     @Override
     public boolean isWarnEnabled() {
         return enabledLevels.get().contains(WARN);
@@ -343,7 +355,9 @@ public class TestLogger implements Logger {
         log(WARN, marker, msg, throwable);
     }
 
-    /** @return whether this logger is error enabled in this thread */
+    /**
+     * @return whether this logger is error enabled in this thread
+     */
     @Override
     public boolean isErrorEnabled() {
         return enabledLevels.get().contains(ERROR);
@@ -464,7 +478,9 @@ public class TestLogger implements Logger {
         }
     }
 
-    /** @return the set of levels enabled for this logger on this thread */
+    /**
+     * @return the set of levels enabled for this logger on this thread
+     */
     public ImmutableSet<Level> getEnabledLevels() {
         return enabledLevels.get();
     }
