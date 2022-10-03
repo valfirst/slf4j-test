@@ -57,7 +57,7 @@
         <mockito.version>4.0.0</mockito.version>
         <powermock.version>2.0.9</powermock.version>
         <jacoco.version>0.8.8</jacoco.version>
-        <pmd.version>6.49.0</pmd.version>
+        <pmd.version>6.50.0</pmd.version>
         <maven.surefire.version>2.22.2</maven.surefire.version>
     </properties>
 
