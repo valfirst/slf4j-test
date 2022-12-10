@@ -19,7 +19,7 @@ LoggingEvent.
 ### Setting the Log Level on a Logger
 
 SLF4J Test only stores events for levels which are marked as enabled on the
-Logger. By default all levels are enabled; however, this can be programatically
+Logger. By default, all levels are enabled; however, this can be programmatically
 changed on a per logger basis using the following functions:
 
     Logger.setEnabledLevels(Level... levels)
@@ -32,6 +32,28 @@ is concerned, notwithstanding the fact that implementations such as Logback and
 Log4J do not permit this. If you wish to test using these common configurations,
 you should use the constants defined in
 uk.org.lidalia.slf4jext.ConventionalLevelHierarchy.
+
+### Globally disabling a Log Level
+
+Storing log events at all levels can slow down test executions. If needed a global
+setting can be used to avoid capturing events at a given level or below respecting
+the conventional level hierarchy (if the capture level is set to INFO, DEBUG and TRACE
+events won't be captured). This can be set in any of the following ways:
+
+#### Programmatically
+    TestLoggerFactory.getInstance().setCaptureLevel(Level.INFO);
+
+#### Via a System Property
+Run the JVM with the following:
+
+    -Dslf4jtest.capture.level=INFO
+
+#### Via a properties file
+Place a file called slf4jtest.properties on the classpath with the following
+line in it:
+
+    capture.level=INFO
+
 
 ### Resetting Stored State
 
@@ -93,10 +115,12 @@ It can still be useful to print log messages to System out/err as appropriate.
 SLF4J Test will print messages using a standard (non-configurable) format based
 on the value of the TestLoggerFactory's printLevel property. For convenience
 this does respect the conventional level hierarchy where if the print level is
-INFO logging events at levels WARN and ERROR will also be printed. This can be
-set in any of the following ways:
+INFO logging events at levels WARN and ERROR will also be printed. A level that is
+disabled [globally](#globally-disabling-a-log-level) will not be printed.
 
-#### Programatically
+This can be set in any of the following ways:
+
+#### Programmatically
     TestLoggerFactory.getInstance().setPrintLevel(Level.INFO);
 
 #### Via a System Property

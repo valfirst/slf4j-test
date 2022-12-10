@@ -25,24 +25,38 @@ public final class TestLoggerFactory implements ILoggerFactory {
             Suppliers.memoize(
                     () -> {
                         try {
-                            final String level =
-                                    new OverridableProperties("slf4jtest").getProperty("print.level", "OFF");
-                            return new TestLoggerFactory(Level.valueOf(level));
-                        } catch (IllegalArgumentException e) {
-                            throw new IllegalStateException(
-                                    "Invalid level name in property print.level of file slf4jtest.properties "
-                                            + "or System property slf4jtest.print.level",
-                                    e);
+                            OverridableProperties properties = new OverridableProperties("slf4jtest");
+                            Level printLevel = getLevelProperty(properties, "print.level", "OFF");
+                            Level captureLevel = getLevelProperty(properties, "capture.level", "TRACE");
+                            return new TestLoggerFactory(printLevel, captureLevel);
                         } catch (IOException e) {
                             throw new UncheckedIOException(e);
                         }
                     });
+
+    private static Level getLevelProperty(
+            OverridableProperties properties, String propertyKey, String defaultValue)
+            throws IOException {
+        try {
+            final String printLevelProperty = properties.getProperty(propertyKey, defaultValue);
+            return Level.valueOf(printLevelProperty);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException(
+                    "Invalid level name in property "
+                            + propertyKey
+                            + " of file slf4jtest.properties "
+                            + "or System property slf4jtest."
+                            + propertyKey,
+                    e);
+        }
+    }
 
     private final ConcurrentMap<String, TestLogger> loggers = new ConcurrentHashMap<>();
     private final List<LoggingEvent> allLoggingEvents =
             Collections.synchronizedList(new ArrayList<>());
     private final ThreadLocal<List<LoggingEvent>> loggingEvents = new ThreadLocal<>(ArrayList::new);
     private volatile Level printLevel;
+    private volatile Level captureLevel;
 
     public static TestLoggerFactory getInstance() {
         return INSTANCE.get();
@@ -81,15 +95,24 @@ public final class TestLoggerFactory implements ILoggerFactory {
     }
 
     public TestLoggerFactory() {
-        this(Level.OFF);
+        this(Level.OFF, Level.TRACE);
     }
 
     public TestLoggerFactory(final Level printLevel) {
+        this(printLevel, Level.TRACE);
+    }
+
+    public TestLoggerFactory(final Level printLevel, final Level captureLevel) {
         this.printLevel = checkNotNull(printLevel);
+        this.captureLevel = checkNotNull(captureLevel);
     }
 
     public Level getPrintLevel() {
         return printLevel;
+    }
+
+    public Level getCaptureLevel() {
+        return captureLevel;
     }
 
     public ImmutableMap<String, TestLogger> getAllLoggers() {
@@ -140,5 +163,9 @@ public final class TestLoggerFactory implements ILoggerFactory {
 
     public void setPrintLevel(final Level printLevel) {
         this.printLevel = checkNotNull(printLevel);
+    }
+
+    public void setCaptureLevel(Level captureLevel) {
+        this.captureLevel = checkNotNull(captureLevel);
     }
 }

@@ -71,6 +71,7 @@ class TestLoggerTests extends StdIoTests {
         MDC.clear();
         TestLoggerFactory.reset();
         TestLoggerFactory.getInstance().setPrintLevel(Level.OFF);
+        TestLoggerFactory.getInstance().setCaptureLevel(Level.TRACE);
     }
 
     @Test
@@ -785,12 +786,51 @@ class TestLoggerTests extends StdIoTests {
     }
 
     @Test
-    void doesNotWhenPrintLevelGreaterThanThanEventLevel() {
+    void doesNotWhenPrintLevelGreaterThanEventLevel() {
         TestLoggerFactory.getInstance().setPrintLevel(WARN);
 
         testLogger.info(message);
 
         assertThat(getStdOut(), emptyString());
+    }
+
+    @Test
+    void doesNotCaptureWhenCaptureLevelGreaterThanEventLevel() {
+        TestLoggerFactory.getInstance().setCaptureLevel(WARN);
+
+        testLogger.setEnabledLevels(ERROR, WARN, INFO, DEBUG, TRACE);
+
+        assertLogsAreCaptured(ERROR, WARN);
+    }
+
+    @Test
+    void captureLevelAndLoggerLevelAreChecked() {
+        TestLoggerFactory.getInstance().setCaptureLevel(INFO);
+
+        testLogger.setEnabledLevels(ERROR, WARN);
+
+        assertLogsAreCaptured(ERROR, WARN);
+    }
+
+    @Test
+    void captureAllLevelsByDefault() {
+        assertLogsAreCaptured(ERROR, WARN, INFO, DEBUG, TRACE);
+    }
+
+    private void assertLogsAreCaptured(Level... shouldLog) {
+        testLogger.error(message);
+        testLogger.warn(message);
+        testLogger.info(message);
+        testLogger.debug(message);
+        testLogger.trace(message);
+
+        List<LoggingEvent> expectedEvents =
+                Arrays.stream(shouldLog)
+                        .map(level -> new LoggingEvent(level, mdcValues, message))
+                        .collect(Collectors.toList());
+
+        assertEquals(expectedEvents, testLogger.getLoggingEvents());
+        testLogger.clear();
     }
 
     @Test
