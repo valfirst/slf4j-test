@@ -457,7 +457,7 @@ public class TestLogger implements Logger {
             final Optional<Throwable> throwable,
             final String format,
             final Object... args) {
-        if (enabledLevels.get().contains(level)) {
+        if (enabledLevels.get().contains(level) && enabledByGlobalCaptureLevel(level)) {
             final LoggingEvent event =
                     new LoggingEvent(of(this), level, mdc(), marker, throwable, format, args);
             allLoggingEvents.add(event);
@@ -465,6 +465,10 @@ public class TestLogger implements Logger {
             testLoggerFactory.addLoggingEvent(event);
             optionallyPrint(event);
         }
+    }
+
+    private boolean enabledByGlobalCaptureLevel(Level level) {
+        return testLoggerFactory.getCaptureLevel().compareTo(level) <= 0;
     }
 
     @SuppressWarnings("unchecked")
