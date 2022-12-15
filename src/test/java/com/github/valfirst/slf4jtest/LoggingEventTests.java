@@ -17,6 +17,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static uk.org.lidalia.slf4jext.Level.DEBUG;
 import static uk.org.lidalia.slf4jext.Level.ERROR;
 import static uk.org.lidalia.slf4jext.Level.INFO;
@@ -25,6 +26,10 @@ import static uk.org.lidalia.slf4jext.Level.WARN;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,14 +38,13 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
-import org.joda.time.DateTimeUtils;
-import org.joda.time.Instant;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.MockedStatic;
 import org.slf4j.Marker;
 import uk.org.lidalia.slf4jext.Level;
 
@@ -60,7 +64,6 @@ class LoggingEventTests extends StdIoTests {
     @AfterEach
     void afterEach() {
         super.after();
-        DateTimeUtils.setCurrentMillisSystem();
         TestLoggerFactory.reset();
     }
 
@@ -420,8 +423,14 @@ class LoggingEventTests extends StdIoTests {
     @Test
     void timestamp() {
         Instant now = Instant.now();
-        DateTimeUtils.setCurrentMillisFixed(now.getMillis());
-        LoggingEvent event = info("Message");
+        LoggingEvent event;
+
+        try (MockedStatic<Instant> instant = mockStatic(Instant.class)) {
+            instant.when(Instant::now).thenReturn(now);
+
+            event = info("Message");
+        }
+
         assertThat(event.getTimestamp(), is(now));
     }
 
@@ -441,9 +450,14 @@ class LoggingEventTests extends StdIoTests {
 
     @Test
     void printToStandardOutNoThrowable() {
-        DateTimeUtils.setCurrentMillisFixed(0);
+        LoggingEvent event;
 
-        LoggingEvent event = new LoggingEvent(INFO, "message with {}", "argument");
+        Clock fixed = Clock.fixed(Instant.ofEpochMilli(0), ZoneId.systemDefault());
+        try (MockedStatic<Clock> instant = mockStatic(Clock.class)) {
+            instant.when(Clock::systemUTC).thenReturn(fixed);
+            event = new LoggingEvent(INFO, "message with {}", "argument");
+        }
+
         event.print();
 
         assertThat(
@@ -457,9 +471,14 @@ class LoggingEventTests extends StdIoTests {
 
     @Test
     void printToStandardOutWithThrowable() {
-        DateTimeUtils.setCurrentMillisFixed(0);
+        LoggingEvent event;
 
-        LoggingEvent event = new LoggingEvent(INFO, new Exception(), "message");
+        Clock fixed = Clock.fixed(Instant.ofEpochMilli(0), ZoneId.systemDefault());
+        try (MockedStatic<Clock> instant = mockStatic(Clock.class)) {
+            instant.when(Clock::systemUTC).thenReturn(fixed);
+            event = new LoggingEvent(INFO, new Exception(), "message");
+        }
+
         event.print();
 
         assertThat(

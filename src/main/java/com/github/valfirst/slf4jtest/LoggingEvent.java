@@ -7,13 +7,15 @@ import static java.util.Optional.ofNullable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.io.PrintStream;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.joda.time.Instant;
 import org.slf4j.Marker;
 import org.slf4j.helpers.MessageFormatter;
 import uk.org.lidalia.slf4jext.Level;
@@ -40,6 +42,7 @@ import uk.org.lidalia.slf4jext.Level;
  */
 @SuppressWarnings({"PMD.ExcessivePublicCount", "PMD.TooManyMethods"})
 public class LoggingEvent {
+    private static final DateTimeFormatter ISO_FORMAT = new DateTimeFormatterBuilder().appendInstant(3).toFormatter();
 
     private final Level level;
     private final ImmutableMap<String, String> mdc;
@@ -49,7 +52,7 @@ public class LoggingEvent {
     private final ImmutableList<Object> arguments;
 
     private final Optional<TestLogger> creatingLogger;
-    private final Instant timestamp = new Instant();
+    private final Instant timestamp = Instant.now();
     private final String threadName = Thread.currentThread().getName();
     private final ClassLoader threadContextClassLoader =
             Thread.currentThread().getContextClassLoader();
@@ -474,7 +477,7 @@ public class LoggingEvent {
     }
 
     private String formatLogStatement() {
-        return getTimestamp()
+        return ISO_FORMAT.format(getTimestamp())
                 + " ["
                 + getThreadName()
                 + "] "
