@@ -1,5 +1,10 @@
 ## Changelog
 
+### Unreleased
+
+Introduce a new `capture.level` property and API to control captured events globally,
+see https://github.com/valfirst/slf4j-test/issues/314.
+
 ### Version 1.2.0
 
 Allows construction of standalone instances to facilitate logging in different

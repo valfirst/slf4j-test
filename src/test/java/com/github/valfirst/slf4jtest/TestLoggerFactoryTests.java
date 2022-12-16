@@ -248,6 +248,7 @@ public class TestLoggerFactoryTests {
         final OverridableProperties properties = mock(OverridableProperties.class);
         whenNew(OverridableProperties.class).withArguments("slf4jtest").thenReturn(properties);
         when(properties.getProperty("print.level", "OFF")).thenReturn("INFO");
+        when(properties.getProperty("capture.level", "TRACE")).thenReturn("INFO");
 
         assertThat(getInstance().getPrintLevel(), is(Level.INFO));
     }
@@ -267,6 +268,44 @@ public class TestLoggerFactoryTests {
                 is(
                         "Invalid level name in property print.level of file slf4jtest.properties "
                                 + "or System property slf4jtest.print.level"));
+        assertThat(illegalStateException.getCause(), instanceOf(IllegalArgumentException.class));
+        assertThat(
+                illegalStateException.getCause().getMessage(),
+                is("No enum constant " + Level.class.getName() + "." + invalidLevelName));
+    }
+
+    @Test
+    public void defaultCaptureLevelIsTrace() {
+        assertThat(getInstance().getCaptureLevel(), is(Level.TRACE));
+    }
+
+    @Test
+    @PrepareForTest(TestLoggerFactory.class)
+    public void captureLevelTakenFromOverridableProperties() throws Exception {
+        final OverridableProperties properties = mock(OverridableProperties.class);
+        whenNew(OverridableProperties.class).withArguments("slf4jtest").thenReturn(properties);
+        when(properties.getProperty("print.level", "OFF")).thenReturn("INFO");
+        when(properties.getProperty("capture.level", "TRACE")).thenReturn("INFO");
+
+        assertThat(getInstance().getCaptureLevel(), is(Level.INFO));
+    }
+
+    @Test
+    @PrepareForTest(TestLoggerFactory.class)
+    public void captureLevelInvalidInOverridableProperties() throws Exception {
+        final OverridableProperties properties = mock(OverridableProperties.class);
+        whenNew(OverridableProperties.class).withArguments("slf4jtest").thenReturn(properties);
+        when(properties.getProperty("print.level", "OFF")).thenReturn("INFO");
+        final String invalidLevelName = "nonsense";
+        when(properties.getProperty("capture.level", "TRACE")).thenReturn(invalidLevelName);
+
+        final IllegalStateException illegalStateException =
+                assertThrows(IllegalStateException.class, TestLoggerFactory::getInstance);
+        assertThat(
+                illegalStateException.getMessage(),
+                is(
+                        "Invalid level name in property capture.level of file slf4jtest.properties "
+                                + "or System property slf4jtest.capture.level"));
         assertThat(illegalStateException.getCause(), instanceOf(IllegalArgumentException.class));
         assertThat(
                 illegalStateException.getCause().getMessage(),
