@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"com.github.valfirst.slf4jtest","l":"StdIoTests"},{"p":"com.github.valfirst.slf4jtest","l":"TestLoggerFactoryResetRuleTests"},{"p":"com.github.valfirst.slf4jtest","l":"TestLoggerFactoryTests"},{"p":"uk.org.lidalia.lang","l":"ThreadLocalTests"}]

@@ -446,83 +446,89 @@ public class LoggingEvent {
 <span class="fc" id="L446">        return creatingLogger.get();</span>
     }
 
-    /** @return the time at which this logging event was created */
+    /**
+     * @return the time at which this logging event was created
+     */
     public Instant getTimestamp() {
-<span class="fc" id="L451">        return timestamp;</span>
+<span class="fc" id="L453">        return timestamp;</span>
     }
 
-    /** @return the name of the thread that created this logging event */
+    /**
+     * @return the name of the thread that created this logging event
+     */
     public String getThreadName() {
-<span class="fc" id="L456">        return threadName;</span>
+<span class="fc" id="L460">        return threadName;</span>
     }
 
-    /** @return the Thread Context Classloader used when this logging event was created */
+    /**
+     * @return the Thread Context Classloader used when this logging event was created
+     */
     public ClassLoader getThreadContextClassLoader() {
-<span class="fc" id="L461">        return threadContextClassLoader;</span>
+<span class="fc" id="L467">        return threadContextClassLoader;</span>
     }
 
     void print() {
-<span class="fc" id="L465">        final PrintStream output = printStreamForLevel();</span>
-<span class="fc" id="L466">        output.println(formatLogStatement());</span>
-<span class="fc" id="L467">        throwable.ifPresent(throwableToPrint -&gt; throwableToPrint.printStackTrace(output));</span>
-<span class="fc" id="L468">    }</span>
+<span class="fc" id="L471">        final PrintStream output = printStreamForLevel();</span>
+<span class="fc" id="L472">        output.println(formatLogStatement());</span>
+<span class="fc" id="L473">        throwable.ifPresent(throwableToPrint -&gt; throwableToPrint.printStackTrace(output));</span>
+<span class="fc" id="L474">    }</span>
 
     private String formatLogStatement() {
-<span class="fc" id="L471">        return getTimestamp()</span>
+<span class="fc" id="L477">        return getTimestamp()</span>
                 + &quot; [&quot;
-<span class="fc" id="L473">                + getThreadName()</span>
+<span class="fc" id="L479">                + getThreadName()</span>
                 + &quot;] &quot;
-<span class="fc" id="L475">                + getLevel()</span>
-<span class="fc" id="L476">                + safeLoggerName()</span>
+<span class="fc" id="L481">                + getLevel()</span>
+<span class="fc" id="L482">                + safeLoggerName()</span>
                 + &quot; - &quot;
-<span class="fc" id="L478">                + getFormattedMessage();</span>
+<span class="fc" id="L484">                + getFormattedMessage();</span>
     }
 
     private String safeLoggerName() {
-<span class="fc" id="L482">        return creatingLogger.map(logger -&gt; &quot; &quot; + logger.getName()).orElse(&quot;&quot;);</span>
+<span class="fc" id="L488">        return creatingLogger.map(logger -&gt; &quot; &quot; + logger.getName()).orElse(&quot;&quot;);</span>
     }
 
     public String getFormattedMessage() {
-<span class="fc" id="L486">        Object[] argumentsWithNulls =</span>
-<span class="fc bfc" id="L487" title="All 2 branches covered.">                getArguments().stream().map(a -&gt; a.equals(Optional.empty()) ? null : a).toArray();</span>
-<span class="fc" id="L488">        return MessageFormatter.arrayFormat(getMessage(), argumentsWithNulls).getMessage();</span>
+<span class="fc" id="L492">        Object[] argumentsWithNulls =</span>
+<span class="fc bfc" id="L493" title="All 2 branches covered.">                getArguments().stream().map(a -&gt; a.equals(Optional.empty()) ? null : a).toArray();</span>
+<span class="fc" id="L494">        return MessageFormatter.arrayFormat(getMessage(), argumentsWithNulls).getMessage();</span>
     }
 
     private PrintStream printStreamForLevel() {
-<span class="fc bfc" id="L492" title="All 2 branches covered.">        switch (level) {</span>
+<span class="fc bfc" id="L498" title="All 2 branches covered.">        switch (level) {</span>
             case ERROR:
             case WARN:
-<span class="fc" id="L495">                return System.err;</span>
+<span class="fc" id="L501">                return System.err;</span>
             default:
-<span class="fc" id="L497">                return System.out;</span>
+<span class="fc" id="L503">                return System.out;</span>
         }
     }
 
     @Override
     public boolean equals(Object o) {
-<span class="pc bpc" id="L503" title="1 of 2 branches missed.">        if (this == o) {</span>
-<span class="nc" id="L504">            return true;</span>
+<span class="pc bpc" id="L509" title="1 of 2 branches missed.">        if (this == o) {</span>
+<span class="nc" id="L510">            return true;</span>
         }
-<span class="pc bpc" id="L506" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
-<span class="nc" id="L507">            return false;</span>
+<span class="pc bpc" id="L512" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L513">            return false;</span>
         }
-<span class="fc" id="L509">        LoggingEvent that = (LoggingEvent) o;</span>
-<span class="fc bfc" id="L510" title="All 2 branches covered.">        return level == that.level</span>
-<span class="pc bpc" id="L511" title="1 of 2 branches missed.">                &amp;&amp; Objects.equals(mdc, that.mdc)</span>
-<span class="pc bpc" id="L512" title="1 of 2 branches missed.">                &amp;&amp; Objects.equals(marker, that.marker)</span>
-<span class="fc bfc" id="L513" title="All 2 branches covered.">                &amp;&amp; Objects.equals(throwable, that.throwable)</span>
-<span class="fc bfc" id="L514" title="All 2 branches covered.">                &amp;&amp; Objects.equals(message, that.message)</span>
-<span class="fc bfc" id="L515" title="All 2 branches covered.">                &amp;&amp; Objects.equals(arguments, that.arguments);</span>
+<span class="fc" id="L515">        LoggingEvent that = (LoggingEvent) o;</span>
+<span class="fc bfc" id="L516" title="All 2 branches covered.">        return level == that.level</span>
+<span class="pc bpc" id="L517" title="1 of 2 branches missed.">                &amp;&amp; Objects.equals(mdc, that.mdc)</span>
+<span class="pc bpc" id="L518" title="1 of 2 branches missed.">                &amp;&amp; Objects.equals(marker, that.marker)</span>
+<span class="fc bfc" id="L519" title="All 2 branches covered.">                &amp;&amp; Objects.equals(throwable, that.throwable)</span>
+<span class="fc bfc" id="L520" title="All 2 branches covered.">                &amp;&amp; Objects.equals(message, that.message)</span>
+<span class="fc bfc" id="L521" title="All 2 branches covered.">                &amp;&amp; Objects.equals(arguments, that.arguments);</span>
     }
 
     @Override
     public int hashCode() {
-<span class="nc" id="L520">        return Objects.hash(level, mdc, marker, throwable, message, arguments);</span>
+<span class="nc" id="L526">        return Objects.hash(level, mdc, marker, throwable, message, arguments);</span>
     }
 
     @Override
     public String toString() {
-<span class="fc" id="L525">        return &quot;LoggingEvent{&quot;</span>
+<span class="fc" id="L531">        return &quot;LoggingEvent{&quot;</span>
                 + &quot;level=&quot;
                 + level
                 + &quot;, mdc=&quot;
@@ -539,4 +545,4 @@ public class LoggingEvent {
                 + '}';
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

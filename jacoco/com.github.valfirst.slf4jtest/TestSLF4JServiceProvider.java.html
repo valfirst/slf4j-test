@@ -6,8 +6,10 @@ import org.slf4j.helpers.BasicMarkerFactory;
 import org.slf4j.spi.MDCAdapter;
 import org.slf4j.spi.SLF4JServiceProvider;
 
-/** @author Valery Yatsynovich */
-<span class="fc" id="L10">public class TestSLF4JServiceProvider implements SLF4JServiceProvider {</span>
+/**
+ * @author Valery Yatsynovich
+ */
+<span class="fc" id="L12">public class TestSLF4JServiceProvider implements SLF4JServiceProvider {</span>
     public static final String REQUESTED_API_VERSION = &quot;2.0.99&quot;;
 
     private ILoggerFactory loggerFactory;
@@ -16,29 +18,29 @@ import org.slf4j.spi.SLF4JServiceProvider;
 
     @Override
     public void initialize() {
-<span class="fc" id="L19">        loggerFactory = TestLoggerFactory.getInstance();</span>
-<span class="fc" id="L20">        markerFactory = new BasicMarkerFactory();</span>
-<span class="fc" id="L21">        mdcAdapter = new TestMDCAdapter();</span>
-<span class="fc" id="L22">    }</span>
+<span class="fc" id="L21">        loggerFactory = TestLoggerFactory.getInstance();</span>
+<span class="fc" id="L22">        markerFactory = new BasicMarkerFactory();</span>
+<span class="fc" id="L23">        mdcAdapter = new TestMDCAdapter();</span>
+<span class="fc" id="L24">    }</span>
 
     @Override
     public ILoggerFactory getLoggerFactory() {
-<span class="fc" id="L26">        return loggerFactory;</span>
+<span class="fc" id="L28">        return loggerFactory;</span>
     }
 
     @Override
     public IMarkerFactory getMarkerFactory() {
-<span class="fc" id="L31">        return markerFactory;</span>
+<span class="fc" id="L33">        return markerFactory;</span>
     }
 
     @Override
     public MDCAdapter getMDCAdapter() {
-<span class="fc" id="L36">        return mdcAdapter;</span>
+<span class="fc" id="L38">        return mdcAdapter;</span>
     }
 
     @Override
     public String getRequestedApiVersion() {
-<span class="fc" id="L41">        return REQUESTED_API_VERSION;</span>
+<span class="fc" id="L43">        return REQUESTED_API_VERSION;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

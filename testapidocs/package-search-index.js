@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"com.github.valfirst.slf4jtest"},{"l":"org.slf4j.impl"},{"l":"uk.org.lidalia.lang"}]
