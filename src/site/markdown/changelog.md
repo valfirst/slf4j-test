@@ -2,8 +2,22 @@
 
 ### Unreleased
 
-Introduce a new `capture.level` property and API to control captured events globally,
-see https://github.com/valfirst/slf4j-test/issues/314.
+### [slf4j-test-2.7.0](https://github.com/valfirst/slf4j-test/tree/slf4j-test-2.7.0) (2022-12-19)
+[Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-2.6.1...slf4j-test-2.7.0)
+
+**Implemented enhancements:**
+- [#314](https://github.com/valfirst/slf4j-test/issues/314) via [#324](https://github.com/valfirst/slf4j-test/pull/324) - Introduce a new `capture.level` property and API to control captured events globally
+
+  Introduce a new global setting `capture.level` to disable storing (and printing) logs at a given level (following the level hierarchy).
+
+  The implementation is very similar to the `print.level` global setting.
+
+  This is useful when tests are generating a lot of logging events that are not of interest and don't need to be captured. ArchUnit tests are known to be such tests and can be quite slow when `slf4j-test` is used.
+
+**Updates:**
+- Bump `org.slf4j:slf4j-api` from `2.0.0-alpha7` to `2.0.6`
+- Bump `joda-time:joda-time` from `2.10.14` to `2.12.2`
+- Bump `org.assertj:assertj-core` from `3.22.0` to `3.23.1`
 
 ### [slf4j-test-2.6.1](https://github.com/valfirst/slf4j-test/tree/slf4j-test-2.6.1) (2022-04-01)
 [Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-2.6.0...slf4j-test-2.6.1)
