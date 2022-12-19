@@ -10,15 +10,6 @@
     </skin>
 
     <body>
-        <head>
-      <![CDATA[<script type="text/javascript">
-        $(document).ready(function () {
-          $(".source").addClass("prettyprint");
-          prettyPrint();
-        });
-      </script>
-      ]]>
-        </head>
         <menu name="Overview">
             <item name="Introduction" href="index.html" />
             <item name="Usage" href="usage.html" />
