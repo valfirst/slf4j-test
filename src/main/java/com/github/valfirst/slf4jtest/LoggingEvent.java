@@ -490,7 +490,7 @@ public class LoggingEvent {
 
     public String getFormattedMessage() {
         Object[] argumentsWithNulls =
-                getArguments().stream().map(a -> a.equals(Optional.empty()) ? null : a).toArray();
+                getArguments().stream().map(a -> a.equals(empty()) ? null : a).toArray();
         return MessageFormatter.arrayFormat(getMessage(), argumentsWithNulls).getMessage();
     }
 

@@ -1,20 +1,13 @@
 package com.github.valfirst.slf4jtest;
 
 import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.Sets.immutableEnumSet;
-import static java.util.Arrays.asList;
-import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
-import static uk.org.lidalia.slf4jext.Level.DEBUG;
-import static uk.org.lidalia.slf4jext.Level.ERROR;
-import static uk.org.lidalia.slf4jext.Level.INFO;
-import static uk.org.lidalia.slf4jext.Level.TRACE;
-import static uk.org.lidalia.slf4jext.Level.WARN;
-import static uk.org.lidalia.slf4jext.Level.enablableValueSet;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +50,7 @@ public class TestLogger implements Logger {
 
     private final List<LoggingEvent> allLoggingEvents = new CopyOnWriteArrayList<>();
     private volatile ThreadLocal<ImmutableSet<Level>> enabledLevels =
-            new ThreadLocal<>(enablableValueSet());
+            new ThreadLocal<>(Level.enablableValueSet());
 
     TestLogger(final String name, final TestLoggerFactory testLoggerFactory) {
         this.name = name;
@@ -106,63 +99,63 @@ public class TestLogger implements Logger {
      */
     @Override
     public boolean isTraceEnabled() {
-        return enabledLevels.get().contains(TRACE);
+        return enabledLevels.get().contains(Level.TRACE);
     }
 
     @Override
     public void trace(final String message) {
-        log(TRACE, message);
+        log(Level.TRACE, message);
     }
 
     @Override
     public void trace(final String format, final Object arg) {
-        log(TRACE, format, arg);
+        log(Level.TRACE, format, arg);
     }
 
     @Override
     public void trace(final String format, final Object arg1, final Object arg2) {
-        log(TRACE, format, arg1, arg2);
+        log(Level.TRACE, format, arg1, arg2);
     }
 
     @Override
     public void trace(final String format, final Object... args) {
-        log(TRACE, format, args);
+        log(Level.TRACE, format, args);
     }
 
     @Override
     public void trace(final String msg, final Throwable throwable) {
-        log(TRACE, msg, throwable);
+        log(Level.TRACE, msg, throwable);
     }
 
     @Override
     public boolean isTraceEnabled(final Marker marker) {
-        return enabledLevels.get().contains(TRACE);
+        return enabledLevels.get().contains(Level.TRACE);
     }
 
     @Override
     public void trace(final Marker marker, final String msg) {
-        log(TRACE, marker, msg);
+        log(Level.TRACE, marker, msg);
     }
 
     @Override
     public void trace(final Marker marker, final String format, final Object arg) {
-        log(TRACE, marker, format, arg);
+        log(Level.TRACE, marker, format, arg);
     }
 
     @Override
     public void trace(
             final Marker marker, final String format, final Object arg1, final Object arg2) {
-        log(TRACE, marker, format, arg1, arg2);
+        log(Level.TRACE, marker, format, arg1, arg2);
     }
 
     @Override
     public void trace(final Marker marker, final String format, final Object... args) {
-        log(TRACE, marker, format, args);
+        log(Level.TRACE, marker, format, args);
     }
 
     @Override
     public void trace(final Marker marker, final String msg, final Throwable throwable) {
-        log(TRACE, marker, msg, throwable);
+        log(Level.TRACE, marker, msg, throwable);
     }
 
     /**
@@ -170,63 +163,63 @@ public class TestLogger implements Logger {
      */
     @Override
     public boolean isDebugEnabled() {
-        return enabledLevels.get().contains(DEBUG);
+        return enabledLevels.get().contains(Level.DEBUG);
     }
 
     @Override
     public void debug(final String message) {
-        log(DEBUG, message);
+        log(Level.DEBUG, message);
     }
 
     @Override
     public void debug(final String format, final Object arg) {
-        log(DEBUG, format, arg);
+        log(Level.DEBUG, format, arg);
     }
 
     @Override
     public void debug(final String format, final Object arg1, final Object arg2) {
-        log(DEBUG, format, arg1, arg2);
+        log(Level.DEBUG, format, arg1, arg2);
     }
 
     @Override
     public void debug(final String format, final Object... args) {
-        log(DEBUG, format, args);
+        log(Level.DEBUG, format, args);
     }
 
     @Override
     public void debug(final String msg, final Throwable throwable) {
-        log(DEBUG, msg, throwable);
+        log(Level.DEBUG, msg, throwable);
     }
 
     @Override
     public boolean isDebugEnabled(final Marker marker) {
-        return enabledLevels.get().contains(DEBUG);
+        return enabledLevels.get().contains(Level.DEBUG);
     }
 
     @Override
     public void debug(final Marker marker, final String msg) {
-        log(DEBUG, marker, msg);
+        log(Level.DEBUG, marker, msg);
     }
 
     @Override
     public void debug(final Marker marker, final String format, final Object arg) {
-        log(DEBUG, marker, format, arg);
+        log(Level.DEBUG, marker, format, arg);
     }
 
     @Override
     public void debug(
             final Marker marker, final String format, final Object arg1, final Object arg2) {
-        log(DEBUG, marker, format, arg1, arg2);
+        log(Level.DEBUG, marker, format, arg1, arg2);
     }
 
     @Override
     public void debug(final Marker marker, final String format, final Object... args) {
-        log(DEBUG, marker, format, args);
+        log(Level.DEBUG, marker, format, args);
     }
 
     @Override
     public void debug(final Marker marker, final String msg, final Throwable throwable) {
-        log(DEBUG, marker, msg, throwable);
+        log(Level.DEBUG, marker, msg, throwable);
     }
 
     /**
@@ -234,62 +227,62 @@ public class TestLogger implements Logger {
      */
     @Override
     public boolean isInfoEnabled() {
-        return enabledLevels.get().contains(INFO);
+        return enabledLevels.get().contains(Level.INFO);
     }
 
     @Override
     public void info(final String message) {
-        log(INFO, message);
+        log(Level.INFO, message);
     }
 
     @Override
     public void info(final String format, final Object arg) {
-        log(INFO, format, arg);
+        log(Level.INFO, format, arg);
     }
 
     @Override
     public void info(final String format, final Object arg1, final Object arg2) {
-        log(INFO, format, arg1, arg2);
+        log(Level.INFO, format, arg1, arg2);
     }
 
     @Override
     public void info(final String format, final Object... args) {
-        log(INFO, format, args);
+        log(Level.INFO, format, args);
     }
 
     @Override
     public void info(final String msg, final Throwable throwable) {
-        log(INFO, msg, throwable);
+        log(Level.INFO, msg, throwable);
     }
 
     @Override
     public boolean isInfoEnabled(final Marker marker) {
-        return enabledLevels.get().contains(INFO);
+        return enabledLevels.get().contains(Level.INFO);
     }
 
     @Override
     public void info(final Marker marker, final String msg) {
-        log(INFO, marker, msg);
+        log(Level.INFO, marker, msg);
     }
 
     @Override
     public void info(final Marker marker, final String format, final Object arg) {
-        log(INFO, marker, format, arg);
+        log(Level.INFO, marker, format, arg);
     }
 
     @Override
     public void info(final Marker marker, final String format, final Object arg1, final Object arg2) {
-        log(INFO, marker, format, arg1, arg2);
+        log(Level.INFO, marker, format, arg1, arg2);
     }
 
     @Override
     public void info(final Marker marker, final String format, final Object... args) {
-        log(INFO, marker, format, args);
+        log(Level.INFO, marker, format, args);
     }
 
     @Override
     public void info(final Marker marker, final String msg, final Throwable throwable) {
-        log(INFO, marker, msg, throwable);
+        log(Level.INFO, marker, msg, throwable);
     }
 
     /**
@@ -297,62 +290,62 @@ public class TestLogger implements Logger {
      */
     @Override
     public boolean isWarnEnabled() {
-        return enabledLevels.get().contains(WARN);
+        return enabledLevels.get().contains(Level.WARN);
     }
 
     @Override
     public void warn(final String message) {
-        log(WARN, message);
+        log(Level.WARN, message);
     }
 
     @Override
     public void warn(final String format, final Object arg) {
-        log(WARN, format, arg);
+        log(Level.WARN, format, arg);
     }
 
     @Override
     public void warn(final String format, final Object arg1, final Object arg2) {
-        log(WARN, format, arg1, arg2);
+        log(Level.WARN, format, arg1, arg2);
     }
 
     @Override
     public void warn(final String format, final Object... args) {
-        log(WARN, format, args);
+        log(Level.WARN, format, args);
     }
 
     @Override
     public void warn(final String msg, final Throwable throwable) {
-        log(WARN, msg, throwable);
+        log(Level.WARN, msg, throwable);
     }
 
     @Override
     public boolean isWarnEnabled(final Marker marker) {
-        return enabledLevels.get().contains(WARN);
+        return enabledLevels.get().contains(Level.WARN);
     }
 
     @Override
     public void warn(final Marker marker, final String msg) {
-        log(WARN, marker, msg);
+        log(Level.WARN, marker, msg);
     }
 
     @Override
     public void warn(final Marker marker, final String format, final Object arg) {
-        log(WARN, marker, format, arg);
+        log(Level.WARN, marker, format, arg);
     }
 
     @Override
     public void warn(final Marker marker, final String format, final Object arg1, final Object arg2) {
-        log(WARN, marker, format, arg1, arg2);
+        log(Level.WARN, marker, format, arg1, arg2);
     }
 
     @Override
     public void warn(final Marker marker, final String format, final Object... args) {
-        log(WARN, marker, format, args);
+        log(Level.WARN, marker, format, args);
     }
 
     @Override
     public void warn(final Marker marker, final String msg, final Throwable throwable) {
-        log(WARN, marker, msg, throwable);
+        log(Level.WARN, marker, msg, throwable);
     }
 
     /**
@@ -360,63 +353,63 @@ public class TestLogger implements Logger {
      */
     @Override
     public boolean isErrorEnabled() {
-        return enabledLevels.get().contains(ERROR);
+        return enabledLevels.get().contains(Level.ERROR);
     }
 
     @Override
     public void error(final String message) {
-        log(ERROR, message);
+        log(Level.ERROR, message);
     }
 
     @Override
     public void error(final String format, final Object arg) {
-        log(ERROR, format, arg);
+        log(Level.ERROR, format, arg);
     }
 
     @Override
     public void error(final String format, final Object arg1, final Object arg2) {
-        log(ERROR, format, arg1, arg2);
+        log(Level.ERROR, format, arg1, arg2);
     }
 
     @Override
     public void error(final String format, final Object... args) {
-        log(ERROR, format, args);
+        log(Level.ERROR, format, args);
     }
 
     @Override
     public void error(final String msg, final Throwable throwable) {
-        log(ERROR, msg, throwable);
+        log(Level.ERROR, msg, throwable);
     }
 
     @Override
     public boolean isErrorEnabled(final Marker marker) {
-        return enabledLevels.get().contains(ERROR);
+        return enabledLevels.get().contains(Level.ERROR);
     }
 
     @Override
     public void error(final Marker marker, final String msg) {
-        log(ERROR, marker, msg);
+        log(Level.ERROR, marker, msg);
     }
 
     @Override
     public void error(final Marker marker, final String format, final Object arg) {
-        log(ERROR, marker, format, arg);
+        log(Level.ERROR, marker, format, arg);
     }
 
     @Override
     public void error(
             final Marker marker, final String format, final Object arg1, final Object arg2) {
-        log(ERROR, marker, format, arg1, arg2);
+        log(Level.ERROR, marker, format, arg1, arg2);
     }
 
     @Override
     public void error(final Marker marker, final String format, final Object... args) {
-        log(ERROR, marker, format, args);
+        log(Level.ERROR, marker, format, args);
     }
 
     @Override
     public void error(final Marker marker, final String msg, final Throwable throwable) {
-        log(ERROR, marker, msg, throwable);
+        log(Level.ERROR, marker, msg, throwable);
     }
 
     private void log(final Level level, final String format, final Object... args) {
@@ -459,7 +452,7 @@ public class TestLogger implements Logger {
             final Object... args) {
         if (enabledLevels.get().contains(level) && enabledByGlobalCaptureLevel(level)) {
             final LoggingEvent event =
-                    new LoggingEvent(of(this), level, mdc(), marker, throwable, format, args);
+                    new LoggingEvent(Optional.of(this), level, mdc(), marker, throwable, format, args);
             allLoggingEvents.add(event);
             loggingEvents.get().add(event);
             testLoggerFactory.addLoggingEvent(event);
@@ -514,7 +507,7 @@ public class TestLogger implements Logger {
      *     does not affect enabled levels for this logger in other threads
      */
     public void setEnabledLevels(final Level... enabledLevels) {
-        setEnabledLevels(immutableEnumSet(asList(enabledLevels)));
+        setEnabledLevels(Sets.immutableEnumSet(Arrays.asList(enabledLevels)));
     }
 
     /**
