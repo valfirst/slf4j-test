@@ -306,6 +306,7 @@
                 <configuration>
                     <aggregate>true</aggregate>
                     <targetJdk>${jdk.version}</targetJdk>
+                    <printFailingErrors>true</printFailingErrors>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -319,6 +320,13 @@
                         <version>${pmd.version}</version>
                     </dependency>
                 </dependencies>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
