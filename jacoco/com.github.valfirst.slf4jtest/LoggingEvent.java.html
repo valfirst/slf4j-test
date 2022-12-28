@@ -490,7 +490,7 @@ public class LoggingEvent {
 
     public String getFormattedMessage() {
 <span class="fc" id="L492">        Object[] argumentsWithNulls =</span>
-<span class="fc bfc" id="L493" title="All 2 branches covered.">                getArguments().stream().map(a -&gt; a.equals(Optional.empty()) ? null : a).toArray();</span>
+<span class="fc bfc" id="L493" title="All 2 branches covered.">                getArguments().stream().map(a -&gt; a.equals(empty()) ? null : a).toArray();</span>
 <span class="fc" id="L494">        return MessageFormatter.arrayFormat(getMessage(), argumentsWithNulls).getMessage();</span>
     }
 
@@ -513,12 +513,12 @@ public class LoggingEvent {
 <span class="nc" id="L513">            return false;</span>
         }
 <span class="fc" id="L515">        LoggingEvent that = (LoggingEvent) o;</span>
-<span class="fc bfc" id="L516" title="All 2 branches covered.">        return level == that.level</span>
+<span class="pc bpc" id="L516" title="1 of 2 branches missed.">        return level == that.level</span>
 <span class="pc bpc" id="L517" title="1 of 2 branches missed.">                &amp;&amp; Objects.equals(mdc, that.mdc)</span>
 <span class="pc bpc" id="L518" title="1 of 2 branches missed.">                &amp;&amp; Objects.equals(marker, that.marker)</span>
-<span class="fc bfc" id="L519" title="All 2 branches covered.">                &amp;&amp; Objects.equals(throwable, that.throwable)</span>
-<span class="fc bfc" id="L520" title="All 2 branches covered.">                &amp;&amp; Objects.equals(message, that.message)</span>
-<span class="fc bfc" id="L521" title="All 2 branches covered.">                &amp;&amp; Objects.equals(arguments, that.arguments);</span>
+<span class="pc bpc" id="L519" title="1 of 2 branches missed.">                &amp;&amp; Objects.equals(throwable, that.throwable)</span>
+<span class="pc bpc" id="L520" title="1 of 2 branches missed.">                &amp;&amp; Objects.equals(message, that.message)</span>
+<span class="pc bpc" id="L521" title="1 of 2 branches missed.">                &amp;&amp; Objects.equals(arguments, that.arguments);</span>
     }
 
     @Override

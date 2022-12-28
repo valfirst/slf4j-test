@@ -498,7 +498,7 @@
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 
 <a class="jxr_linenumber" name="L491" href="#L491">491</a>     <strong class="jxr_keyword">public</strong> String getFormattedMessage() {
 <a class="jxr_linenumber" name="L492" href="#L492">492</a>         Object[] argumentsWithNulls =
-<a class="jxr_linenumber" name="L493" href="#L493">493</a>                 getArguments().stream().map(a -&gt; a.equals(Optional.empty()) ? <strong class="jxr_keyword">null</strong> : a).toArray();
+<a class="jxr_linenumber" name="L493" href="#L493">493</a>                 getArguments().stream().map(a -&gt; a.equals(empty()) ? <strong class="jxr_keyword">null</strong> : a).toArray();
 <a class="jxr_linenumber" name="L494" href="#L494">494</a>         <strong class="jxr_keyword">return</strong> MessageFormatter.arrayFormat(getMessage(), argumentsWithNulls).getMessage();
 <a class="jxr_linenumber" name="L495" href="#L495">495</a>     }
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> 
