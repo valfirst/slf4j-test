@@ -1,12 +1,52 @@
 ## Changelog
 
-### Unreleased
+### [slf4j-test-2.8.0](https://github.com/valfirst/slf4j-test/tree/slf4j-test-2.8.0) (2022-12-28)
+[Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-2.7.0...slf4j-test-2.8.0)
+
+**Implemented enhancements:**
+- [#188](https://github.com/valfirst/slf4j-test/issues/188) via [#328](https://github.com/valfirst/slf4j-test/pull/328) - Restructure assertions to be based on predicates (by [@topbadger](https://github.com/topbadger))
+
+  By re-structuring the assertion logic to be based upon predicates, the following enhancements have been made:
+
+  #### Custom Predicates
+  Consumers can now provide custom predicates so that they can assert on `LoggingEvent`s in specific ways in addition to the ways previously supported by the library.
+
+  _Example:_
+  ```java
+  assertThat(logger)
+      .hasLogged(event -> event.getFormattedMessage().startsWith("First section of long log message"));
+  ```
+
+  #### MDC Comparison Strategy
+  The MDC comparison strategy can now be set by consumers.
+  - The full MDC context isn't always relevant to the test, yet the assertions previously enforced this check. The result was that people were unable to use the fluent assertions we provide in a number of scenarios.
+  - The previous behaviour of requiring the MDC contents to match exactly has been retained as the default.
+
+  _Example:_
+  ```java
+  assertThat(logger)
+      .usingMdcComparator(MdcComparator.IGNORING)
+      .hasLogged(warn("Some log message"));
+  ```
+
+  #### Enhanced Assertion Failure Messages
+  Assertion failure messages have been enhanced to show the list of `LoggingEvent`s that were _actually_ captured to make debugging the cause of the failure easier.
+
+  _Example:_
+  ```
+  Failed to find event:
+    LoggingEvent{level=ERROR, mdc={}, marker=Optional.empty, throwable=Optional[throwable], message='There was a problem!', arguments=[]}
+
+  The logger contained the following events:
+    - LoggingEvent{level=WARN, mdc={}, marker=Optional.empty, throwable=Optional.empty, message='Some other problem', arguments=[]}
+    - LoggingEvent{level=ERROR, mdc={}, marker=Optional.empty, throwable=Optional.empty, message='Yet another problem', arguments=[]}
+  ```
 
 ### [slf4j-test-2.7.0](https://github.com/valfirst/slf4j-test/tree/slf4j-test-2.7.0) (2022-12-19)
 [Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-2.6.1...slf4j-test-2.7.0)
 
 **Implemented enhancements:**
-- [#314](https://github.com/valfirst/slf4j-test/issues/314) via [#324](https://github.com/valfirst/slf4j-test/pull/324) - Introduce a new `capture.level` property and API to control captured events globally
+- [#314](https://github.com/valfirst/slf4j-test/issues/314) via [#324](https://github.com/valfirst/slf4j-test/pull/324) - Introduce a new `capture.level` property and API to control captured events globally (by [@youribonnaffe]https://github.com/youribonnaffe)
 
   Introduce a new global setting `capture.level` to disable storing (and printing) logs at a given level (following the level hierarchy).
 
