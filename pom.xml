@@ -31,6 +31,11 @@
         <url>https://github.com/valfirst/slf4j-test</url>
     </scm>
 
+    <ciManagement>
+        <system>GitHub Actions</system>
+        <url>https://github.com/valfirst/slf4j-test/actions</url>
+    </ciManagement>
+
     <distributionManagement>
         <repository>
             <id>sonatype-nexus-staging</id>
