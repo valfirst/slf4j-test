@@ -531,9 +531,9 @@
             </build>
         </profile>
         <profile>
-            <id>surefire-java-16</id>
+            <id>surefire-java-16+</id>
             <activation>
-                <jdk>16</jdk>
+                <jdk>[16,)</jdk>
             </activation>
             <build>
                 <plugins>
