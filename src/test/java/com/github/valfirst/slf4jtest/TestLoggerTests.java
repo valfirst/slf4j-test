@@ -11,8 +11,9 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.emptyString;
+import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -40,14 +41,17 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.junitpioneer.jupiter.StdIo;
+import org.junitpioneer.jupiter.StdOut;
 import org.slf4j.MDC;
 import org.slf4j.Marker;
 import uk.org.lidalia.slf4jext.Level;
 import uk.org.lidalia.slf4jext.Logger;
 
-class TestLoggerTests extends StdIoTests {
+class TestLoggerTests {
 
     private static final String LOGGER_NAME = "com.github.valfirst";
     private static final String MESSAGE = "message {} {} {}";
@@ -780,31 +784,28 @@ class TestLoggerTests extends StdIoTests {
         assertEquals(enablableValueSet(), testLogger.getEnabledLevels());
     }
 
-    @Test
-    void printsWhenPrintLevelEqualToEventLevel() {
-        TestLoggerFactory.getInstance().setPrintLevel(INFO);
+    @ParameterizedTest
+    @EnumSource(names = {"INFO", "DEBUG", "TRACE"})
+    @StdIo
+    void printsWhenPrintLevelIsEqualToOrLessThanEventLevel(Level printLevel, StdOut stdOut) {
+        TestLoggerFactory.getInstance().setPrintLevel(printLevel);
 
         testLogger.info(MESSAGE);
 
-        assertThat(getStdOut(), containsString(MESSAGE));
+        String[] stdOutLines = stdOut.capturedLines();
+        assertThat(stdOutLines.length, is(equalTo(1)));
+        assertThat(stdOutLines[0], is(endsWith(MESSAGE)));
     }
 
-    @Test
-    void printsWhenPrintLevelLessThanEventLevel() {
-        TestLoggerFactory.getInstance().setPrintLevel(DEBUG);
+    @ParameterizedTest
+    @EnumSource(names = {"WARN", "ERROR"})
+    @StdIo
+    void doesNotWhenPrintLevelGreaterThanEventLevel(Level printLevel, StdOut stdOut) {
+        TestLoggerFactory.getInstance().setPrintLevel(printLevel);
 
         testLogger.info(MESSAGE);
 
-        assertThat(getStdOut(), containsString(MESSAGE));
-    }
-
-    @Test
-    void doesNotWhenPrintLevelGreaterThanEventLevel() {
-        TestLoggerFactory.getInstance().setPrintLevel(WARN);
-
-        testLogger.info(MESSAGE);
-
-        assertThat(getStdOut(), emptyString());
+        assertThat(stdOut.capturedLines(), is(arrayContaining("")));
     }
 
     @Test

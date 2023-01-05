@@ -5,11 +5,14 @@ import static com.github.valfirst.slf4jtest.LoggingEvent.error;
 import static com.github.valfirst.slf4jtest.LoggingEvent.info;
 import static com.github.valfirst.slf4jtest.LoggingEvent.trace;
 import static com.github.valfirst.slf4jtest.LoggingEvent.warn;
-import static java.lang.System.lineSeparator;
 import static java.util.Arrays.asList;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.emptyArray;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
@@ -41,10 +44,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junitpioneer.jupiter.StdErr;
+import org.junitpioneer.jupiter.StdIo;
+import org.junitpioneer.jupiter.StdOut;
 import org.slf4j.Marker;
 import uk.org.lidalia.slf4jext.Level;
 
-class LoggingEventTests extends StdIoTests {
+class LoggingEventTests {
 
     private static final ImmutableMap<String, String> emptyMap = ImmutableMap.of();
 
@@ -59,7 +65,6 @@ class LoggingEventTests extends StdIoTests {
 
     @AfterEach
     void afterEach() {
-        super.after();
         DateTimeUtils.setCurrentMillisSystem();
         TestLoggerFactory.reset();
     }
@@ -440,56 +445,66 @@ class LoggingEventTests extends StdIoTests {
     }
 
     @Test
-    void printToStandardOutNoThrowable() {
+    @StdIo
+    void printToStandardOutNoThrowable(StdOut stdOut) {
         DateTimeUtils.setCurrentMillisFixed(0);
 
         LoggingEvent event = new LoggingEvent(INFO, "message with {}", "argument");
         event.print();
 
         assertThat(
-                getStdOut(),
+                stdOut.capturedLines(),
                 is(
-                        "1970-01-01T00:00:00.000Z ["
-                                + Thread.currentThread().getName()
-                                + "] INFO - message with argument"
-                                + lineSeparator()));
+                        arrayContaining(
+                                "1970-01-01T00:00:00.000Z ["
+                                        + Thread.currentThread().getName()
+                                        + "] INFO - message with argument")));
     }
 
     @Test
-    void printToStandardOutWithThrowable() {
+    @StdIo
+    void printToStandardOutWithThrowable(StdOut stdOut) {
         DateTimeUtils.setCurrentMillisFixed(0);
 
         LoggingEvent event = new LoggingEvent(INFO, new Exception(), "message");
         event.print();
 
+        String[] stdOutLines = stdOut.capturedLines();
+        assertThat(stdOutLines.length, is(greaterThan(10)));
         assertThat(
-                getStdOut(),
-                startsWith(
-                        "1970-01-01T00:00:00.000Z ["
-                                + Thread.currentThread().getName()
-                                + "] INFO - message"
-                                + lineSeparator()
-                                + "java.lang.Exception"
-                                + lineSeparator()
-                                + "\tat"));
+                stdOutLines[0],
+                is(
+                        equalTo(
+                                "1970-01-01T00:00:00.000Z ["
+                                        + Thread.currentThread().getName()
+                                        + "] INFO - message")));
+        assertThat(stdOutLines[1], is(equalTo("java.lang.Exception")));
+        assertThat(
+                stdOutLines[2],
+                is(
+                        startsWith(
+                                "\tat com.github.valfirst.slf4jtest.LoggingEventTests"
+                                        + ".printToStandardOutWithThrowable(LoggingEventTests.java:")));
     }
 
     @ParameterizedTest
+    @StdIo
     @EnumSource(names = {"TRACE", "DEBUG", "INFO"})
-    void printInfoAndBelow(Level level) {
+    void printInfoAndBelow(Level level, StdOut stdOut, StdErr stdErr) {
         LoggingEvent event = new LoggingEvent(level, "message with {}", "argument");
         event.print();
-        assertThat(getStdOut(), is(not("")));
-        assertThat(getStdErr(), is(""));
+        assertThat(stdOut.capturedLines(), is(not(emptyArray())));
+        assertThat(stdErr.capturedLines(), is(arrayContaining("")));
     }
 
     @ParameterizedTest
+    @StdIo
     @EnumSource(names = {"WARN", "ERROR"})
-    void printWarnAndAbove(Level level) {
+    void printWarnAndAbove(Level level, StdOut stdOut, StdErr stdErr) {
         LoggingEvent event = new LoggingEvent(level, "message with {}", "argument");
         event.print();
-        assertThat(getStdErr(), is(not("")));
-        assertThat(getStdOut(), is(""));
+        assertThat(stdErr.capturedLines(), is(not(emptyArray())));
+        assertThat(stdOut.capturedLines(), is(arrayContaining("")));
     }
 
     @Test
