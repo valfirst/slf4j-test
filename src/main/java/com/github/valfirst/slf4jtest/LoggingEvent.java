@@ -406,7 +406,7 @@ public class LoggingEvent {
         this.mdc = ImmutableMap.copyOf(mdc);
         this.marker = checkNotNull(marker);
         this.throwable = checkNotNull(throwable);
-        this.message = checkNotNull(message);
+        this.message = message;
         this.arguments =
                 ImmutableList.copyOf(
                         Arrays.stream(arguments)
