@@ -1,5 +1,11 @@
 ## Changelog
 
+### [slf4j-test-2.8.1](https://github.com/valfirst/slf4j-test/tree/slf4j-test-2.8.1) (2023-01-05)
+[Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-2.8.0...slf4j-test-2.8.1)
+
+**Fixes:**
+- [#323](https://github.com/valfirst/slf4j-test/issues/323) via [#334](https://github.com/valfirst/slf4j-test/pull/334) Allow logged message to be `null` (by [@valfirst](https://github.com/valfirst))
+
 ### [slf4j-test-2.8.0](https://github.com/valfirst/slf4j-test/tree/slf4j-test-2.8.0) (2022-12-28)
 [Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-2.7.0...slf4j-test-2.8.0)
 
