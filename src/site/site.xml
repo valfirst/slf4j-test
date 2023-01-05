@@ -15,10 +15,6 @@
             <item name="Usage" href="usage.html" />
             <item name="Changelog" href="changelog.html" />
         </menu>
-        <menu name="Previous Versions">
-            <item name="1.0.1" href="site-versions/1.0.1/" />
-            <item name="1.0.0" href="site-versions/1.0.0/" />
-        </menu>
         <menu ref="reports" />
     </body>
 
