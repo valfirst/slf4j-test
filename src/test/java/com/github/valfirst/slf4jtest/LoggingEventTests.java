@@ -499,6 +499,12 @@ class LoggingEventTests extends StdIoTests {
     }
 
     @Test
+    void shouldHandleNullMessage() {
+        LoggingEvent event = new LoggingEvent(level, null);
+        assertThat(event, is(new LoggingEvent(level, null)));
+    }
+
+    @Test
     public void nullArgumentIsFormattedLikeSlf4j() {
         LoggingEvent event = new LoggingEvent(level, "message with {}, {}", null, "value");
         assertThat(event.getFormattedMessage(), is("message with null, value"));
