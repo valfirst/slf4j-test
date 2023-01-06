@@ -416,10 +416,7 @@ public class TestLogger implements Logger {
         log(level, format, Optional.empty(), args);
     }
 
-    private void log(
-            final Level level,
-            final String msg,
-            final Throwable throwable) { // NOPMD PMD wrongly thinks unused...
+    private void log(final Level level, final String msg, final Throwable throwable) {
         addLoggingEvent(level, Optional.empty(), ofNullable(throwable), msg);
     }
 
