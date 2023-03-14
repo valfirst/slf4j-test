@@ -98,6 +98,17 @@ public class TestLoggerAssert extends AbstractTestLoggerAssert<TestLoggerAssert>
     }
 
     /**
+     * Uses the supplied {@link PredicateBuilder} to construct the predicate with which to Verify that
+     * a matching {@link LoggingEvent} has been logged by the test logger.
+     *
+     * @param predicate the {@link PredicateBuilder} to use to construct the test predicate
+     * @return a {@link TestLoggerAssert} for chaining
+     */
+    public TestLoggerAssert hasLogged(PredicateBuilder predicate) {
+        return hasLogged(predicate.build());
+    }
+
+    /**
      * Verify that a log message, at a specific level, has not been logged by the test logger.
      *
      * @param level the level of the log message to look for
@@ -143,6 +154,22 @@ public class TestLoggerAssert extends AbstractTestLoggerAssert<TestLoggerAssert>
      */
     public TestLoggerAssert hasNotLogged(Predicate<LoggingEvent> predicate) {
         findEvent(predicate)
+                .ifPresent(
+                        loggingEvent ->
+                                failWithMessage("Found %s, even though we expected not to", loggingEvent));
+
+        return this;
+    }
+
+    /**
+     * Uses the supplied {@link PredicateBuilder} to construct the predicate with which to Verify that
+     * a matching {@link LoggingEvent} has _not_ been logged by the test logger.
+     *
+     * @param predicate the {@link PredicateBuilder} to use to construct the test predicate
+     * @return a {@link TestLoggerAssert} for chaining
+     */
+    public TestLoggerAssert hasNotLogged(PredicateBuilder predicate) {
+        findEvent(predicate.build())
                 .ifPresent(
                         loggingEvent ->
                                 failWithMessage("Found %s, even though we expected not to", loggingEvent));
@@ -203,6 +230,10 @@ public class TestLoggerAssert extends AbstractTestLoggerAssert<TestLoggerAssert>
         private Predicate<LoggingEvent> mdcPredicate = IGNORE_PREDICATE;
         private Predicate<LoggingEvent> throwablePredicate = IGNORE_PREDICATE;
         private Predicate<LoggingEvent> levelPredicate = IGNORE_PREDICATE;
+
+        public static PredicateBuilder aLog() {
+            return new PredicateBuilder();
+        }
 
         public PredicateBuilder withLevel(Level level) {
             levelPredicate = event -> event.getLevel().equals(level);

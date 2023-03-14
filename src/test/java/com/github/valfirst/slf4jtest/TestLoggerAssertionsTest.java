@@ -3,6 +3,7 @@ package com.github.valfirst.slf4jtest;
 import static com.github.valfirst.slf4jtest.LoggingEvent.warn;
 import static com.github.valfirst.slf4jtest.TestLoggerAssert.MdcComparator.CONTAINING;
 import static com.github.valfirst.slf4jtest.TestLoggerAssert.MdcComparator.IGNORING;
+import static com.github.valfirst.slf4jtest.TestLoggerAssert.PredicateBuilder.aLog;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -181,6 +182,28 @@ class TestLoggerAssertionsTest {
                 eventsStubbing.thenReturn(ImmutableList.of(loggingEvent));
 
                 assertThatThrownBy(() -> loggerAssert.hasLogged(testPredicate))
+                        .isInstanceOf(AssertionError.class)
+                        .hasMessage(
+                                "Failed to find log matching predicate" + loggerContainedMessage(loggingEvent));
+            }
+        }
+
+        @Nested
+        class UsingPredicateBuilder {
+
+            @Test
+            void passesWhenPredicateMatches() {
+                eventsStubbing.thenReturn(ImmutableList.of(warn("A message")));
+                assertThatNoException()
+                        .isThrownBy(() -> loggerAssert.hasLogged(aLog().withMessage("A message")));
+            }
+
+            @Test
+            void failsWhenPredicateDoesNotMatch() {
+                LoggingEvent loggingEvent = warn("A different message");
+                eventsStubbing.thenReturn(ImmutableList.of(loggingEvent));
+
+                assertThatThrownBy(() -> loggerAssert.hasLogged(aLog().withMessage("A message")))
                         .isInstanceOf(AssertionError.class)
                         .hasMessage(
                                 "Failed to find log matching predicate" + loggerContainedMessage(loggingEvent));
@@ -410,6 +433,27 @@ class TestLoggerAssertionsTest {
                 eventsStubbing.thenReturn(ImmutableList.of(loggingEvent));
 
                 assertThatThrownBy(() -> loggerAssert.hasNotLogged(testPredicate))
+                        .isInstanceOf(AssertionError.class)
+                        .hasMessage("Found " + loggingEvent + ", even though we expected not to");
+            }
+        }
+
+        @Nested
+        class UsingPredicateBuilder {
+            @Test
+            void passesWhenPredicateDoesNotMatch() {
+                eventsStubbing.thenReturn(ImmutableList.of(warn("A message")));
+
+                assertThatNoException()
+                        .isThrownBy(() -> loggerAssert.hasNotLogged(aLog().withMessage("Unexpected")));
+            }
+
+            @Test
+            void failsWhenPredicateMatches() {
+                LoggingEvent loggingEvent = warn("A message");
+                eventsStubbing.thenReturn(ImmutableList.of(loggingEvent));
+
+                assertThatThrownBy(() -> loggerAssert.hasNotLogged(aLog().withMessage("A message")))
                         .isInstanceOf(AssertionError.class)
                         .hasMessage("Found " + loggingEvent + ", even though we expected not to");
             }
