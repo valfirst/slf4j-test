@@ -63,7 +63,7 @@
         <powermock.version>2.0.9</powermock.version>
         <jacoco.version>0.8.8</jacoco.version>
         <pmd.version>6.55.0</pmd.version>
-        <maven.surefire.version>2.22.2</maven.surefire.version>
+        <maven.surefire.version>3.0.0</maven.surefire.version>
     </properties>
 
     <dependencyManagement>
