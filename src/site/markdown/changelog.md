@@ -1,5 +1,29 @@
 ## Changelog
 
+### [slf4j-test-2.9.0](https://github.com/valfirst/slf4j-test/tree/slf4j-test-2.9.0) (2023-03-22)
+[Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-2.8.1...slf4j-test-2.9.0)
+
+**Implemented enhancements:**
+- [#360](https://github.com/valfirst/slf4j-test/pull/360) - Add ability to make assertions using the `PredicateBuilder` more fluent (by [@topbadger](https://github.com/topbadger))
+
+  Static helper method and method overloads are added to make assertions using the `PredicateBuilder` more fluent.
+
+  This allows assertions to be declared as follows:
+
+  ```java
+  assertThat(logger).hasLogged(aLog().withLevel(Level.WARN).withMessage("Something"));
+  ```
+
+  as opposed to:
+
+  ```java
+  assertThat(logger).hasLogged(new PredicateBuilder().withLevel(Level.WARN).withMessage("Something").build());
+  ```
+
+  **Updates:**
+  - Bump `org.slf4j:slf4j-api` from `2.0.6` to `2.0.7`
+  - Bump `org.assertj:assertj-core` from `3.23.1` to `3.24.2`
+
 ### [slf4j-test-2.8.1](https://github.com/valfirst/slf4j-test/tree/slf4j-test-2.8.1) (2023-01-05)
 [Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-2.8.0...slf4j-test-2.8.1)
 
