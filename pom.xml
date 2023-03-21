@@ -356,12 +356,14 @@
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
+                        <phase>test</phase>
                     </execution>
                     <execution>
                         <id>jacoco-instrument</id>
                         <goals>
                             <goal>instrument</goal>
                         </goals>
+                        <phase>test</phase>
                     </execution>
                     <execution>
                         <id>jacoco-restore-instrumented-classes</id>
