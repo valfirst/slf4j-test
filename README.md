@@ -3,7 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/valfirst/slf4j-test/badge.svg?branch=master)](https://coveralls.io/github/valfirst/slf4j-test?branch=master)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=com.github.valfirst%3Aslf4j-test&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=com.github.valfirst%3Aslf4j-test)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ac96a0c1a5614c3b93491d10e70b3a36)](https://www.codacy.com/gh/valfirst/slf4j-test/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=valfirst/slf4j-test&amp;utm_campaign=Badge_Grade)
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.valfirst/slf4j-test.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3Acom.github.valfirst%20a%3Aslf4j-test)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.valfirst/slf4j-test.svg)](https://central.sonatype.com/search?q=slf4j-test&namespace=com.github.valfirst)
 [![Javadocs](http://www.javadoc.io/badge/com.github.valfirst/slf4j-test.svg)](http://www.javadoc.io/doc/com.github.valfirst/slf4j-test)
 [![Known Vulnerabilities](https://snyk.io/test/github/valfirst/slf4j-test/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/valfirst/slf4j-test?targetFile=pom.xml)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/valfirst/jbehave-junit-runner/master/LICENSE)
