@@ -13,7 +13,6 @@ import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.Is.is;
@@ -26,8 +25,6 @@ import static org.slf4j.event.Level.INFO;
 import static org.slf4j.event.Level.TRACE;
 import static org.slf4j.event.Level.WARN;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -52,7 +49,7 @@ import org.slf4j.event.Level;
 
 class LoggingEventTests {
 
-    private static final ImmutableMap<String, String> emptyMap = ImmutableMap.of();
+    private static final Map<String, String> emptyMap = Collections.emptyMap();
 
     private final Level level = TRACE;
     private final Map<String, String> mdc = Collections.singletonMap("key", "value");
@@ -402,9 +399,12 @@ class LoggingEventTests {
     }
 
     @Test
-    void mdcNotModifiable() {
-        Map<String, String> mdc = Collections.singletonMap("key", "value1");
-        assertThat(new LoggingEvent(level, mdc, message).getMdc(), is(instanceOf(ImmutableMap.class)));
+    public void mdcNotModifiable() {
+        Map<String, String> mdc = new HashMap<>();
+        mdc.put("key", "value1");
+        final LoggingEvent event = new LoggingEvent(level, mdc, message);
+        assertThrows(
+                UnsupportedOperationException.class, () -> event.getMdc().put("anything", "whatever"));
     }
 
     @Test
@@ -417,9 +417,9 @@ class LoggingEventTests {
     }
 
     @Test
-    void argsNotModifiable() {
-        assertThat(
-                new LoggingEvent(level, message, arg1).getArguments(), is(instanceOf(ImmutableList.class)));
+    public void argsNotModifiable() {
+        final LoggingEvent event = new LoggingEvent(level, message, arg1);
+        assertThrows(UnsupportedOperationException.class, () -> event.getArguments().add(arg2));
     }
 
     @Test

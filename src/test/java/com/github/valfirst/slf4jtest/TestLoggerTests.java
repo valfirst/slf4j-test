@@ -5,8 +5,6 @@ import static com.github.valfirst.slf4jtest.LoggingEvent.error;
 import static com.github.valfirst.slf4jtest.LoggingEvent.info;
 import static com.github.valfirst.slf4jtest.LoggingEvent.trace;
 import static com.github.valfirst.slf4jtest.LoggingEvent.warn;
-import static com.google.common.collect.Sets.difference;
-import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -26,8 +24,6 @@ import static org.slf4j.event.Level.INFO;
 import static org.slf4j.event.Level.TRACE;
 import static org.slf4j.event.Level.WARN;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.EnumSet;
@@ -106,7 +102,7 @@ class TestLoggerTests {
     void clearResetsLevel() {
         testLogger.setEnabledLevels();
         testLogger.clear();
-        assertEquals(newHashSet(TRACE, DEBUG, INFO, WARN, ERROR), testLogger.getEnabledLevels());
+        assertEquals(EnumSet.of(TRACE, DEBUG, INFO, WARN, ERROR), testLogger.getEnabledLevels());
     }
 
     @Test
@@ -741,7 +737,7 @@ class TestLoggerTests {
 
     @Test
     void setEnabledLevelOnlyChangesLevelForCurrentThread() throws Exception {
-        final AtomicReference<ImmutableSet<Level>> inThreadEnabledLevels = new AtomicReference<>();
+        final AtomicReference<Set<Level>> inThreadEnabledLevels = new AtomicReference<>();
         Thread t =
                 new Thread(
                         () -> {
@@ -750,7 +746,7 @@ class TestLoggerTests {
                         });
         t.start();
         t.join();
-        assertEquals(ImmutableSet.of(WARN, ERROR), inThreadEnabledLevels.get());
+        assertEquals(EnumSet.of(WARN, ERROR), inThreadEnabledLevels.get());
         assertEquals(EnumSet.allOf(Level.class), testLogger.getEnabledLevels());
     }
 
@@ -760,12 +756,12 @@ class TestLoggerTests {
         Thread t = new Thread(testLogger::clear);
         t.start();
         t.join();
-        assertEquals(ImmutableSet.of(WARN, ERROR), testLogger.getEnabledLevels());
+        assertEquals(EnumSet.of(WARN, ERROR), testLogger.getEnabledLevels());
     }
 
     @Test
     void setEnabledLevelsForAllThreads() throws Exception {
-        final AtomicReference<ImmutableSet<Level>> inThreadEnabledLevels = new AtomicReference<>();
+        final AtomicReference<Set<Level>> inThreadEnabledLevels = new AtomicReference<>();
         Thread t =
                 new Thread(
                         () -> {
@@ -774,8 +770,8 @@ class TestLoggerTests {
                         });
         t.start();
         t.join();
-        assertEquals(ImmutableSet.of(WARN, ERROR), inThreadEnabledLevels.get());
-        assertEquals(ImmutableSet.of(WARN, ERROR), testLogger.getEnabledLevels());
+        assertEquals(EnumSet.of(WARN, ERROR), inThreadEnabledLevels.get());
+        assertEquals(EnumSet.of(WARN, ERROR), testLogger.getEnabledLevels());
     }
 
     @Test
@@ -860,15 +856,16 @@ class TestLoggerTests {
     }
 
     @Test
-    void nullMdcValue() {
+    public void nullMdcValue() {
         MDC.clear();
         MDC.put("key", null);
 
         testLogger.info(MESSAGE);
 
-        assertThat(
-                testLogger.getLoggingEvents(),
-                is(singletonList(info(ImmutableMap.of("key", "null"), MESSAGE))));
+        Map<String, String> expected = new HashMap<>();
+        expected.put("key", "null");
+
+        assertEquals(Arrays.asList(info(expected, MESSAGE)), testLogger.getLoggingEvents());
     }
 
     private static final Map<Level, Predicate<Logger>> levelEnabledMap;
@@ -888,7 +885,7 @@ class TestLoggerTests {
                 levelEnabledMap.get(levelToTest).test(testLogger),
                 "Logger level set to " + levelToTest + " means " + levelToTest + " should be enabled");
 
-        Set<Level> disabledLevels = difference(EnumSet.allOf(Level.class), newHashSet(levelToTest));
+        Set<Level> disabledLevels = EnumSet.complementOf(EnumSet.of(levelToTest));
         for (Level disabledLevel : disabledLevels) {
             assertFalse(
                     levelEnabledMap.get(disabledLevel).test(testLogger),
@@ -913,7 +910,7 @@ class TestLoggerTests {
                 levelMarkerEnabledMap.get(levelToTest).test(testLogger, marker),
                 "Logger level set to " + levelToTest + " means " + levelToTest + " should be enabled");
 
-        Set<Level> disabledLevels = difference(EnumSet.allOf(Level.class), newHashSet(levelToTest));
+        Set<Level> disabledLevels = EnumSet.complementOf(EnumSet.of(levelToTest));
         for (Level disabledLevel : disabledLevels) {
             assertFalse(
                     levelMarkerEnabledMap.get(disabledLevel).test(testLogger, marker),

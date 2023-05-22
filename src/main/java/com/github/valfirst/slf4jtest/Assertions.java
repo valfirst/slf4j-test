@@ -4,4 +4,6 @@ public class Assertions {
     public static TestLoggerAssert assertThat(TestLogger testLogger) {
         return new TestLoggerAssert(testLogger);
     }
+
+    private Assertions() {}
 }
