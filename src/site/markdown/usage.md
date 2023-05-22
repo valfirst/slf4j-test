@@ -13,7 +13,7 @@ LoggingEvent to facilitate easy construction of expected events for comparison
 against those that were actually received, and LoggingEvent has appropriate
 equals, hashCode and toString implementations for this purpose. See the [front
 ](./index.html) page for an example of using the [info static factory method
-](./xref/com/github/valfirst/slf4jtest/TestLogger.html#L241)to create an expected
+](./xref/com/github/valfirst/slf4jtest/LoggingEvent.html#L161) to create an expected
 LoggingEvent.
 
 #### Custom Predicates
@@ -47,9 +47,7 @@ It's important to note that SLF4J does *not* imply any relationship between the
 levels - it is perfectly possible for a logger to be enabled for INFO but
 disabled for ERROR as far as SLF4J is concerned, and hence as far as SLF4J Test
 is concerned, notwithstanding the fact that implementations such as Logback and
-Log4J do not permit this. If you wish to test using these common configurations,
-you should use the constants defined in
-uk.org.lidalia.slf4jext.ConventionalLevelHierarchy.
+Log4J do not permit this.
 
 ### Globally disabling a Log Level
 
