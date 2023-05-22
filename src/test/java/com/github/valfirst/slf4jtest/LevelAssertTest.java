@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.org.lidalia.slf4jext.Level;
+import org.slf4j.event.Level;
 
 @ExtendWith(MockitoExtension.class)
 class LevelAssertTest {

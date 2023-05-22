@@ -15,8 +15,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.joda.time.Instant;
 import org.slf4j.Marker;
+import org.slf4j.event.Level;
 import org.slf4j.helpers.MessageFormatter;
-import uk.org.lidalia.slf4jext.Level;
 
 /**
  * Representation of a call to a logger for test assertion purposes. The contract of {@link

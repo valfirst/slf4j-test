@@ -8,7 +8,7 @@ import static org.hamcrest.core.Is.is;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import uk.org.lidalia.slf4jext.LoggerFactory;
+import org.slf4j.LoggerFactory;
 
 @ExtendWith(TestLoggerFactoryExtension.class)
 class TestLoggerFactoryExtensionTests {

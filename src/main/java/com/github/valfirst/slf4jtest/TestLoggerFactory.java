@@ -1,7 +1,5 @@
 package com.github.valfirst.slf4jtest;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -16,8 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Supplier;
 import org.slf4j.ILoggerFactory;
+import org.slf4j.event.Level;
 import uk.org.lidalia.lang.ThreadLocal;
-import uk.org.lidalia.slf4jext.Level;
 
 public final class TestLoggerFactory implements ILoggerFactory {
 
@@ -39,6 +37,7 @@ public final class TestLoggerFactory implements ILoggerFactory {
             throws IOException {
         try {
             final String printLevelProperty = properties.getProperty(propertyKey, defaultValue);
+            if ("OFF".equals(printLevelProperty)) return null;
             return Level.valueOf(printLevelProperty);
         } catch (IllegalArgumentException e) {
             throw new IllegalStateException(
@@ -95,7 +94,7 @@ public final class TestLoggerFactory implements ILoggerFactory {
     }
 
     public TestLoggerFactory() {
-        this(Level.OFF, Level.TRACE);
+        this(null, Level.TRACE);
     }
 
     public TestLoggerFactory(final Level printLevel) {
@@ -103,8 +102,8 @@ public final class TestLoggerFactory implements ILoggerFactory {
     }
 
     public TestLoggerFactory(final Level printLevel, final Level captureLevel) {
-        this.printLevel = checkNotNull(printLevel);
-        this.captureLevel = checkNotNull(captureLevel);
+        this.printLevel = printLevel;
+        this.captureLevel = captureLevel;
     }
 
     public Level getPrintLevel() {
@@ -162,10 +161,10 @@ public final class TestLoggerFactory implements ILoggerFactory {
     }
 
     public void setPrintLevel(final Level printLevel) {
-        this.printLevel = checkNotNull(printLevel);
+        this.printLevel = printLevel;
     }
 
     public void setCaptureLevel(Level captureLevel) {
-        this.captureLevel = checkNotNull(captureLevel);
+        this.captureLevel = captureLevel;
     }
 }

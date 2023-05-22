@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import org.assertj.core.api.AbstractAssert;
-import uk.org.lidalia.slf4jext.Level;
+import org.slf4j.event.Level;
 
 abstract class AbstractTestLoggerAssert<C extends AbstractAssert<C, TestLogger>>
         extends AbstractAssert<C, TestLogger> {

@@ -5,17 +5,18 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static uk.org.lidalia.slf4jext.Level.DEBUG;
-import static uk.org.lidalia.slf4jext.Level.INFO;
+import static org.slf4j.event.Level.DEBUG;
+import static org.slf4j.event.Level.INFO;
 
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
-import uk.org.lidalia.slf4jext.Level;
+import org.slf4j.event.Level;
 
 class TestLoggerFactoryResetRuleUnitTests {
 
@@ -37,7 +38,7 @@ class TestLoggerFactoryResetRuleUnitTests {
                                         TestLoggerFactory.getLoggingEvents(),
                                         is(Collections.<LoggingEvent>emptyList()));
                                 assertThat(logger.getLoggingEvents(), is(Collections.<LoggingEvent>emptyList()));
-                                assertThat(logger.getEnabledLevels(), is(Level.enablableValueSet()));
+                                assertThat(logger.getEnabledLevels(), is(EnumSet.allOf(Level.class)));
                             }
                         },
                         Description.EMPTY)
@@ -62,7 +63,7 @@ class TestLoggerFactoryResetRuleUnitTests {
 
         assertThat(TestLoggerFactory.getLoggingEvents(), is(Collections.<LoggingEvent>emptyList()));
         assertThat(logger.getLoggingEvents(), is(Collections.<LoggingEvent>emptyList()));
-        assertThat(logger.getEnabledLevels(), is(Level.enablableValueSet()));
+        assertThat(logger.getEnabledLevels(), is(EnumSet.allOf(Level.class)));
     }
 
     @Test
@@ -91,7 +92,7 @@ class TestLoggerFactoryResetRuleUnitTests {
         assertThat(thrown, is(toThrow));
         assertThat(TestLoggerFactory.getLoggingEvents(), is(Collections.<LoggingEvent>emptyList()));
         assertThat(logger.getLoggingEvents(), is(Collections.<LoggingEvent>emptyList()));
-        assertThat(logger.getEnabledLevels(), is(Level.enablableValueSet()));
+        assertThat(logger.getEnabledLevels(), is(EnumSet.allOf(Level.class)));
     }
 
     @Test

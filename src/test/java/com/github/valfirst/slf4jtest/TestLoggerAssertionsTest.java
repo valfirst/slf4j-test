@@ -18,7 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.OngoingStubbing;
-import uk.org.lidalia.slf4jext.Level;
+import org.slf4j.event.Level;
 
 @ExtendWith(MockitoExtension.class)
 class TestLoggerAssertionsTest {

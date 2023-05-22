@@ -9,6 +9,7 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
-import static uk.org.lidalia.slf4jext.Level.WARN;
+import static org.slf4j.event.Level.WARN;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -29,7 +30,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import uk.org.lidalia.slf4jext.Level;
+import org.slf4j.event.Level;
 
 @RunWith(PowerMockRunner.class)
 public class TestLoggerFactoryTests {
@@ -239,7 +240,7 @@ public class TestLoggerFactoryTests {
 
     @Test
     public void defaultPrintLevelIsOff() {
-        assertThat(getInstance().getPrintLevel(), is(Level.OFF));
+        assertThat(getInstance().getPrintLevel(), is(nullValue()));
     }
 
     @Test
@@ -335,7 +336,7 @@ public class TestLoggerFactoryTests {
     public void resetLoggerFactory() {
         try {
             TestLoggerFactory.reset();
-            getInstance().setPrintLevel(Level.OFF);
+            getInstance().setPrintLevel(null);
         } catch (IllegalStateException | UncheckedIOException e) {
             // ignore
         }
