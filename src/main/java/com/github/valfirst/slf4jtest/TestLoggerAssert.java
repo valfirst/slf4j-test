@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import org.slf4j.Marker;
-import uk.org.lidalia.slf4jext.Level;
+import org.slf4j.event.Level;
 
 /**
  * A set of assertions to validate that logs have been logged to a {@link TestLogger}.

@@ -9,7 +9,7 @@ import static org.hamcrest.core.Is.is;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
-import uk.org.lidalia.slf4jext.LoggerFactory;
+import org.slf4j.LoggerFactory;
 
 public class TestLoggerFactoryResetRuleTests {
 

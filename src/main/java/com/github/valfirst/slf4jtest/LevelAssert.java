@@ -3,7 +3,7 @@ package com.github.valfirst.slf4jtest;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import uk.org.lidalia.slf4jext.Level;
+import org.slf4j.event.Level;
 
 /**
  * A set of assertions to validate that logs have been logged to a {@link TestLogger}, for a

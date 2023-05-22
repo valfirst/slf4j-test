@@ -20,22 +20,25 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
-import static uk.org.lidalia.slf4jext.Level.DEBUG;
-import static uk.org.lidalia.slf4jext.Level.ERROR;
-import static uk.org.lidalia.slf4jext.Level.INFO;
-import static uk.org.lidalia.slf4jext.Level.TRACE;
-import static uk.org.lidalia.slf4jext.Level.WARN;
-import static uk.org.lidalia.slf4jext.Level.enablableValueSet;
+import static org.slf4j.event.Level.DEBUG;
+import static org.slf4j.event.Level.ERROR;
+import static org.slf4j.event.Level.INFO;
+import static org.slf4j.event.Level.TRACE;
+import static org.slf4j.event.Level.WARN;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,10 +49,10 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.StdIo;
 import org.junitpioneer.jupiter.StdOut;
+import org.slf4j.Logger;
 import org.slf4j.MDC;
 import org.slf4j.Marker;
-import uk.org.lidalia.slf4jext.Level;
-import uk.org.lidalia.slf4jext.Logger;
+import org.slf4j.event.Level;
 
 class TestLoggerTests {
 
@@ -77,7 +80,7 @@ class TestLoggerTests {
     void afterEach() {
         MDC.clear();
         TestLoggerFactory.reset();
-        TestLoggerFactory.getInstance().setPrintLevel(Level.OFF);
+        TestLoggerFactory.getInstance().setPrintLevel(null);
         TestLoggerFactory.getInstance().setCaptureLevel(Level.TRACE);
     }
 
@@ -748,7 +751,7 @@ class TestLoggerTests {
         t.start();
         t.join();
         assertEquals(ImmutableSet.of(WARN, ERROR), inThreadEnabledLevels.get());
-        assertEquals(enablableValueSet(), testLogger.getEnabledLevels());
+        assertEquals(EnumSet.allOf(Level.class), testLogger.getEnabledLevels());
     }
 
     @Test
@@ -781,7 +784,7 @@ class TestLoggerTests {
         Thread t = new Thread(testLogger::clearAll);
         t.start();
         t.join();
-        assertEquals(enablableValueSet(), testLogger.getEnabledLevels());
+        assertEquals(EnumSet.allOf(Level.class), testLogger.getEnabledLevels());
     }
 
     @ParameterizedTest
@@ -815,6 +818,15 @@ class TestLoggerTests {
         testLogger.setEnabledLevels(ERROR, WARN, INFO, DEBUG, TRACE);
 
         assertLogsAreCaptured(ERROR, WARN);
+    }
+
+    @Test
+    void doesNotCaptureWhenCaptureLevelIsNull() {
+        TestLoggerFactory.getInstance().setCaptureLevel(null);
+
+        testLogger.setEnabledLevels(ERROR, WARN, INFO, DEBUG, TRACE);
+
+        assertLogsAreCaptured();
     }
 
     @Test
@@ -859,30 +871,52 @@ class TestLoggerTests {
                 is(singletonList(info(ImmutableMap.of("key", "null"), MESSAGE))));
     }
 
+    private static final Map<Level, Predicate<Logger>> levelEnabledMap;
+
+    static {
+        levelEnabledMap = new EnumMap<>(Level.class);
+        levelEnabledMap.put(Level.TRACE, logger -> logger.isTraceEnabled());
+        levelEnabledMap.put(Level.DEBUG, logger -> logger.isDebugEnabled());
+        levelEnabledMap.put(Level.INFO, logger -> logger.isInfoEnabled());
+        levelEnabledMap.put(Level.WARN, logger -> logger.isWarnEnabled());
+        levelEnabledMap.put(Level.ERROR, logger -> logger.isErrorEnabled());
+    }
+
     private void assertEnabledReturnsCorrectly(Level levelToTest) {
         testLogger.setEnabledLevels(levelToTest);
         assertTrue(
-                new Logger(testLogger).isEnabled(levelToTest),
+                levelEnabledMap.get(levelToTest).test(testLogger),
                 "Logger level set to " + levelToTest + " means " + levelToTest + " should be enabled");
 
-        Set<Level> disabledLevels = difference(enablableValueSet(), newHashSet(levelToTest));
+        Set<Level> disabledLevels = difference(EnumSet.allOf(Level.class), newHashSet(levelToTest));
         for (Level disabledLevel : disabledLevels) {
             assertFalse(
-                    new Logger(testLogger).isEnabled(disabledLevel),
+                    levelEnabledMap.get(disabledLevel).test(testLogger),
                     "Logger level set to " + levelToTest + " means " + levelToTest + " should be disabled");
         }
+    }
+
+    private static final Map<Level, BiPredicate<Logger, Marker>> levelMarkerEnabledMap;
+
+    static {
+        levelMarkerEnabledMap = new EnumMap<>(Level.class);
+        levelMarkerEnabledMap.put(Level.TRACE, (logger, marker) -> logger.isTraceEnabled(marker));
+        levelMarkerEnabledMap.put(Level.DEBUG, (logger, marker) -> logger.isDebugEnabled(marker));
+        levelMarkerEnabledMap.put(Level.INFO, (logger, marker) -> logger.isInfoEnabled(marker));
+        levelMarkerEnabledMap.put(Level.WARN, (logger, marker) -> logger.isWarnEnabled(marker));
+        levelMarkerEnabledMap.put(Level.ERROR, (logger, marker) -> logger.isErrorEnabled(marker));
     }
 
     private void assertEnabledReturnsCorrectly(Level levelToTest, Marker marker) {
         testLogger.setEnabledLevels(levelToTest);
         assertTrue(
-                new Logger(testLogger).isEnabled(levelToTest, marker),
+                levelMarkerEnabledMap.get(levelToTest).test(testLogger, marker),
                 "Logger level set to " + levelToTest + " means " + levelToTest + " should be enabled");
 
-        Set<Level> disabledLevels = difference(enablableValueSet(), newHashSet(levelToTest));
+        Set<Level> disabledLevels = difference(EnumSet.allOf(Level.class), newHashSet(levelToTest));
         for (Level disabledLevel : disabledLevels) {
             assertFalse(
-                    new Logger(testLogger).isEnabled(disabledLevel, marker),
+                    levelMarkerEnabledMap.get(disabledLevel).test(testLogger, marker),
                     "Logger level set to " + levelToTest + " means " + levelToTest + " should be disabled");
         }
     }
