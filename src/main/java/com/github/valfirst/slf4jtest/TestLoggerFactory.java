@@ -15,7 +15,7 @@ import uk.org.lidalia.lang.ThreadLocal;
 
 public final class TestLoggerFactory implements ILoggerFactory {
 
-    private static TestLoggerFactory INSTANCE = null;
+    private static volatile TestLoggerFactory INSTANCE = null;
 
     private static Level getLevelProperty(
             OverridableProperties properties, String propertyKey, String defaultValue)
@@ -42,15 +42,19 @@ public final class TestLoggerFactory implements ILoggerFactory {
     private volatile Level printLevel;
     private volatile Level captureLevel;
 
-    public static synchronized TestLoggerFactory getInstance() {
+    public static TestLoggerFactory getInstance() {
         if (INSTANCE == null) {
-            try {
-                OverridableProperties properties = new OverridableProperties("slf4jtest");
-                Level printLevel = getLevelProperty(properties, "print.level", "OFF");
-                Level captureLevel = getLevelProperty(properties, "capture.level", "TRACE");
-                INSTANCE = new TestLoggerFactory(printLevel, captureLevel);
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
+            synchronized (TestLoggerFactory.class) {
+                if (INSTANCE == null) {
+                    try {
+                        OverridableProperties properties = new OverridableProperties("slf4jtest");
+                        Level printLevel = getLevelProperty(properties, "print.level", "OFF");
+                        Level captureLevel = getLevelProperty(properties, "capture.level", "TRACE");
+                        INSTANCE = new TestLoggerFactory(printLevel, captureLevel);
+                    } catch (IOException e) {
+                        throw new UncheckedIOException(e);
+                    }
+                }
             }
         }
         return INSTANCE;
