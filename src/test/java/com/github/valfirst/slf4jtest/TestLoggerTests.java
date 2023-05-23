@@ -856,7 +856,7 @@ class TestLoggerTests {
     }
 
     @Test
-    public void nullMdcValue() {
+    void nullMdcValue() {
         MDC.clear();
         MDC.put("key", null);
 
