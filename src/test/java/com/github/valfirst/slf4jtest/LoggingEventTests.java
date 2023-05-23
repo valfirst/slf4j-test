@@ -399,7 +399,7 @@ class LoggingEventTests {
     }
 
     @Test
-    public void mdcNotModifiable() {
+    void mdcNotModifiable() {
         Map<String, String> mdc = new HashMap<>();
         mdc.put("key", "value1");
         final LoggingEvent event = new LoggingEvent(level, mdc, message);
