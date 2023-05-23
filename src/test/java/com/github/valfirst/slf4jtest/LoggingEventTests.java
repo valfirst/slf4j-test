@@ -417,7 +417,7 @@ class LoggingEventTests {
     }
 
     @Test
-    public void argsNotModifiable() {
+    void argsNotModifiable() {
         final LoggingEvent event = new LoggingEvent(level, message, arg1);
         assertThrows(UnsupportedOperationException.class, () -> event.getArguments().add(arg2));
     }
