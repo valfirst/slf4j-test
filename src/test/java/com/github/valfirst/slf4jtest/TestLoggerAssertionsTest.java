@@ -7,7 +7,6 @@ import static com.github.valfirst.slf4jtest.TestLoggerAssert.PredicateBuilder.aL
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import com.google.common.collect.ImmutableList;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -72,7 +71,7 @@ class TestLoggerAssertionsTest {
             testMdc.put("key", "value");
             testMdc.put("another", "different value");
             loggingEvent = warn(testMdc, "Something may be wrong");
-            when(logger.getLoggingEvents()).thenReturn(ImmutableList.of(loggingEvent));
+            when(logger.getLoggingEvents()).thenReturn(Collections.singletonList(loggingEvent));
         }
 
         @Test
@@ -114,12 +113,11 @@ class TestLoggerAssertionsTest {
 
     class HasLoggedTestCase {
 
-        private final OngoingStubbing<ImmutableList<LoggingEvent>> eventsStubbing;
+        private final OngoingStubbing<List<LoggingEvent>> eventsStubbing;
         private final TestLoggerAssert loggerAssert;
 
         protected HasLoggedTestCase(
-                OngoingStubbing<ImmutableList<LoggingEvent>> eventsStubbing,
-                TestLoggerAssert loggerAssert) {
+                OngoingStubbing<List<LoggingEvent>> eventsStubbing, TestLoggerAssert loggerAssert) {
             this.eventsStubbing = eventsStubbing;
             this.loggerAssert = loggerAssert;
         }
@@ -172,14 +170,14 @@ class TestLoggerAssertionsTest {
 
             @Test
             void passesWhenPredicateMatches() {
-                eventsStubbing.thenReturn(ImmutableList.of(warn("A {} message", "formatted")));
+                eventsStubbing.thenReturn(Collections.singletonList(warn("A {} message", "formatted")));
                 assertThatNoException().isThrownBy(() -> loggerAssert.hasLogged(testPredicate));
             }
 
             @Test
             void failsWhenPredicateDoesNotMatch() {
                 LoggingEvent loggingEvent = warn("A different message");
-                eventsStubbing.thenReturn(ImmutableList.of(loggingEvent));
+                eventsStubbing.thenReturn(Collections.singletonList(loggingEvent));
 
                 assertThatThrownBy(() -> loggerAssert.hasLogged(testPredicate))
                         .isInstanceOf(AssertionError.class)
@@ -193,7 +191,7 @@ class TestLoggerAssertionsTest {
 
             @Test
             void passesWhenPredicateMatches() {
-                eventsStubbing.thenReturn(ImmutableList.of(warn("A message")));
+                eventsStubbing.thenReturn(Collections.singletonList(warn("A message")));
                 assertThatNoException()
                         .isThrownBy(() -> loggerAssert.hasLogged(aLog().withMessage("A message")));
             }
@@ -201,7 +199,7 @@ class TestLoggerAssertionsTest {
             @Test
             void failsWhenPredicateDoesNotMatch() {
                 LoggingEvent loggingEvent = warn("A different message");
-                eventsStubbing.thenReturn(ImmutableList.of(loggingEvent));
+                eventsStubbing.thenReturn(Collections.singletonList(loggingEvent));
 
                 assertThatThrownBy(() -> loggerAssert.hasLogged(aLog().withMessage("A message")))
                         .isInstanceOf(AssertionError.class)
@@ -226,7 +224,7 @@ class TestLoggerAssertionsTest {
             class WithoutThrowable {
                 @Test
                 void failsWhenLogMessageIsNotFound() {
-                    eventsStubbing.thenReturn(ImmutableList.of());
+                    eventsStubbing.thenReturn(Collections.emptyList());
 
                     assertThatThrownBy(
                                     () -> performAssert(loggerAssert, Level.WARN, "Something may be wrong"))
@@ -239,7 +237,7 @@ class TestLoggerAssertionsTest {
                 @Test
                 void failsWhenExpectingMoreArgumentsThanExists() {
                     LoggingEvent loggingEvent = warn("Something may be wrong");
-                    eventsStubbing.thenReturn(ImmutableList.of(loggingEvent));
+                    eventsStubbing.thenReturn(Collections.singletonList(loggingEvent));
 
                     assertThatThrownBy(
                                     () ->
@@ -256,7 +254,7 @@ class TestLoggerAssertionsTest {
                     LoggingEvent firstEvent = warn("Something may be wrong", "Extra context", "Another");
                     LoggingEvent secondEvent =
                             LoggingEvent.error("Something may be wrong", "Extra context", "Another");
-                    eventsStubbing.thenReturn(ImmutableList.of(firstEvent, secondEvent));
+                    eventsStubbing.thenReturn(Arrays.asList(firstEvent, secondEvent));
 
                     assertThatThrownBy(
                                     () ->
@@ -271,7 +269,7 @@ class TestLoggerAssertionsTest {
                 @Test
                 void failsWhenArgumentsInDifferentOrder() {
                     LoggingEvent loggingEvent = warn("Something may be wrong", "Another", "Extra context");
-                    eventsStubbing.thenReturn(ImmutableList.of(loggingEvent));
+                    eventsStubbing.thenReturn(Collections.singletonList(loggingEvent));
 
                     assertThatThrownBy(
                                     () ->
@@ -289,7 +287,7 @@ class TestLoggerAssertionsTest {
 
                 @Test
                 void passesWhenLogMessageIsFound() {
-                    eventsStubbing.thenReturn(ImmutableList.of(warn("Something may be wrong")));
+                    eventsStubbing.thenReturn(Collections.singletonList(warn("Something may be wrong")));
 
                     assertThatCode(() -> performAssert(loggerAssert, Level.WARN, "Something may be wrong"))
                             .doesNotThrowAnyException();
@@ -297,7 +295,7 @@ class TestLoggerAssertionsTest {
 
                 @Test
                 void returnsSelfWhenPasses() {
-                    eventsStubbing.thenReturn(ImmutableList.of(warn("Something may be wrong")));
+                    eventsStubbing.thenReturn(Collections.singletonList(warn("Something may be wrong")));
 
                     TestLoggerAssert actual =
                             performAssert(loggerAssert, Level.WARN, "Something may be wrong");
@@ -313,7 +311,7 @@ class TestLoggerAssertionsTest {
                 @Test
                 void canBeUsedToAssertWithThrowablesWhenFound() {
                     eventsStubbing.thenReturn(
-                            ImmutableList.of(LoggingEvent.error(throwable, "There was a problem!")));
+                            Collections.singletonList(LoggingEvent.error(throwable, "There was a problem!")));
 
                     assertThatCode(
                                     () -> performAssert(loggerAssert, throwable, Level.ERROR, "There was a problem!"))
@@ -323,7 +321,7 @@ class TestLoggerAssertionsTest {
                 @Test
                 void canBeUsedToAssertWithThrowablesWhenNotFoundWithArguments() {
                     LoggingEvent loggingEvent = LoggingEvent.error("There was a problem!", "context");
-                    eventsStubbing.thenReturn(ImmutableList.of(loggingEvent));
+                    eventsStubbing.thenReturn(Collections.singletonList(loggingEvent));
 
                     assertThatThrownBy(
                                     () ->
@@ -338,7 +336,7 @@ class TestLoggerAssertionsTest {
                 @Test
                 void canBeUsedToAssertWithThrowablesWhenNotFound() {
                     LoggingEvent loggingEvent = LoggingEvent.error("There was a problem!");
-                    eventsStubbing.thenReturn(ImmutableList.of(loggingEvent));
+                    eventsStubbing.thenReturn(Collections.singletonList(loggingEvent));
 
                     assertThatThrownBy(
                                     () -> performAssert(loggerAssert, throwable, Level.ERROR, "There was a problem!"))
@@ -351,7 +349,7 @@ class TestLoggerAssertionsTest {
                 @Test
                 void returnsSelfWhenPasses() {
                     eventsStubbing.thenReturn(
-                            ImmutableList.of(LoggingEvent.error(throwable, "There was a problem!")));
+                            Collections.singletonList(LoggingEvent.error(throwable, "There was a problem!")));
 
                     TestLoggerAssert actual =
                             performAssert(loggerAssert, throwable, Level.ERROR, "There was a problem!");
@@ -364,12 +362,11 @@ class TestLoggerAssertionsTest {
 
     static class HasNotLoggedTestCase {
 
-        private final OngoingStubbing<ImmutableList<LoggingEvent>> eventsStubbing;
+        private final OngoingStubbing<List<LoggingEvent>> eventsStubbing;
         private final TestLoggerAssert loggerAssert;
 
         protected HasNotLoggedTestCase(
-                OngoingStubbing<ImmutableList<LoggingEvent>> eventsStubbing,
-                TestLoggerAssert loggerAssert) {
+                OngoingStubbing<List<LoggingEvent>> eventsStubbing, TestLoggerAssert loggerAssert) {
             this.eventsStubbing = eventsStubbing;
             this.loggerAssert = loggerAssert;
         }
@@ -422,7 +419,7 @@ class TestLoggerAssertionsTest {
 
             @Test
             void passesWhenPredicateDoesNotMatch() {
-                eventsStubbing.thenReturn(ImmutableList.of(warn("A different message")));
+                eventsStubbing.thenReturn(Collections.singletonList(warn("A different message")));
 
                 assertThatNoException().isThrownBy(() -> loggerAssert.hasNotLogged(testPredicate));
             }
@@ -430,7 +427,7 @@ class TestLoggerAssertionsTest {
             @Test
             void failsWhenPredicateMatches() {
                 LoggingEvent loggingEvent = warn("A {} message", "formatted");
-                eventsStubbing.thenReturn(ImmutableList.of(loggingEvent));
+                eventsStubbing.thenReturn(Collections.singletonList(loggingEvent));
 
                 assertThatThrownBy(() -> loggerAssert.hasNotLogged(testPredicate))
                         .isInstanceOf(AssertionError.class)
@@ -442,7 +439,7 @@ class TestLoggerAssertionsTest {
         class UsingPredicateBuilder {
             @Test
             void passesWhenPredicateDoesNotMatch() {
-                eventsStubbing.thenReturn(ImmutableList.of(warn("A message")));
+                eventsStubbing.thenReturn(Collections.singletonList(warn("A message")));
 
                 assertThatNoException()
                         .isThrownBy(() -> loggerAssert.hasNotLogged(aLog().withMessage("Unexpected")));
@@ -451,7 +448,7 @@ class TestLoggerAssertionsTest {
             @Test
             void failsWhenPredicateMatches() {
                 LoggingEvent loggingEvent = warn("A message");
-                eventsStubbing.thenReturn(ImmutableList.of(loggingEvent));
+                eventsStubbing.thenReturn(Collections.singletonList(loggingEvent));
 
                 assertThatThrownBy(() -> loggerAssert.hasNotLogged(aLog().withMessage("A message")))
                         .isInstanceOf(AssertionError.class)
@@ -472,7 +469,7 @@ class TestLoggerAssertionsTest {
 
             @Test
             void failsWhenLogMessageIsFound() {
-                eventsStubbing.thenReturn(ImmutableList.of(warn("Something may be wrong")));
+                eventsStubbing.thenReturn(Collections.singletonList(warn("Something may be wrong")));
 
                 assertThatThrownBy(() -> performAssert(loggerAssert, Level.WARN, "Something may be wrong"))
                         .isInstanceOf(AssertionError.class)
@@ -482,7 +479,7 @@ class TestLoggerAssertionsTest {
 
             @Test
             void failsWhenExpectingMoreArgumentsThanExists() {
-                eventsStubbing.thenReturn(ImmutableList.of(warn("Something may be wrong")));
+                eventsStubbing.thenReturn(Collections.singletonList(warn("Something may be wrong")));
 
                 assertThatCode(
                                 () ->
@@ -494,7 +491,7 @@ class TestLoggerAssertionsTest {
             @Test
             void passesWhenActuallyMoreArgumentsThanExpected() {
                 eventsStubbing.thenReturn(
-                        ImmutableList.of(warn("Something may be wrong", "Extra context", "Another")));
+                        Collections.singletonList(warn("Something may be wrong", "Extra context", "Another")));
 
                 assertThatCode(
                                 () ->
@@ -506,7 +503,7 @@ class TestLoggerAssertionsTest {
             @Test
             void failsWhenArgumentsInDifferentOrder() {
                 eventsStubbing.thenReturn(
-                        ImmutableList.of(warn("Something may be wrong", "Another", "Extra context")));
+                        Collections.singletonList(warn("Something may be wrong", "Another", "Extra context")));
 
                 assertThatCode(
                                 () ->
@@ -521,7 +518,8 @@ class TestLoggerAssertionsTest {
 
             @Test
             void passesWhenLogMessageIsNotFound() {
-                eventsStubbing.thenReturn(ImmutableList.of(LoggingEvent.info("Nothing to see here")));
+                eventsStubbing.thenReturn(
+                        Collections.singletonList(LoggingEvent.info("Nothing to see here")));
 
                 assertThatCode(() -> performAssert(loggerAssert, Level.WARN, "Something may be wrong"))
                         .doesNotThrowAnyException();
@@ -530,7 +528,7 @@ class TestLoggerAssertionsTest {
             @Test
             void passesWhenLogMessageIsNotFoundWithArguments() {
                 eventsStubbing.thenReturn(
-                        ImmutableList.of(LoggingEvent.info("Nothing to see here", "Context setting")));
+                        Collections.singletonList(LoggingEvent.info("Nothing to see here", "Context setting")));
 
                 assertThatCode(() -> performAssert(loggerAssert, Level.WARN, "Something may be wrong"))
                         .doesNotThrowAnyException();
@@ -538,7 +536,7 @@ class TestLoggerAssertionsTest {
 
             @Test
             void returnsSelfWhenPasses() {
-                eventsStubbing.thenReturn(ImmutableList.of(warn("Something else")));
+                eventsStubbing.thenReturn(Collections.singletonList(warn("Something else")));
 
                 TestLoggerAssert actual = performAssert(loggerAssert, Level.WARN, "Something may be wrong");
 
@@ -552,7 +550,7 @@ class TestLoggerAssertionsTest {
                 @Test
                 void canBeUsedToAssertWithThrowablesWhenNotFound() {
                     eventsStubbing.thenReturn(
-                            ImmutableList.of(
+                            Collections.singletonList(
                                     LoggingEvent.error(
                                             throwable, "There was a problem, but this isn't what you're looking for!")));
 
@@ -564,7 +562,8 @@ class TestLoggerAssertionsTest {
                 @Test
                 void canBeUsedToAssertWithThrowablesWhenFoundWithArguments() {
                     eventsStubbing.thenReturn(
-                            ImmutableList.of(LoggingEvent.error(throwable, "There was a problem!", "context")));
+                            Collections.singletonList(
+                                    LoggingEvent.error(throwable, "There was a problem!", "context")));
 
                     assertThatThrownBy(
                                     () ->
@@ -578,7 +577,7 @@ class TestLoggerAssertionsTest {
                 @Test
                 void canBeUsedToAssertWithThrowablesWhenFound() {
                     eventsStubbing.thenReturn(
-                            ImmutableList.of(LoggingEvent.error(throwable, "There was a problem!")));
+                            Collections.singletonList(LoggingEvent.error(throwable, "There was a problem!")));
 
                     assertThatThrownBy(
                                     () -> performAssert(loggerAssert, throwable, Level.ERROR, "There was a problem!"))
@@ -589,7 +588,7 @@ class TestLoggerAssertionsTest {
 
                 @Test
                 void returnsSelfWhenPasses() {
-                    eventsStubbing.thenReturn(ImmutableList.of());
+                    eventsStubbing.thenReturn(Collections.emptyList());
 
                     TestLoggerAssert actual =
                             performAssert(loggerAssert, throwable, Level.ERROR, "There was a problem!");
@@ -611,7 +610,7 @@ class TestLoggerAssertionsTest {
 
         @Test
         void propagatesAnyThreadToLevelAssert() {
-            when(logger.getAllLoggingEvents()).thenReturn(ImmutableList.of());
+            when(logger.getAllLoggingEvents()).thenReturn(Collections.emptyList());
 
             assertions.anyThread().hasLevel(Level.ERROR).hasNumberOfLogs(0);
 

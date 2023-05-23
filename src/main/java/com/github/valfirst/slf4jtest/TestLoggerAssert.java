@@ -1,6 +1,5 @@
 package com.github.valfirst.slf4jtest;
 
-import com.google.common.collect.ObjectArrays;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -198,7 +197,8 @@ public class TestLoggerAssert extends AbstractTestLoggerAssert<TestLoggerAssert>
                             .reduce((first, second) -> first + "\n  - " + second)
                             .map(output -> "  - " + output)
                             .orElse("  <none>");
-            Object[] newArguments = ObjectArrays.concat(arguments, allEvents);
+            Object[] newArguments = Arrays.copyOf(arguments, arguments.length + 1);
+            newArguments[arguments.length] = allEvents;
             failWithMessage(
                     failureMessage + "%n%nThe logger contained the following events:%n%s", newArguments);
         }

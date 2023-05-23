@@ -1,18 +1,16 @@
 package com.github.valfirst.slf4jtest;
 
-import static com.google.common.collect.ImmutableList.copyOf;
 import static java.util.Optional.ofNullable;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.MDC;
@@ -35,8 +33,8 @@ import uk.org.lidalia.lang.ThreadLocal;
  *
  * <p>By default all Levels are enabled. It is important to note that the conventional hierarchical
  * notion of Levels, where info being enabled implies warn and error being enabled, is not a
- * requirement of the SLF4J API, so the {@link #setEnabledLevels(ImmutableSet)}, {@link
- * #setEnabledLevels(Level...)}, {@link #setEnabledLevelsForAllThreads(ImmutableSet)}, {@link
+ * requirement of the SLF4J API, so the {@link #setEnabledLevels(Collection)}, {@link
+ * #setEnabledLevels(Level...)}, {@link #setEnabledLevelsForAllThreads(Collection)}, {@link
  * #setEnabledLevelsForAllThreads(Level...)} and the various isXxxxxEnabled() methods make no
  * assumptions about this hierarchy.
  */
@@ -48,8 +46,8 @@ public class TestLogger implements Logger {
     private final ThreadLocal<List<LoggingEvent>> loggingEvents = new ThreadLocal<>(ArrayList::new);
 
     private final List<LoggingEvent> allLoggingEvents = new CopyOnWriteArrayList<>();
-    private volatile ThreadLocal<ImmutableSet<Level>> enabledLevels =
-            new ThreadLocal<>(ImmutableSet.copyOf(EnumSet.allOf(Level.class)));
+    private volatile ThreadLocal<Set<Level>> enabledLevels =
+            new ThreadLocal<>(Collections.unmodifiableSet(EnumSet.allOf(Level.class)));
 
     TestLogger(final String name, final TestLoggerFactory testLoggerFactory) {
         this.name = name;
@@ -80,17 +78,21 @@ public class TestLogger implements Logger {
     }
 
     /**
-     * @return all {@link LoggingEvent}s logged on this logger by this thread
+     * Get all {@link LoggingEvent}s logged on this logger by this thread.
+     *
+     * @return the {@link LoggingEvent}s as an unmodifiable {@link List}.
      */
-    public ImmutableList<LoggingEvent> getLoggingEvents() {
-        return copyOf(loggingEvents.get());
+    public List<LoggingEvent> getLoggingEvents() {
+        return Collections.unmodifiableList(new ArrayList<>(loggingEvents.get()));
     }
 
     /**
-     * @return all {@link LoggingEvent}s logged on this logger by ANY thread
+     * Get all {@link LoggingEvent}s logged on this logger by ANY thread.
+     *
+     * @return the {@link LoggingEvent}s as an unmodifiable {@link List}.
      */
-    public ImmutableList<LoggingEvent> getAllLoggingEvents() {
-        return copyOf(allLoggingEvents);
+    public List<LoggingEvent> getAllLoggingEvents() {
+        return Collections.unmodifiableList(new ArrayList<>(allLoggingEvents));
     }
 
     /**
@@ -474,9 +476,11 @@ public class TestLogger implements Logger {
     }
 
     /**
-     * @return the set of levels enabled for this logger on this thread
+     * Get the enabled levels levels enabled for this logger on this thread.
+     *
+     * @return the set of levels as an unmodifiable {@link Set}.
      */
-    public ImmutableSet<Level> getEnabledLevels() {
+    public Set<Level> getEnabledLevels() {
         return enabledLevels.get();
     }
 
@@ -488,8 +492,8 @@ public class TestLogger implements Logger {
      * @param enabledLevels levels which will be considered enabled for this logger IN THIS THREAD;
      *     does not affect enabled levels for this logger in other threads
      */
-    public void setEnabledLevels(final ImmutableSet<Level> enabledLevels) {
-        this.enabledLevels.set(enabledLevels);
+    public void setEnabledLevels(final Collection<Level> enabledLevels) {
+        this.enabledLevels.set(setOfLevels(enabledLevels));
     }
 
     /**
@@ -501,7 +505,7 @@ public class TestLogger implements Logger {
      *     does not affect enabled levels for this logger in other threads
      */
     public void setEnabledLevels(final Level... enabledLevels) {
-        setEnabledLevels(Sets.immutableEnumSet(Arrays.asList(enabledLevels)));
+        setEnabledLevels(Arrays.asList(enabledLevels));
     }
 
     /**
@@ -509,22 +513,40 @@ public class TestLogger implements Logger {
      * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be
      * passed explicitly to this method.
      *
+     * <p>Note that this modifies the default enabled levels in all threads. After calling this
+     * method, {@link #clear()} and {@link #clearAll()} will set the enabled levels to the value
+     * passed to this method, not all levels. You will have to call this method with {@code
+     * EnumSet.allOf(Level.class)} (or {@link #setEnabledLevelsForAllThreads(Level...)} with all the
+     * levels) to return to standard behaviour.
+     *
      * @param enabledLevelsForAllThreads levels which will be considered enabled for this logger IN
      *     ALL THREADS
      */
-    public void setEnabledLevelsForAllThreads(final ImmutableSet<Level> enabledLevelsForAllThreads) {
-        this.enabledLevels = new ThreadLocal<>(enabledLevelsForAllThreads);
+    public void setEnabledLevelsForAllThreads(final Collection<Level> enabledLevelsForAllThreads) {
+        this.enabledLevels = new ThreadLocal<>(setOfLevels(enabledLevelsForAllThreads));
     }
 
     /**
      * The conventional hierarchical notion of Levels, where info being enabled implies warn and error
      * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be
      * passed explicitly to this method.
+     *
+     * <p>Note that this modifies the default enabled levels in all threads. After calling this
+     * method, {@link #clear()} and {@link #clearAll()} will set the enabled levels to the value
+     * passed to this method, not all levels. You will have to call this method with all levels (or
+     * {@link #setEnabledLevelsForAllThreads(Collection)} with {@code EnumSet.allOf(Level.class)}) to
+     * return to standard behaviour.
      *
      * @param enabledLevelsForAllThreads levels which will be considered enabled for this logger IN
      *     ALL THREADS
      */
     public void setEnabledLevelsForAllThreads(final Level... enabledLevelsForAllThreads) {
-        setEnabledLevelsForAllThreads(ImmutableSet.copyOf(enabledLevelsForAllThreads));
+        setEnabledLevelsForAllThreads(Arrays.asList(enabledLevelsForAllThreads));
+    }
+
+    private Set<Level> setOfLevels(final Collection<Level> levels) {
+        return levels.isEmpty()
+                ? Collections.emptySet()
+                : Collections.unmodifiableSet(EnumSet.copyOf(levels));
     }
 }
