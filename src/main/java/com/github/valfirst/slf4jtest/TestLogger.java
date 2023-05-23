@@ -545,8 +545,8 @@ public class TestLogger implements Logger {
     }
 
     private Set<Level> setOfLevels(final Collection<Level> levels) {
-        return·levels.isEmpty()
-                ?·Collections.emptySet()
-                :·Collections.unmodifiableSet(EnumSet.copyOf(levels));
+        return levels.isEmpty()
+                ? Collections.emptySet()
+                : Collections.unmodifiableSet(EnumSet.copyOf(levels));
     }
 }
