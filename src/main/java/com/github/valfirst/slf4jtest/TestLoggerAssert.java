@@ -1,7 +1,7 @@
 package com.github.valfirst.slf4jtest;
 
 import java.util.*;
-import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import org.slf4j.Marker;
 import org.slf4j.event.Level;
@@ -305,15 +305,14 @@ public class TestLoggerAssert extends AbstractTestLoggerAssert<TestLoggerAssert>
         public static final MdcComparator CONTAINING =
                 new MdcComparator((a, b) -> a.entrySet().containsAll(b.entrySet()));
 
-        private final BiFunction<Map<String, String>, Map<String, String>, Boolean> compareFunction;
+        private final BiPredicate<Map<String, String>, Map<String, String>> compareFunction;
 
-        private MdcComparator(
-                BiFunction<Map<String, String>, Map<String, String>, Boolean> compareFunction) {
+        private MdcComparator(BiPredicate<Map<String, String>, Map<String, String>> compareFunction) {
             this.compareFunction = compareFunction;
         }
 
         public boolean compare(Map<String, String> actual, Map<String, String> expected) {
-            return compareFunction.apply(actual, expected);
+            return compareFunction.test(actual, expected);
         }
     }
 }

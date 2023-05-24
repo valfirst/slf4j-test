@@ -78,7 +78,7 @@ public class ThreadLocalTests {
     }
 
     @Test
-    public void initialValueSourceIsStateful() throws InterruptedException {
+    public void initialValueSourceIsStateful() {
         final ThreadLocal<AtomicReference<String>> threadLocal =
                 new ThreadLocal<>(() -> new AtomicReference<>("initial value"));
 

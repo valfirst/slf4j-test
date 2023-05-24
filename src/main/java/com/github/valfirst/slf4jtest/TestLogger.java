@@ -463,7 +463,6 @@ public class TestLogger implements Logger {
         return captureLevel != null && captureLevel.compareTo(level) >= 0;
     }
 
-    @SuppressWarnings("unchecked")
     private Map<String, String> mdc() {
         return ofNullable(MDC.getCopyOfContextMap()).orElseGet(Collections::emptyMap);
     }

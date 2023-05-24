@@ -18,8 +18,7 @@ public final class TestLoggerFactory implements ILoggerFactory {
     private static volatile TestLoggerFactory INSTANCE = null;
 
     private static Level getLevelProperty(
-            OverridableProperties properties, String propertyKey, String defaultValue)
-            throws IOException {
+            OverridableProperties properties, String propertyKey, String defaultValue) {
         try {
             final String printLevelProperty = properties.getProperty(propertyKey, defaultValue);
             if ("OFF".equals(printLevelProperty)) return null;
@@ -146,7 +145,7 @@ public final class TestLoggerFactory implements ILoggerFactory {
     }
 
     public List<LoggingEvent> getLoggingEventsFromLoggers() {
-        return Collections.unmodifiableList(new ArrayList(loggingEvents.get()));
+        return Collections.unmodifiableList(new ArrayList<>(loggingEvents.get()));
     }
 
     public List<LoggingEvent> getAllLoggingEventsFromLoggers() {

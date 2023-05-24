@@ -865,18 +865,18 @@ class TestLoggerTests {
         Map<String, String> expected = new HashMap<>();
         expected.put("key", "null");
 
-        assertEquals(Arrays.asList(info(expected, MESSAGE)), testLogger.getLoggingEvents());
+        assertEquals(singletonList(info(expected, MESSAGE)), testLogger.getLoggingEvents());
     }
 
     private static final Map<Level, Predicate<Logger>> levelEnabledMap;
 
     static {
         levelEnabledMap = new EnumMap<>(Level.class);
-        levelEnabledMap.put(Level.TRACE, logger -> logger.isTraceEnabled());
-        levelEnabledMap.put(Level.DEBUG, logger -> logger.isDebugEnabled());
-        levelEnabledMap.put(Level.INFO, logger -> logger.isInfoEnabled());
-        levelEnabledMap.put(Level.WARN, logger -> logger.isWarnEnabled());
-        levelEnabledMap.put(Level.ERROR, logger -> logger.isErrorEnabled());
+        levelEnabledMap.put(Level.TRACE, Logger::isTraceEnabled);
+        levelEnabledMap.put(Level.DEBUG, Logger::isDebugEnabled);
+        levelEnabledMap.put(Level.INFO, Logger::isInfoEnabled);
+        levelEnabledMap.put(Level.WARN, Logger::isWarnEnabled);
+        levelEnabledMap.put(Level.ERROR, Logger::isErrorEnabled);
     }
 
     private void assertEnabledReturnsCorrectly(Level levelToTest) {
@@ -897,11 +897,11 @@ class TestLoggerTests {
 
     static {
         levelMarkerEnabledMap = new EnumMap<>(Level.class);
-        levelMarkerEnabledMap.put(Level.TRACE, (logger, marker) -> logger.isTraceEnabled(marker));
-        levelMarkerEnabledMap.put(Level.DEBUG, (logger, marker) -> logger.isDebugEnabled(marker));
-        levelMarkerEnabledMap.put(Level.INFO, (logger, marker) -> logger.isInfoEnabled(marker));
-        levelMarkerEnabledMap.put(Level.WARN, (logger, marker) -> logger.isWarnEnabled(marker));
-        levelMarkerEnabledMap.put(Level.ERROR, (logger, marker) -> logger.isErrorEnabled(marker));
+        levelMarkerEnabledMap.put(Level.TRACE, Logger::isTraceEnabled);
+        levelMarkerEnabledMap.put(Level.DEBUG, Logger::isDebugEnabled);
+        levelMarkerEnabledMap.put(Level.INFO, Logger::isInfoEnabled);
+        levelMarkerEnabledMap.put(Level.WARN, Logger::isWarnEnabled);
+        levelMarkerEnabledMap.put(Level.ERROR, Logger::isErrorEnabled);
     }
 
     private void assertEnabledReturnsCorrectly(Level levelToTest, Marker marker) {
