@@ -1,44 +1,28 @@
 package com.github.valfirst.slf4jtest;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import com.google.common.base.Suppliers;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.function.Supplier;
 import org.slf4j.ILoggerFactory;
+import org.slf4j.event.Level;
 import uk.org.lidalia.lang.ThreadLocal;
-import uk.org.lidalia.slf4jext.Level;
 
 public final class TestLoggerFactory implements ILoggerFactory {
 
-    private static final Supplier<TestLoggerFactory> INSTANCE =
-            Suppliers.memoize(
-                    () -> {
-                        try {
-                            OverridableProperties properties = new OverridableProperties("slf4jtest");
-                            Level printLevel = getLevelProperty(properties, "print.level", "OFF");
-                            Level captureLevel = getLevelProperty(properties, "capture.level", "TRACE");
-                            return new TestLoggerFactory(printLevel, captureLevel);
-                        } catch (IOException e) {
-                            throw new UncheckedIOException(e);
-                        }
-                    });
+    private static volatile TestLoggerFactory INSTANCE = null;
 
     private static Level getLevelProperty(
             OverridableProperties properties, String propertyKey, String defaultValue)
             throws IOException {
         try {
             final String printLevelProperty = properties.getProperty(propertyKey, defaultValue);
+            if ("OFF".equals(printLevelProperty)) return null;
             return Level.valueOf(printLevelProperty);
         } catch (IllegalArgumentException e) {
             throw new IllegalStateException(
@@ -59,7 +43,21 @@ public final class TestLoggerFactory implements ILoggerFactory {
     private volatile Level captureLevel;
 
     public static TestLoggerFactory getInstance() {
-        return INSTANCE.get();
+        if (INSTANCE == null) {
+            synchronized (TestLoggerFactory.class) {
+                if (INSTANCE == null) {
+                    try {
+                        OverridableProperties properties = new OverridableProperties("slf4jtest");
+                        Level printLevel = getLevelProperty(properties, "print.level", "OFF");
+                        Level captureLevel = getLevelProperty(properties, "capture.level", "TRACE");
+                        INSTANCE = new TestLoggerFactory(printLevel, captureLevel);
+                    } catch (IOException e) {
+                        throw new UncheckedIOException(e);
+                    }
+                }
+            }
+        }
+        return INSTANCE;
     }
 
     public static TestLogger getTestLogger(final Class<?> aClass) {
@@ -95,7 +93,7 @@ public final class TestLoggerFactory implements ILoggerFactory {
     }
 
     public TestLoggerFactory() {
-        this(Level.OFF, Level.TRACE);
+        this(null, Level.TRACE);
     }
 
     public TestLoggerFactory(final Level printLevel) {
@@ -103,8 +101,8 @@ public final class TestLoggerFactory implements ILoggerFactory {
     }
 
     public TestLoggerFactory(final Level printLevel, final Level captureLevel) {
-        this.printLevel = checkNotNull(printLevel);
-        this.captureLevel = checkNotNull(captureLevel);
+        this.printLevel = printLevel;
+        this.captureLevel = captureLevel;
     }
 
     public Level getPrintLevel() {
@@ -115,8 +113,8 @@ public final class TestLoggerFactory implements ILoggerFactory {
         return captureLevel;
     }
 
-    public ImmutableMap<String, TestLogger> getAllLoggers() {
-        return ImmutableMap.copyOf(loggers);
+    public Map<String, TestLogger> getAllLoggers() {
+        return Collections.unmodifiableMap(new HashMap<>(loggers));
     }
 
     public TestLogger getLogger(final Class<?> aClass) {
@@ -124,8 +122,7 @@ public final class TestLoggerFactory implements ILoggerFactory {
     }
 
     public TestLogger getLogger(final String name) {
-        final TestLogger newLogger = new TestLogger(name, this);
-        return Optional.ofNullable(loggers.putIfAbsent(name, newLogger)).orElse(newLogger);
+        return loggers.computeIfAbsent(name, nm -> new TestLogger(nm, this));
     }
 
     public void clearLoggers() {
@@ -148,8 +145,8 @@ public final class TestLoggerFactory implements ILoggerFactory {
         loggers.clear();
     }
 
-    public ImmutableList<LoggingEvent> getLoggingEventsFromLoggers() {
-        return ImmutableList.copyOf(loggingEvents.get());
+    public List<LoggingEvent> getLoggingEventsFromLoggers() {
+        return Collections.unmodifiableList(new ArrayList(loggingEvents.get()));
     }
 
     public List<LoggingEvent> getAllLoggingEventsFromLoggers() {
@@ -162,10 +159,10 @@ public final class TestLoggerFactory implements ILoggerFactory {
     }
 
     public void setPrintLevel(final Level printLevel) {
-        this.printLevel = checkNotNull(printLevel);
+        this.printLevel = printLevel;
     }
 
     public void setCaptureLevel(Level captureLevel) {
-        this.captureLevel = checkNotNull(captureLevel);
+        this.captureLevel = captureLevel;
     }
 }

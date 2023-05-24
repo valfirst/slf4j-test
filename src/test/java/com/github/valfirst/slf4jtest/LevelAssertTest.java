@@ -3,14 +3,15 @@ package com.github.valfirst.slf4jtest;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
+import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.org.lidalia.slf4jext.Level;
+import org.slf4j.event.Level;
 
 @ExtendWith(MockitoExtension.class)
 class LevelAssertTest {
@@ -29,7 +30,7 @@ class LevelAssertTest {
 
         @Test
         void failsWhenDoesNotMatchExpected() {
-            when(logger.getLoggingEvents()).thenReturn(ImmutableList.of());
+            when(logger.getLoggingEvents()).thenReturn(Collections.emptyList());
 
             assertThatThrownBy(() -> assertions.hasNumberOfLogs(1))
                     .isInstanceOf(AssertionError.class)
@@ -40,7 +41,7 @@ class LevelAssertTest {
         void passesWhenDoesMatch() {
             when(logger.getLoggingEvents())
                     .thenReturn(
-                            ImmutableList.of(
+                            Arrays.asList(
                                     LoggingEvent.warn("Ignore me"),
                                     LoggingEvent.info("Yay for me!"),
                                     LoggingEvent.info("With args {}", "argument")));
@@ -50,7 +51,8 @@ class LevelAssertTest {
 
         @Test
         void returnsSelfWhenPasses() {
-            when(logger.getLoggingEvents()).thenReturn(ImmutableList.of(LoggingEvent.info("Event")));
+            when(logger.getLoggingEvents())
+                    .thenReturn(Collections.singletonList(LoggingEvent.info("Event")));
 
             LevelAssert actual = assertions.hasNumberOfLogs(1);
 
@@ -63,7 +65,7 @@ class LevelAssertTest {
 
         @Test
         void failsWhenDoesNotContainSubstring() {
-            when(logger.getLoggingEvents()).thenReturn(ImmutableList.of());
+            when(logger.getLoggingEvents()).thenReturn(Collections.emptyList());
 
             assertThatThrownBy(() -> assertions.hasMessageContaining("words"))
                     .isInstanceOf(AssertionError.class)
@@ -75,7 +77,7 @@ class LevelAssertTest {
         void passesWhenDoesMatch() {
             when(logger.getLoggingEvents())
                     .thenReturn(
-                            ImmutableList.of(
+                            Arrays.asList(
                                     LoggingEvent.warn("Ignore me"),
                                     LoggingEvent.info("Yay for me!"),
                                     LoggingEvent.info("With args {}", "argument")));
@@ -85,7 +87,8 @@ class LevelAssertTest {
 
         @Test
         void returnsSelfWhenPasses() {
-            when(logger.getLoggingEvents()).thenReturn(ImmutableList.of(LoggingEvent.info("Event")));
+            when(logger.getLoggingEvents())
+                    .thenReturn(Collections.singletonList(LoggingEvent.info("Event")));
 
             LevelAssert actual = assertions.hasMessageContaining("Event");
 
@@ -98,7 +101,7 @@ class LevelAssertTest {
 
         @Test
         void failsWhenDoesNotMatchExpected() {
-            when(logger.getLoggingEvents()).thenReturn(ImmutableList.of(LoggingEvent.info("")));
+            when(logger.getLoggingEvents()).thenReturn(Collections.singletonList(LoggingEvent.info("")));
 
             assertThatThrownBy(() -> assertions.hasMessageMatching(".+"))
                     .isInstanceOf(AssertionError.class)
@@ -110,7 +113,7 @@ class LevelAssertTest {
         void passesWhenDoesMatch() {
             when(logger.getLoggingEvents())
                     .thenReturn(
-                            ImmutableList.of(
+                            Arrays.asList(
                                     LoggingEvent.warn("Ignore me"),
                                     LoggingEvent.info("Yay for me!"),
                                     LoggingEvent.info("With args {}", "argument")));
@@ -120,7 +123,8 @@ class LevelAssertTest {
 
         @Test
         void returnsSelfWhenPasses() {
-            when(logger.getLoggingEvents()).thenReturn(ImmutableList.of(LoggingEvent.info("12340")));
+            when(logger.getLoggingEvents())
+                    .thenReturn(Collections.singletonList(LoggingEvent.info("12340")));
 
             LevelAssert actual = assertions.hasMessageMatching("[0-9]+");
 

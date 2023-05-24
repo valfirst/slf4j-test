@@ -1,6 +1,6 @@
 package com.github.valfirst.slf4jtest;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.helpers.BasicMDCAdapter;
@@ -26,12 +26,11 @@ public class TestMDCAdapter extends BasicMDCAdapter {
         value.remove();
     }
 
-    public ImmutableMap<String, String> getCopyOfContextMap() {
-        return ImmutableMap.copyOf(value.get());
+    public Map<String, String> getCopyOfContextMap() {
+        return Collections.unmodifiableMap(new HashMap<>(value.get()));
     }
 
-    @SuppressWarnings("unchecked")
-    public void setContextMap(final Map contextMap) {
-        value.set(new HashMap<String, String>(contextMap));
+    public void setContextMap(final Map<String, String> contextMap) {
+        value.set(new HashMap<>(contextMap));
     }
 }

@@ -3,7 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/valfirst/slf4j-test/badge.svg?branch=master)](https://coveralls.io/github/valfirst/slf4j-test?branch=master)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=com.github.valfirst%3Aslf4j-test&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=com.github.valfirst%3Aslf4j-test)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ac96a0c1a5614c3b93491d10e70b3a36)](https://www.codacy.com/gh/valfirst/slf4j-test/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=valfirst/slf4j-test&amp;utm_campaign=Badge_Grade)
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.valfirst/slf4j-test.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3Acom.github.valfirst%20a%3Aslf4j-test)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.valfirst/slf4j-test.svg)](https://central.sonatype.com/search?q=slf4j-test&namespace=com.github.valfirst)
 [![Javadocs](http://www.javadoc.io/badge/com.github.valfirst/slf4j-test.svg)](http://www.javadoc.io/doc/com.github.valfirst/slf4j-test)
 [![Known Vulnerabilities](https://snyk.io/test/github/valfirst/slf4j-test/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/valfirst/slf4j-test?targetFile=pom.xml)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/valfirst/jbehave-junit-runner/master/LICENSE)
@@ -20,16 +20,16 @@ all available from Maven Central.
 <dependency>
     <groupId>com.github.valfirst</groupId>
     <artifactId>slf4j-test</artifactId>
-    <version>2.6.1</version>
+    <version>2.9.0</version>
 </dependency>
 ```
 
 ## Compatibility Matrix
-|`org.slf4j:slf4j-api`            | `com.github.valfirst:slf4j-test` |
+| `org.slf4j:slf4j-api`           | `com.github.valfirst:slf4j-test` |
 |---------------------------------|----------------------------------|
 | `1.8.0-beta0` - `2.0.0-alpha2`  | `1.3.0` - `2.3.0`                |
 | `2.0.0-alpha3` - `2.0.0-alpha5` | `2.4.0` - `2.4.1`                |
-| `2.0.0-alpha6` - `2.0.1`        | `2.5.0` - `2.6.1`                |
+| `2.0.0-alpha6` - `2.0.7`        | `2.5.0` - `2.9.0`                |
 
 
 ## JUnit 5 Support

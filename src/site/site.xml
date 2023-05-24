@@ -6,27 +6,14 @@
     <skin>
         <groupId>org.apache.maven.skins</groupId>
         <artifactId>maven-fluido-skin</artifactId>
-        <version>1.7</version>
+        <version>1.11.1</version>
     </skin>
 
     <body>
-        <head>
-      <![CDATA[<script type="text/javascript">
-        $(document).ready(function () {
-          $(".source").addClass("prettyprint");
-          prettyPrint();
-        });
-      </script>
-      ]]>
-        </head>
         <menu name="Overview">
             <item name="Introduction" href="index.html" />
             <item name="Usage" href="usage.html" />
             <item name="Changelog" href="changelog.html" />
-        </menu>
-        <menu name="Previous Versions">
-            <item name="1.0.1" href="site-versions/1.0.1/" />
-            <item name="1.0.0" href="site-versions/1.0.0/" />
         </menu>
         <menu ref="reports" />
     </body>

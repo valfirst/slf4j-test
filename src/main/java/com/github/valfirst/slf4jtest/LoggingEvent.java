@@ -1,24 +1,24 @@
 package com.github.valfirst.slf4jtest;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import java.io.PrintStream;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.slf4j.Marker;
+import org.slf4j.event.Level;
 import org.slf4j.helpers.MessageFormatter;
-import uk.org.lidalia.slf4jext.Level;
 
 /**
  * Representation of a call to a logger for test assertion purposes. The contract of {@link
@@ -45,11 +45,11 @@ public class LoggingEvent {
     private static final DateTimeFormatter ISO_FORMAT = new DateTimeFormatterBuilder().appendInstant(3).toFormatter();
 
     private final Level level;
-    private final ImmutableMap<String, String> mdc;
+    private final Map<String, String> mdc;
     private final Optional<Marker> marker;
     private final Optional<Throwable> throwable;
     private final String message;
-    private final ImmutableList<Object> arguments;
+    private final List<Object> arguments;
 
     private final Optional<TestLogger> creatingLogger;
     private final Instant timestamp = Instant.now();
@@ -405,13 +405,13 @@ public class LoggingEvent {
             final Object... arguments) {
         super();
         this.creatingLogger = creatingLogger;
-        this.level = checkNotNull(level);
-        this.mdc = ImmutableMap.copyOf(mdc);
-        this.marker = checkNotNull(marker);
-        this.throwable = checkNotNull(throwable);
-        this.message = checkNotNull(message);
+        this.level = requireNonNull(level);
+        this.mdc = Collections.unmodifiableMap(new TreeMap<>(mdc));
+        this.marker = requireNonNull(marker);
+        this.throwable = requireNonNull(throwable);
+        this.message = message;
         this.arguments =
-                ImmutableList.copyOf(
+                Collections.unmodifiableList(
                         Arrays.stream(arguments)
                                 .map(input -> ofNullable(input).orElse(empty()))
                                 .collect(Collectors.toList()));
@@ -421,7 +421,11 @@ public class LoggingEvent {
         return level;
     }
 
-    public ImmutableMap<String, String> getMdc() {
+    /**
+     * Get the MDC of the event. This is a copy of the MDC when the event was created. The returned
+     * value is an unmodifiable {@link java.util.SortedMap} with natural ordering of the keys.
+     */
+    public Map<String, String> getMdc() {
         return mdc;
     }
 
@@ -433,7 +437,13 @@ public class LoggingEvent {
         return message;
     }
 
-    public ImmutableList<Object> getArguments() {
+    /**
+     * Get the arguments to the event.
+     *
+     * @return an unmodifiable copy of the arguments when the event was created. Null values are
+     *     replaced by {@link Optional#empty()}.
+     */
+    public List<Object> getArguments() {
         return arguments;
     }
 
@@ -493,7 +503,7 @@ public class LoggingEvent {
 
     public String getFormattedMessage() {
         Object[] argumentsWithNulls =
-                getArguments().stream().map(a -> a.equals(Optional.empty()) ? null : a).toArray();
+                getArguments().stream().map(a -> a.equals(empty()) ? null : a).toArray();
         return MessageFormatter.arrayFormat(getMessage(), argumentsWithNulls).getMessage();
     }
 

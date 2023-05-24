@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.valfirst</groupId>
     <artifactId>slf4j-test</artifactId>
-    <version>2.6.2-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
 
     <name>SLF4J Test</name>
     <description>An in-memory SLF4J implementation focused on aiding unit
@@ -31,6 +31,11 @@
         <url>https://github.com/valfirst/slf4j-test</url>
     </scm>
 
+    <ciManagement>
+        <system>GitHub Actions</system>
+        <url>https://github.com/valfirst/slf4j-test/actions</url>
+    </ciManagement>
+
     <distributionManagement>
         <repository>
             <id>sonatype-nexus-staging</id>
@@ -51,14 +56,14 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.8</jdk.version>
-        <slf4j.version>2.0.6</slf4j.version>
+        <slf4j.version>2.0.7</slf4j.version>
         <junit.version>4.13.2</junit.version>
-        <junit5.version>5.9.1</junit5.version>
+        <junit5.version>5.9.3</junit5.version>
         <mockito.version>4.0.0</mockito.version>
         <powermock.version>2.0.9</powermock.version>
-        <jacoco.version>0.8.8</jacoco.version>
-        <pmd.version>6.52.0</pmd.version>
-        <maven.surefire.version>2.22.2</maven.surefire.version>
+        <jacoco.version>0.8.10</jacoco.version>
+        <pmd.version>6.55.0</pmd.version>
+        <maven.surefire.version>3.1.0</maven.surefire.version>
     </properties>
 
     <dependencyManagement>
@@ -80,19 +85,9 @@
             <version>${slf4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>31.1-jre</version>
-        </dependency>
-        <dependency>
-            <groupId>uk.org.lidalia</groupId>
-            <artifactId>lidalia-slf4j-ext</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.23.1</version>
+            <version>3.24.2</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
@@ -144,6 +139,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.junit-pioneer</groupId>
+            <artifactId>junit-pioneer</artifactId>
+            <version>1.9.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-module-junit4</artifactId>
             <version>${powermock.version}</version>
@@ -169,7 +170,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
+                <version>3.11.0</version>
                 <configuration>
                     <source>${jdk.version}</source>
                     <target>${jdk.version}</target>
@@ -179,7 +180,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -192,7 +193,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.4.1</version>
+                <version>3.5.0</version>
                 <configuration>
                     <source>${jdk.version}</source>
                     <detectLinks />
@@ -224,7 +225,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
+                <version>3.0.0</version>
                 <configuration>
                     <localCheckout>true</localCheckout>
                     <pushChanges>false</pushChanges>
@@ -240,7 +241,7 @@
                     <dependency>
                         <groupId>org.apache.maven.doxia</groupId>
                         <artifactId>doxia-module-markdown</artifactId>
-                        <version>1.11.1</version>
+                        <version>1.12.0</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -277,7 +278,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-scm-publish-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.2.1</version>
                 <configuration>
                     <pubScmUrl>${project.scm.developerConnection}</pubScmUrl>
                     <scmBranch>gh-pages</scmBranch>
@@ -297,10 +298,11 @@
             </plugin>
             <plugin>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.19.0</version>
+                <version>3.21.0</version>
                 <configuration>
                     <aggregate>true</aggregate>
                     <targetJdk>${jdk.version}</targetJdk>
+                    <printFailingErrors>true</printFailingErrors>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -314,6 +316,13 @@
                         <version>${pmd.version}</version>
                     </dependency>
                 </dependencies>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -366,7 +375,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.4.1</version>
+                <version>3.4.3</version>
             </plugin>
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -381,7 +390,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.2.2</version>
             </plugin>
             <plugin>
                 <artifactId>maven-pmd-plugin</artifactId>
@@ -459,7 +468,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.0.1</version>
+                        <version>3.1.0</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -518,9 +527,9 @@
             </build>
         </profile>
         <profile>
-            <id>surefire-java-16</id>
+            <id>surefire-java-16+</id>
             <activation>
-                <jdk>16</jdk>
+                <jdk>[16,)</jdk>
             </activation>
             <build>
                 <plugins>
@@ -547,11 +556,11 @@
                     <plugin>
                         <groupId>com.diffplug.spotless</groupId>
                         <artifactId>spotless-maven-plugin</artifactId>
-                        <version>2.28.0</version>
+                        <version>2.36.0</version>
                         <configuration>
                             <java>
                                 <googleJavaFormat>
-                                    <version>1.14.0</version>
+                                    <version>1.15.0</version>
                                 </googleJavaFormat>
                                 <formatAnnotations />
                                 <trimTrailingWhitespace />
