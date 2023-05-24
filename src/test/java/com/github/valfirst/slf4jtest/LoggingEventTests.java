@@ -26,9 +26,7 @@ import static org.slf4j.event.Level.INFO;
 import static org.slf4j.event.Level.TRACE;
 import static org.slf4j.event.Level.WARN;
 
-import java.time.Clock;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -457,9 +455,9 @@ class LoggingEventTests {
     void printToStandardOutNoThrowable(StdOut stdOut) {
         LoggingEvent event;
 
-        Clock fixed = Clock.fixed(Instant.ofEpochMilli(0), ZoneId.systemDefault());
-        try (MockedStatic<Clock> instant = mockStatic(Clock.class)) {
-            instant.when(Clock::systemUTC).thenReturn(fixed);
+        Instant fixed = Instant.ofEpochMilli(0);
+        try (MockedStatic<Instant> instant = mockStatic(Instant.class)) {
+            instant.when(Instant::now).thenReturn(fixed);
             event = new LoggingEvent(INFO, "message with {}", "argument");
         }
 
@@ -479,9 +477,9 @@ class LoggingEventTests {
     void printToStandardOutWithThrowable(StdOut stdOut) {
         LoggingEvent event;
 
-        Clock fixed = Clock.fixed(Instant.ofEpochMilli(0), ZoneId.systemDefault());
-        try (MockedStatic<Clock> instant = mockStatic(Clock.class)) {
-            instant.when(Clock::systemUTC).thenReturn(fixed);
+        Instant fixed = Instant.ofEpochMilli(0);
+        try (MockedStatic<Instant> instant = mockStatic(Instant.class)) {
+            instant.when(Instant::now).thenReturn(fixed);
             event = new LoggingEvent(INFO, new Exception(), "message");
         }
 
