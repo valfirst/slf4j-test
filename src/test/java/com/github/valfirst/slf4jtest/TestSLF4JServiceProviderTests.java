@@ -19,7 +19,7 @@ import org.slf4j.spi.SLF4JServiceProvider;
  * @author Valery Yatsynovich
  */
 class TestSLF4JServiceProviderTests {
-    private SLF4JServiceProvider slf4JServiceProvider =
+    private final SLF4JServiceProvider slf4JServiceProvider =
             ServiceLoader.load(SLF4JServiceProvider.class).iterator().next();
 
     @BeforeEach

@@ -80,7 +80,8 @@ class TestLoggerAssertionsTest {
             mdc.put("key", "value");
             mdc.put("another", "slightly different value");
 
-            assertThatThrownBy(() -> assertions.hasLogged(warn(mdc, "Something may be wrong")))
+            LoggingEvent event = warn(mdc, "Something may be wrong");
+            assertThatThrownBy(() -> assertions.hasLogged(event))
                     .isInstanceOf(AssertionError.class)
                     .hasMessage(
                             "Failed to find event:\n  LoggingEvent{level=WARN, mdc={another=slightly different value, key=value}, marker=Optional.empty, throwable=Optional.empty, message='Something may be wrong', arguments=[]}"
@@ -201,7 +202,8 @@ class TestLoggerAssertionsTest {
                 LoggingEvent loggingEvent = warn("A different message");
                 eventsStubbing.thenReturn(Collections.singletonList(loggingEvent));
 
-                assertThatThrownBy(() -> loggerAssert.hasLogged(aLog().withMessage("A message")))
+                TestLoggerAssert.PredicateBuilder predicateBuilder = aLog().withMessage("A message");
+                assertThatThrownBy(() -> loggerAssert.hasLogged(predicateBuilder))
                         .isInstanceOf(AssertionError.class)
                         .hasMessage(
                                 "Failed to find log matching predicate" + loggerContainedMessage(loggingEvent));
@@ -450,7 +452,8 @@ class TestLoggerAssertionsTest {
                 LoggingEvent loggingEvent = warn("A message");
                 eventsStubbing.thenReturn(Collections.singletonList(loggingEvent));
 
-                assertThatThrownBy(() -> loggerAssert.hasNotLogged(aLog().withMessage("A message")))
+                TestLoggerAssert.PredicateBuilder predicateBuilder = aLog().withMessage("A message");
+                assertThatThrownBy(() -> loggerAssert.hasNotLogged(predicateBuilder))
                         .isInstanceOf(AssertionError.class)
                         .hasMessage("Found " + loggingEvent + ", even though we expected not to");
             }

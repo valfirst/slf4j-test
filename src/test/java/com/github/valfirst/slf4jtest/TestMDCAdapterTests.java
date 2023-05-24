@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 
 class TestMDCAdapterTests {
 
-    private TestMDCAdapter testMDCAdapter = new TestMDCAdapter();
-    private String key = "key";
-    private String value = "value";
+    private final TestMDCAdapter testMDCAdapter = new TestMDCAdapter();
+    private final String key = "key";
+    private final String value = "value";
 
     @Test
     void putGetRemoveLoop() {
@@ -33,7 +33,7 @@ class TestMDCAdapterTests {
     @Test
     void getCopyOfContextMapIsCopy() {
         testMDCAdapter.put(key, value);
-        Map actual = testMDCAdapter.getCopyOfContextMap();
+        Map<String, String> actual = testMDCAdapter.getCopyOfContextMap();
         testMDCAdapter.clear();
         assertEquals(Collections.singletonMap(key, value), actual);
     }

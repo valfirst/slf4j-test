@@ -536,7 +536,7 @@ class LoggingEventTests {
     }
 
     @Test
-    public void nullArgumentIsFormattedLikeSlf4j() {
+    void nullArgumentIsFormattedLikeSlf4j() {
         LoggingEvent event = new LoggingEvent(level, "message with {}, {}", null, "value");
         assertThat(event.getFormattedMessage(), is("message with null, value"));
     }

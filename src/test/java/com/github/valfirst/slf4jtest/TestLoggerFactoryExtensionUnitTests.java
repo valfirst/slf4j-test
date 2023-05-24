@@ -17,7 +17,7 @@ import org.slf4j.event.Level;
 
 class TestLoggerFactoryExtensionUnitTests {
 
-    private TestLoggerFactoryExtension extension = new TestLoggerFactoryExtension();
+    private final TestLoggerFactoryExtension extension = new TestLoggerFactoryExtension();
 
     @Test
     void resetsThreadLocalData() {
