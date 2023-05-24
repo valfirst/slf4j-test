@@ -42,7 +42,8 @@ import org.slf4j.helpers.MessageFormatter;
  */
 @SuppressWarnings({"PMD.ExcessivePublicCount", "PMD.TooManyMethods"})
 public class LoggingEvent {
-    private static final DateTimeFormatter ISO_FORMAT = new DateTimeFormatterBuilder().appendInstant(3).toFormatter();
+    private static final DateTimeFormatter ISO_FORMAT =
+            new DateTimeFormatterBuilder().appendInstant(3).toFormatter();
 
     private final Level level;
     private final Map<String, String> mdc;
