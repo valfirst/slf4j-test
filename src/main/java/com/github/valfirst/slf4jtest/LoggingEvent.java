@@ -411,7 +411,7 @@ public class LoggingEvent {
         this.marker = requireNonNull(marker);
         this.throwable = requireNonNull(throwable);
         this.message = message;
-        this.arguments = Collections.unmodifiableList(Arrays.asList(arguments));
+        this.arguments = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(arguments)));
     }
 
     public Level getLevel() {
