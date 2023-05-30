@@ -8,6 +8,7 @@ import java.io.PrintStream;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +16,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 import org.slf4j.Marker;
 import org.slf4j.event.Level;
 import org.slf4j.helpers.MessageFormatter;
@@ -411,11 +411,7 @@ public class LoggingEvent {
         this.marker = requireNonNull(marker);
         this.throwable = requireNonNull(throwable);
         this.message = message;
-        this.arguments =
-                Collections.unmodifiableList(
-                        Arrays.stream(arguments)
-                                .map(input -> ofNullable(input).orElse(empty()))
-                                .collect(Collectors.toList()));
+        this.arguments = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(arguments)));
     }
 
     public Level getLevel() {
@@ -441,8 +437,7 @@ public class LoggingEvent {
     /**
      * Get the arguments to the event.
      *
-     * @return an unmodifiable copy of the arguments when the event was created. Null values are
-     *     replaced by {@link Optional#empty()}.
+     * @return an unmodifiable copy of the arguments when the event was created.
      */
     public List<Object> getArguments() {
         return arguments;
@@ -503,8 +498,7 @@ public class LoggingEvent {
     }
 
     public String getFormattedMessage() {
-        Object[] argumentsWithNulls =
-                getArguments().stream().map(a -> a.equals(empty()) ? null : a).toArray();
+        Object[] argumentsWithNulls = getArguments().toArray();
         return MessageFormatter.arrayFormat(getMessage(), argumentsWithNulls).getMessage();
     }
 
