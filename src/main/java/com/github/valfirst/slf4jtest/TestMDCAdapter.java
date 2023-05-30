@@ -11,7 +11,7 @@ public class TestMDCAdapter extends BasicMDCAdapter {
 
     @Override
     public void put(final String key, final String val) {
-        value.get().put(key, String.valueOf(val));
+        value.get().put(key, val);
     }
 
     @Override

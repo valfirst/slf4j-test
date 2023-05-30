@@ -863,7 +863,7 @@ class TestLoggerTests {
         testLogger.info(MESSAGE);
 
         Map<String, String> expected = new HashMap<>();
-        expected.put("key", "null");
+        expected.put("key", null);
 
         assertEquals(singletonList(info(expected, MESSAGE)), testLogger.getLoggingEvents());
     }

@@ -526,7 +526,7 @@ class LoggingEventTests {
     @Test
     void nullArgument() {
         LoggingEvent event = new LoggingEvent(level, "message with null arg", null, null);
-        assertThat(event, is(new LoggingEvent(level, "message with null arg", empty(), empty())));
+        assertThat(event, is(new LoggingEvent(level, "message with null arg", null, null)));
     }
 
     @Test
