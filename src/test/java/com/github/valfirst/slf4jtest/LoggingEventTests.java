@@ -16,6 +16,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.Mockito.mock;
@@ -539,6 +540,12 @@ class LoggingEventTests {
     void nullArgumentIsFormattedLikeSlf4j() {
         LoggingEvent event = new LoggingEvent(level, "message with {}, {}", null, "value");
         assertThat(event.getFormattedMessage(), is("message with null, value"));
+    }
+
+    @Test
+    void nullMdcGivesEmptyMdc() {
+        LoggingEvent event = new LoggingEvent(level, (Map<String, String>) null, message);
+        assertEquals(Collections.emptyMap(), event.getMdc());
     }
 
     public interface TriFunction<A, B, C, R> {

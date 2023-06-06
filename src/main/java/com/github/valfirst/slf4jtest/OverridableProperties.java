@@ -2,6 +2,7 @@ package com.github.valfirst.slf4jtest;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.util.Properties;
 
 class OverridableProperties {
@@ -36,5 +37,13 @@ class OverridableProperties {
     String getProperty(final String propertyKey, final String defaultValue) {
         final String propertyFileProperty = properties.getProperty(propertyKey, defaultValue);
         return System.getProperty(propertySourceName + "." + propertyKey, propertyFileProperty);
+    }
+
+    public static OverridableProperties createUnchecked(final String propertySourceName) {
+        try {
+            return new OverridableProperties(propertySourceName);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }

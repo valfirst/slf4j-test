@@ -407,7 +407,8 @@ public class LoggingEvent {
         super();
         this.creatingLogger = creatingLogger;
         this.level = requireNonNull(level);
-        this.mdc = Collections.unmodifiableMap(new TreeMap<>(mdc));
+        this.mdc =
+                mdc == null ? Collections.emptyMap() : Collections.unmodifiableMap(new TreeMap<>(mdc));
         this.marker = requireNonNull(marker);
         this.throwable = requireNonNull(throwable);
         this.message = message;
