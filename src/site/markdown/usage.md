@@ -188,3 +188,121 @@ doing this declaratively. For example
         }
         ...
     }
+
+### Customizing the MDC
+The MDC (original meaning Mapped Diagnostic Context) is a place that can
+be used to store additional information as key/value pairs. The
+information is stored by thread. It can be set by the client code and used
+by the logging backend.
+The [specification](https://www.slf4j.org/apidocs/org/slf4j/MDC.html) of 
+the MDC in SLF4J leaves much detail up to the logging backend. 
+
+SLF4J Test lets the user customize the behavior of the MDC to more closely
+match that of the backend expected to be used at run-time.
+
+The configuration can be changed in the property file `slf4jtest.properties`,
+using system properties specified as command line arguments to the JVM,
+or programatically. The property file and the system properties are read
+at start-up time, with system properties overriding the property file.
+Note that changing the values programatically affects all threads.
+
+#### Completely Disable the MDC
+The backend does not even have to implement the MDC at all.
+If the log4j2 adapter or logback is used, there is full support for the MDC.
+Using the java.util.logging adapter, there is an MDC, but it cannot be used
+by log appenders.
+In the slf4j-simple, the MDC implentation is a no-op.
+
+It is possible to disable the MDC completely by specifying
+
+##### Programmatically
+
+    TestMDCAdapter.getInstance().setEnable(false);
+
+##### Via a System Property
+
+    -Dslf4jtest.mdc.enable=false
+
+##### In the slf4j.properties File
+
+    mdc.enable=false
+
+The default value is `true`. If disabled, the `get` and `getCopyOfContextMap`
+methods return null, and all other methods are no-ops.
+
+#### Inheritance from the Parent Thread
+It is unspecified whether a child thread inherits the MDC from its parent.
+In log4j2 and logback, the MDC is not inherited by default, but this
+behavoir can be changed by the configuration. Using the java.util.logging
+adapter, inheritance is always on.
+
+##### Programmatically
+
+    TestMDCAdapter.getInstance().setInherit(true);
+
+##### Via a System Property
+
+    -Dslf4jtest.mdc.inherit=true
+
+##### In the slf4j.properties File
+
+    mdc.inherit=true
+
+The default value is `false`.
+
+#### Allow null values
+In the description of the
+[`put`](https://www.slf4j.org/apidocs/org/slf4j/MDC.html#put-java.lang.String-java.lang.String-)
+method, it says "The `val` parameter can be null only if the underlying
+implementation supports it."
+To emulate a backend that does not support null values, this can be configured.
+
+##### Programmatically
+
+    TestMDCAdapter.getInstance().setAllowNullValues(false);
+
+##### Via a System Property
+
+    -Dslf4jtest.mdc.allow.null.values=false
+
+##### In the slf4j.properties File
+
+    mdc.allow.null.values=false
+
+The default value is `true`.
+Note that if the MDC functionality has been completely disabled, null
+values are accepted and ignored, regardless of this setting.
+
+#### Null Returned for Empty Map
+The description of the
+[`getCopyOfContextMap`](https://www.slf4j.org/apidocs/org/slf4j/MDC.html#getCopyOfContextMap--)
+method says "Returned value may be null.", but it is not specified under
+which circumstances it may be null. Obviously, a backend that does not
+support an MDC will return null. The implementation in the
+java.util.logging adapter returns null, if `put` has not been called.
+Other implementations may return an empty map in that case.
+To change the behavior:
+
+##### Programmatically
+
+    TestMDCAdapter.getInstance().setReturnNullCopyWhenMdcNotSet(true);
+
+##### Via a System Property
+
+    -Dslf4jtest.mdc.return.null.copy.when.mdc.not.set=true
+
+##### In the slf4j.properties File
+
+    mdc.return.null.copy.when.mdc.not.set=true
+
+The default value is `false`, in which case an empty map is returned
+when the MDC is not set.
+Note that if the MDC functionality has been completely disabled,
+`null` is returned, regardless of this setting.
+
+#### Restoring Options
+To restore these options to the values defined by the initial
+configuration, use
+
+    TestMDCAdapter.getInstance().restoreOptions();
+
