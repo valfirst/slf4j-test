@@ -1,7 +1,5 @@
 package com.github.valfirst.slf4jtest;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -45,18 +43,17 @@ public final class TestLoggerFactory implements ILoggerFactory {
         if (INSTANCE == null) {
             synchronized (TestLoggerFactory.class) {
                 if (INSTANCE == null) {
-                    try {
-                        OverridableProperties properties = new OverridableProperties("slf4jtest");
-                        Level printLevel = getLevelProperty(properties, "print.level", "OFF");
-                        Level captureLevel = getLevelProperty(properties, "capture.level", "TRACE");
-                        INSTANCE = new TestLoggerFactory(printLevel, captureLevel);
-                    } catch (IOException e) {
-                        throw new UncheckedIOException(e);
-                    }
+                    INSTANCE = createInstance(OverridableProperties.createUnchecked("slf4jtest"));
                 }
             }
         }
         return INSTANCE;
+    }
+
+    static TestLoggerFactory createInstance(OverridableProperties properties) {
+        Level printLevel = getLevelProperty(properties, "print.level", "OFF");
+        Level captureLevel = getLevelProperty(properties, "capture.level", "TRACE");
+        return new TestLoggerFactory(printLevel, captureLevel);
     }
 
     public static TestLogger getTestLogger(final Class<?> aClass) {
