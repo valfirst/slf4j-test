@@ -11,32 +11,28 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.powermock.api.mockito.PowerMockito.mock;
-import static org.powermock.api.mockito.PowerMockito.when;
-import static org.powermock.api.mockito.PowerMockito.whenNew;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.slf4j.event.Level.WARN;
 
-import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.event.Level;
 
-@RunWith(PowerMockRunner.class)
-public class TestLoggerFactoryTests {
+class TestLoggerFactoryTests {
 
     @Test
-    public void getLoggerDifferentNames() {
+    void getLoggerDifferentNames() {
         TestLogger logger1 = getInstance().getLogger("name1");
         TestLogger logger2 = getInstance().getLogger("name2");
 
@@ -44,7 +40,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void getLoggerSameNames() {
+    void getLoggerSameNames() {
         TestLogger logger1 = getInstance().getLogger("name1");
         TestLogger logger2 = getInstance().getLogger("name1");
 
@@ -52,7 +48,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void staticGetTestLoggerStringReturnsSame() {
+    void staticGetTestLoggerStringReturnsSame() {
         TestLogger logger1 = TestLoggerFactory.getTestLogger("name1");
         TestLogger logger2 = getInstance().getLogger("name1");
 
@@ -60,7 +56,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void staticGetTestLoggerClassReturnsSame() {
+    void staticGetTestLoggerClassReturnsSame() {
         TestLogger logger1 = TestLoggerFactory.getTestLogger(String.class);
         TestLogger logger2 = getInstance().getLogger("java.lang.String");
 
@@ -68,7 +64,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void clear() {
+    void clear() {
         TestLogger logger1 = getInstance().getLogger("name1");
         logger1.trace("hello");
         assertThat(logger1.getLoggingEvents().size(), is(1));
@@ -84,7 +80,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void getAllLoggingEvents() {
+    void getAllLoggingEvents() {
         TestLogger logger1 = getInstance().getLogger("name1");
         TestLogger logger2 = getInstance().getLogger("name2");
         logger1.trace("hello");
@@ -98,7 +94,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void getAllLoggingEventsDoesNotAddToMultipleLoggers() {
+    void getAllLoggingEventsDoesNotAddToMultipleLoggers() {
         TestLogger logger1 = getInstance().getLogger("name1");
         TestLogger logger2 = getInstance().getLogger("name2");
         logger1.trace("hello");
@@ -109,7 +105,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void getAllLoggingEventsDoesNotGetEventsForLoggersNotEnabled() {
+    void getAllLoggingEventsDoesNotGetEventsForLoggersNotEnabled() {
         TestLogger logger = getInstance().getLogger("name1");
         logger.setEnabledLevels(WARN);
         logger.info("hello");
@@ -118,7 +114,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void getAllTestLoggers() {
+    void getAllTestLoggers() {
         TestLogger logger1 = getInstance().getLogger("name1");
         TestLogger logger2 = getInstance().getLogger("name2");
         Map<String, TestLogger> expected = new HashMap<>();
@@ -128,7 +124,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void clearDoesNotRemoveLoggers() {
+    void clearDoesNotRemoveLoggers() {
         TestLogger logger1 = getInstance().getLogger("name1");
         TestLoggerFactory.clear();
 
@@ -137,7 +133,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void resetRemovesAllLoggers() {
+    void resetRemovesAllLoggers() {
         getInstance().getLogger("name1");
 
         TestLoggerFactory.reset();
@@ -147,7 +143,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void resetRemovesAllLoggingEvents() {
+    void resetRemovesAllLoggingEvents() {
         getInstance().getLogger("name1").info("hello");
 
         TestLoggerFactory.reset();
@@ -156,7 +152,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void getLoggingEventsReturnsCopyNotView() {
+    void getLoggingEventsReturnsCopyNotView() {
         getInstance().getLogger("name1").debug("hello");
         List<LoggingEvent> loggingEvents = TestLoggerFactory.getLoggingEvents();
         getInstance().getLogger("name1").info("world");
@@ -164,14 +160,14 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void getLoggingEventsReturnsUnmodifiableList() {
+    void getLoggingEventsReturnsUnmodifiableList() {
         List<LoggingEvent> loggingEvents = TestLoggerFactory.getLoggingEvents();
         LoggingEvent loggingEvent = debug("hello");
         assertThrows(UnsupportedOperationException.class, () -> loggingEvents.add(loggingEvent));
     }
 
     @Test
-    public void getAllLoggersReturnsCopyNotView() {
+    void getAllLoggersReturnsCopyNotView() {
         TestLogger logger1 = getInstance().getLogger("name1");
         Map<String, TestLogger> allTestLoggers = TestLoggerFactory.getAllTestLoggers();
         getInstance().getLogger("name2");
@@ -180,7 +176,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void getAllLoggersReturnsUnmodifiableList() {
+    void getAllLoggersReturnsUnmodifiableList() {
         Map<String, TestLogger> allTestLoggers = TestLoggerFactory.getAllTestLoggers();
         TestLogger newLogger = new TestLogger("newlogger", getInstance());
         assertThrows(
@@ -188,7 +184,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void getLoggingEventsOnlyReturnsEventsLoggedInThisThread() throws InterruptedException {
+    void getLoggingEventsOnlyReturnsEventsLoggedInThisThread() throws InterruptedException {
         Thread t = new Thread(() -> TestLoggerFactory.getTestLogger("name1").info("hello"));
         t.start();
         t.join();
@@ -196,7 +192,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void getAllLoggingEventsReturnsEventsLoggedInAllThreads() throws InterruptedException {
+    void getAllLoggingEventsReturnsEventsLoggedInAllThreads() throws InterruptedException {
         Thread t = new Thread(() -> TestLoggerFactory.getTestLogger("name1").info("message1"));
         t.start();
         t.join();
@@ -206,7 +202,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void clearOnlyClearsEventsLoggedInThisThread() throws InterruptedException {
+    void clearOnlyClearsEventsLoggedInThisThread() throws InterruptedException {
         final TestLogger logger = TestLoggerFactory.getTestLogger("name");
         Thread t = new Thread(() -> logger.info("hello"));
         t.start();
@@ -216,7 +212,7 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void clearAllClearsEventsLoggedInAllThreads() throws InterruptedException {
+    void clearAllClearsEventsLoggedInAllThreads() throws InterruptedException {
         final TestLogger logger1 = TestLoggerFactory.getTestLogger("name1");
         final TestLogger logger2 = TestLoggerFactory.getTestLogger("name2");
         logger1.info("hello11");
@@ -239,31 +235,28 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void defaultPrintLevelIsOff() {
+    void defaultPrintLevelIsOff() {
         assertThat(getInstance().getPrintLevel(), is(nullValue()));
     }
 
     @Test
-    @PrepareForTest(TestLoggerFactory.class)
-    public void printLevelTakenFromOverridableProperties() throws Exception {
+    void printLevelTakenFromOverridableProperties() throws Exception {
         final OverridableProperties properties = mock(OverridableProperties.class);
-        whenNew(OverridableProperties.class).withArguments("slf4jtest").thenReturn(properties);
         when(properties.getProperty("print.level", "OFF")).thenReturn("INFO");
         when(properties.getProperty("capture.level", "TRACE")).thenReturn("INFO");
 
-        assertThat(getInstance().getPrintLevel(), is(Level.INFO));
+        assertThat(TestLoggerFactory.createInstance(properties).getPrintLevel(), is(Level.INFO));
     }
 
     @Test
-    @PrepareForTest(TestLoggerFactory.class)
-    public void printLevelInvalidInOverridableProperties() throws Exception {
+    void printLevelInvalidInOverridableProperties() throws Exception {
         final OverridableProperties properties = mock(OverridableProperties.class);
-        whenNew(OverridableProperties.class).withArguments("slf4jtest").thenReturn(properties);
         final String invalidLevelName = "nonsense";
         when(properties.getProperty("print.level", "OFF")).thenReturn(invalidLevelName);
 
         final IllegalStateException illegalStateException =
-                assertThrows(IllegalStateException.class, TestLoggerFactory::getInstance);
+                assertThrows(
+                        IllegalStateException.class, () -> TestLoggerFactory.createInstance(properties));
         assertThat(
                 illegalStateException.getMessage(),
                 is(
@@ -276,32 +269,29 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    public void defaultCaptureLevelIsTrace() {
+    void defaultCaptureLevelIsTrace() {
         assertThat(getInstance().getCaptureLevel(), is(Level.TRACE));
     }
 
     @Test
-    @PrepareForTest(TestLoggerFactory.class)
-    public void captureLevelTakenFromOverridableProperties() throws Exception {
+    void captureLevelTakenFromOverridableProperties() throws Exception {
         final OverridableProperties properties = mock(OverridableProperties.class);
-        whenNew(OverridableProperties.class).withArguments("slf4jtest").thenReturn(properties);
         when(properties.getProperty("print.level", "OFF")).thenReturn("INFO");
         when(properties.getProperty("capture.level", "TRACE")).thenReturn("INFO");
 
-        assertThat(getInstance().getCaptureLevel(), is(Level.INFO));
+        assertThat(TestLoggerFactory.createInstance(properties).getCaptureLevel(), is(Level.INFO));
     }
 
     @Test
-    @PrepareForTest(TestLoggerFactory.class)
-    public void captureLevelInvalidInOverridableProperties() throws Exception {
+    void captureLevelInvalidInOverridableProperties() throws Exception {
         final OverridableProperties properties = mock(OverridableProperties.class);
-        whenNew(OverridableProperties.class).withArguments("slf4jtest").thenReturn(properties);
         when(properties.getProperty("print.level", "OFF")).thenReturn("INFO");
         final String invalidLevelName = "nonsense";
         when(properties.getProperty("capture.level", "TRACE")).thenReturn(invalidLevelName);
 
         final IllegalStateException illegalStateException =
-                assertThrows(IllegalStateException.class, TestLoggerFactory::getInstance);
+                assertThrows(
+                        IllegalStateException.class, () -> TestLoggerFactory.createInstance(properties));
         assertThat(
                 illegalStateException.getMessage(),
                 is(
@@ -314,26 +304,29 @@ public class TestLoggerFactoryTests {
     }
 
     @Test
-    @PrepareForTest(TestLoggerFactory.class)
-    public void ioExceptionAtPropertiesLoading() throws Exception {
-        IOException ioException = new IOException();
-        whenNew(OverridableProperties.class).withArguments("slf4jtest").thenThrow(ioException);
-
-        final UncheckedIOException uncheckedIOException =
-                assertThrows(UncheckedIOException.class, TestLoggerFactory::getInstance);
-        assertThat(uncheckedIOException.getCause(), is(ioException));
-    }
-
-    @Test
-    public void setLevel() {
+    void setLevel() {
         for (Level printLevel : Level.values()) {
             getInstance().setPrintLevel(printLevel);
             assertThat(getInstance().getPrintLevel(), is(printLevel));
         }
     }
 
-    @After
-    public void resetLoggerFactory() {
+    @Test
+    void defaultConstructor() {
+        TestLoggerFactory testLoggerFactory = new TestLoggerFactory();
+        assertEquals(Level.TRACE, testLoggerFactory.getCaptureLevel(), "capture level");
+        assertNull(testLoggerFactory.getPrintLevel(), "print level");
+    }
+
+    @Test
+    void oneArgConstructor() {
+        TestLoggerFactory testLoggerFactory = new TestLoggerFactory(Level.INFO);
+        assertEquals(Level.TRACE, testLoggerFactory.getCaptureLevel(), "capture level");
+        assertEquals(Level.INFO, testLoggerFactory.getPrintLevel(), "print level");
+    }
+
+    @AfterEach
+    void resetLoggerFactory() {
         try {
             TestLoggerFactory.reset();
             getInstance().setPrintLevel(null);
