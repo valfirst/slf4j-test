@@ -149,3 +149,42 @@ Place a file called slf4jtest.properties on the classpath with the following
 line in it:
 
     print.level=INFO
+
+### Testing Code Using java.util.logging
+Although this module is named SLF4J Test, it can be used to test code using
+other test API's as well. In most cases, it is just a matter of placing the
+proper bridge on the test classpath, see e.g.
+[Bridging legacy APIs](https://www.slf4j.org/legacy.html).
+But in case of java.util.logging, there is a little more work than adding
+`jul-to-slf4j` to the classpath. Normally,
+an application will create a `logging.properties` file containing
+
+    handlers = org.slf4j.bridge.SLF4JBridgeHandler
+
+and set the system property `java.util.logging.config.file` on the
+command line to the full path of the file. But this is not
+practical for running unit tests. Instead, the configuration is done
+programatically in the test code.
+
+SLF4J Test has code to make this easier. Calling
+[`JulConfig.setup()`](apidocs/com/github/valfirst/slf4jtest/JulConfig.html#setup--)
+will do this for you. You should call this method before running any
+test that requires java.util.logging to be configured. Calling this method more
+than once has no effect, so you can safely call it before tests in all test
+suites with this requirement, e.g. in a `@BeforeClass` method if using Junit 4.
+
+If you use Junit 5, it is even easier. There is a Junit 5 extension
+[`JulConfigExtension`](apidocs/apidocs/com/github/valfirst/slf4jtest/JulConfigExtension.html.html)
+doing this declaratively. For example
+
+    import com.github.valfirst.slf4jtest.JulConfigExtension;
+    import org.junit.jupiter.api.extension.ExtendWith;
+    
+    @ExtendWith(JulConfigExtension.class)
+    class JulLoggingTests {
+        @Test
+        void testJulLogging() {
+            ...
+        }
+        ...
+    }
