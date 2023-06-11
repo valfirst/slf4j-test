@@ -196,13 +196,20 @@
                 <version>3.5.0</version>
                 <configuration>
                     <source>${jdk.version}</source>
-                    <detectLinks />
-                    <links combine.children="append">
-                        <link>https://www.slf4j.org/apidocs</link>
-                        <link>http://projects.lidalia.org.uk/lidalia-lang/apidocs</link>
-                        <link>http://projects.lidalia.org.uk/lidalia-test/apidocs</link>
-                        <link>http://projects.lidalia.org.uk/lidalia-slf4j-ext/apidocs</link>
+                    <links>
+                        <link>https://www.slf4j.org/apidocs/</link>
+                        <link>https://junit.org/junit4/javadoc/latest/</link>
                     </links>
+                    <offlineLinks>
+                        <offlineLink>
+                            <url>https://www.javadoc.io/doc/org.assertj/assertj-core/latest/</url>
+                            <location>../../src/site/javadoc-links/assertj-core</location>
+                        </offlineLink>
+                        <offlineLink>
+                            <url>https://junit.org/junit5/docs/current/api/org.junit.jupiter.api/</url>
+                            <location>../../src/site/javadoc-links/junit5-api</location>
+                        </offlineLink>
+                    </offlineLinks>
                 </configuration>
                 <executions>
                     <execution>
