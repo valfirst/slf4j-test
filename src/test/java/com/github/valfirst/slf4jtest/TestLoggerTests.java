@@ -783,6 +783,22 @@ class TestLoggerTests {
         assertEquals(EnumSet.allOf(Level.class), testLogger.getEnabledLevels());
     }
 
+    @Test
+    void clearAllChangesAllLevelsAllThreads() throws Exception {
+        testLogger.setEnabledLevelsForAllThreads(WARN, ERROR);
+        Thread t = new Thread(testLogger::clearAll);
+        t.start();
+        t.join();
+        assertEquals(EnumSet.allOf(Level.class), testLogger.getEnabledLevels());
+    }
+
+    @Test
+    void clearChangesLevelsAllThreads() throws Exception {
+        testLogger.setEnabledLevelsForAllThreads(WARN, ERROR);
+        testLogger.clear();
+        assertEquals(EnumSet.allOf(Level.class), testLogger.getEnabledLevels());
+    }
+
     @ParameterizedTest
     @EnumSource(names = {"INFO", "DEBUG", "TRACE"})
     @StdIo

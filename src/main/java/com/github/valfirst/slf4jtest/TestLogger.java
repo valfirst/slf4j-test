@@ -46,8 +46,10 @@ public class TestLogger implements Logger {
     private final ThreadLocal<List<LoggingEvent>> loggingEvents = new ThreadLocal<>(ArrayList::new);
 
     private final List<LoggingEvent> allLoggingEvents = new CopyOnWriteArrayList<>();
-    private volatile ThreadLocal<Set<Level>> enabledLevels =
-            new ThreadLocal<>(Collections.unmodifiableSet(EnumSet.allOf(Level.class)));
+
+    private static final Set<Level> allLevels =
+            Collections.unmodifiableSet(EnumSet.allOf(Level.class));
+    private volatile ThreadLocal<Set<Level>> enabledLevels = new ThreadLocal<>(allLevels);
 
     TestLogger(final String name, final TestLoggerFactory testLoggerFactory) {
         this.name = name;
@@ -64,7 +66,7 @@ public class TestLogger implements Logger {
      */
     public void clear() {
         loggingEvents.get().clear();
-        enabledLevels.remove();
+        enabledLevels.set(allLevels);
     }
 
     /**
@@ -75,6 +77,7 @@ public class TestLogger implements Logger {
         allLoggingEvents.clear();
         loggingEvents.reset();
         enabledLevels.reset();
+        enabledLevels = new ThreadLocal<>(allLevels);
     }
 
     /**
@@ -512,12 +515,6 @@ public class TestLogger implements Logger {
      * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be
      * passed explicitly to this method.
      *
-     * <p>Note that this modifies the default enabled levels in all threads. After calling this
-     * method, {@link #clear()} and {@link #clearAll()} will set the enabled levels to the value
-     * passed to this method, not all levels. You will have to call this method with {@code
-     * EnumSet.allOf(Level.class)} (or {@link #setEnabledLevelsForAllThreads(Level...)} with all the
-     * levels) to return to standard behaviour.
-     *
      * @param enabledLevelsForAllThreads levels which will be considered enabled for this logger IN
      *     ALL THREADS
      */
@@ -529,12 +526,6 @@ public class TestLogger implements Logger {
      * The conventional hierarchical notion of Levels, where info being enabled implies warn and error
      * being enabled, is not a requirement of the SLF4J API, so all levels you wish to enable must be
      * passed explicitly to this method.
-     *
-     * <p>Note that this modifies the default enabled levels in all threads. After calling this
-     * method, {@link #clear()} and {@link #clearAll()} will set the enabled levels to the value
-     * passed to this method, not all levels. You will have to call this method with all levels (or
-     * {@link #setEnabledLevelsForAllThreads(Collection)} with {@code EnumSet.allOf(Level.class)}) to
-     * return to standard behaviour.
      *
      * @param enabledLevelsForAllThreads levels which will be considered enabled for this logger IN
      *     ALL THREADS
