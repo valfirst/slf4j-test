@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
-import org.slf4j.MDC;
 import org.slf4j.Marker;
 import org.slf4j.event.Level;
 import org.slf4j.helpers.FormattingTuple;
@@ -467,7 +466,7 @@ public class TestLogger implements Logger {
     }
 
     private Map<String, String> mdc() {
-        return ofNullable(MDC.getCopyOfContextMap()).orElseGet(Collections::emptyMap);
+        return TestMDCAdapter.getInstance().getContextMap();
     }
 
     private void optionallyPrint(final LoggingEvent event) {

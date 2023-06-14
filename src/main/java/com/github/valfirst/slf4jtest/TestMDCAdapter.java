@@ -3,8 +3,6 @@ package com.github.valfirst.slf4jtest;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 import org.slf4j.MDC;
 import org.slf4j.helpers.BasicMDCAdapter;
 
@@ -94,9 +92,7 @@ public class TestMDCAdapter extends BasicMDCAdapter {
     }
 
     /**
-     * Return a copy of the current thread's context map. It is a {@link SortedMap}, using the natural
-     * order of the keys. This makes it easier to spot discrepancies if an assertion fails. The
-     * returned map is unmodifiable. {@code null} is returned if
+     * Return a copy of the current thread's context map. {@code null} is returned if
      *
      * <ul>
      *   <li>The MDC functionality is disabled, c.f. <code>setEnable</code>, or
@@ -114,20 +110,24 @@ public class TestMDCAdapter extends BasicMDCAdapter {
             if (returnNullCopyWhenMdcNotSet) {
                 return null;
             } else {
-                return Collections.emptyMap();
+                return new HashMap<>();
             }
         } else {
-            return Collections.unmodifiableMap(new TreeMap<>(map));
+            return new HashMap<>(map);
         }
+    }
+
+    // Internal access
+    Map<String, String> getContextMap() {
+        Map<String, String> map = value.get();
+        return map == null ? Collections.emptySortedMap() : map;
     }
 
     @Override
     public void setContextMap(final Map<String, String> contextMap) {
         if (!enable) return;
-        if (contextMap == null) {
-            clear();
-            return;
-        }
+        clear();
+        if (contextMap == null) return;
         if (contextMap.keySet().contains(null))
             throw new IllegalArgumentException("key cannot be null");
         if (!allowNullValues && contextMap.values().contains(null))
