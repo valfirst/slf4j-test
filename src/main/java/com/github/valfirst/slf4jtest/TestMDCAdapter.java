@@ -3,6 +3,7 @@ package com.github.valfirst.slf4jtest;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import org.slf4j.MDC;
 import org.slf4j.helpers.BasicMDCAdapter;
 
@@ -110,10 +111,10 @@ public class TestMDCAdapter extends BasicMDCAdapter {
             if (returnNullCopyWhenMdcNotSet) {
                 return null;
             } else {
-                return new HashMap<>();
+                return new TreeMap<>();
             }
         } else {
-            return new HashMap<>(map);
+            return new TreeMap<>(map);
         }
     }
 

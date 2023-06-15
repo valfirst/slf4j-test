@@ -409,7 +409,7 @@ public class LoggingEvent {
         this.creatingLogger = creatingLogger;
         this.level = requireNonNull(level);
         this.mdc =
-                mdc.isEmpty()
+                requireNonNull(mdc).isEmpty()
                         ? Collections.emptySortedMap()
                         : Collections.unmodifiableSortedMap(new TreeMap<>(mdc));
         this.marker = requireNonNull(marker);
