@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.SortedMap;
 import java.util.TreeMap;
 import org.slf4j.Marker;
 import org.slf4j.event.Level;
@@ -46,7 +47,7 @@ public class LoggingEvent {
             new DateTimeFormatterBuilder().appendInstant(3).toFormatter();
 
     private final Level level;
-    private final Map<String, String> mdc;
+    private final SortedMap<String, String> mdc;
     private final Optional<Marker> marker;
     private final Optional<Throwable> throwable;
     private final String message;
@@ -319,7 +320,7 @@ public class LoggingEvent {
     }
 
     public LoggingEvent(final Level level, final String message, final Object... arguments) {
-        this(level, Collections.emptyMap(), empty(), empty(), message, arguments);
+        this(level, Collections.emptySortedMap(), empty(), empty(), message, arguments);
     }
 
     public LoggingEvent(
@@ -327,12 +328,12 @@ public class LoggingEvent {
             final Throwable throwable,
             final String message,
             final Object... arguments) {
-        this(level, Collections.emptyMap(), empty(), ofNullable(throwable), message, arguments);
+        this(level, Collections.emptySortedMap(), empty(), ofNullable(throwable), message, arguments);
     }
 
     public LoggingEvent(
             final Level level, final Marker marker, final String message, final Object... arguments) {
-        this(level, Collections.emptyMap(), ofNullable(marker), empty(), message, arguments);
+        this(level, Collections.emptySortedMap(), ofNullable(marker), empty(), message, arguments);
     }
 
     public LoggingEvent(
@@ -343,7 +344,7 @@ public class LoggingEvent {
             final Object... arguments) {
         this(
                 level,
-                Collections.emptyMap(),
+                Collections.emptySortedMap(),
                 ofNullable(marker),
                 ofNullable(throwable),
                 message,
@@ -408,7 +409,9 @@ public class LoggingEvent {
         this.creatingLogger = creatingLogger;
         this.level = requireNonNull(level);
         this.mdc =
-                mdc == null ? Collections.emptyMap() : Collections.unmodifiableMap(new TreeMap<>(mdc));
+                requireNonNull(mdc).isEmpty()
+                        ? Collections.emptySortedMap()
+                        : Collections.unmodifiableSortedMap(new TreeMap<>(mdc));
         this.marker = requireNonNull(marker);
         this.throwable = requireNonNull(throwable);
         this.message = message;
@@ -420,10 +423,13 @@ public class LoggingEvent {
     }
 
     /**
-     * Get the MDC of the event. This is a copy of the MDC when the event was created. The returned
-     * value is an unmodifiable {@link java.util.SortedMap} with natural ordering of the keys.
+     * Get the MDC of the event. For events created by {@link TestLogger}, this is an unmodifiable
+     * copy of the MDC of the the thread when the event was created. For events constructed directly,
+     * this is unmodifiable copy of the MDC passed to the constructor, if any. If no MDC was used for
+     * construction, the copy is an empty map. The copy is a {@link SortedMap}, in order to make it
+     * easier to spot discrepancies in case an assertion fails. Natural ordering of the keys is used.
      */
-    public Map<String, String> getMdc() {
+    public SortedMap<String, String> getMdc() {
         return mdc;
     }
 

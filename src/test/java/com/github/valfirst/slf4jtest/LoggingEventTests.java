@@ -16,7 +16,6 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.Mockito.mock;
@@ -543,9 +542,10 @@ class LoggingEventTests {
     }
 
     @Test
-    void nullMdcGivesEmptyMdc() {
-        LoggingEvent event = new LoggingEvent(level, (Map<String, String>) null, message);
-        assertEquals(Collections.emptyMap(), event.getMdc());
+    void nullMdcThrowsNullPointerException() {
+        assertThrows(
+                NullPointerException.class,
+                () -> new LoggingEvent(level, (Map<String, String>) null, message));
     }
 
     public interface TriFunction<A, B, C, R> {
