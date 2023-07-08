@@ -306,3 +306,50 @@ configuration, use
 
     TestMDCAdapter.getInstance().restoreOptions();
 
+### Using the Fluent API
+From SLF4J version 2.0, there is a new fluent logging API.
+It allows writing code like
+
+    logger.atInfo().setMessage("With an argument {}")
+        .addArgument(() -> myObj.calculateValue())
+        .addMarker("ForYourEyesOnly").log();
+
+The `atInfo()` method returns a `LoggingEventBuilder` which is used to
+build the event and finally log it.
+
+If logging at INFO level is not enabled, a NOOP `LoggingEventBuilder` is 
+returned by `atInfo`. This means the lambda on the second line will not be
+executed, thus saving the overhead if the message is not logged.
+
+Note that it is possible to add multiple markers to an event, 
+which is not possible with the classic API.
+
+SLF4J Test uses the `TestLoggingEventBuilder`, which is a modified version of
+the `DefaultLoggingEventBuilder` of SLF4J.
+
+Creating an SLF4J Test `LoggingEvent` to compare against can be done
+in the classic way like
+
+    LoggingEvent.info(
+        MarkerFactory.getMarker("ForYourEyesOnly"),
+        "With an argument {}",
+        myObj.calculateValue());
+
+Alternatively, you can create the `LoggingEvent` from a an existing SLF4J
+logging event, like
+
+    
+    LoggingEvent.fromSlf4jEvent(
+        new TestLoggingEventBuilder(null, Level.INFO)
+            .setMessage("With an argument {}")
+            .addArgument(() -> myObj.calculateValue())
+            .addMarker(MarkerFactory.getMarker("ForYourEyesOnly"))
+            .toLoggingEvent());
+
+This approach is neccessary if you use the features available
+in the fluent API only. This includes multiple markers and key/value pairs.
+
+The `TestLoggingEventBuilder` adds the `toLoggingEvent` method
+to access the created event. Please note that the returned value is an
+`org.slf4j.event.LoggingEvent`,
+which is different from `com.github.valfirst.slf4jtest.LoggingEvent`.

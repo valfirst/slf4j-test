@@ -84,7 +84,7 @@ class TestLoggerAssertionsTest {
             assertThatThrownBy(() -> assertions.hasLogged(event))
                     .isInstanceOf(AssertionError.class)
                     .hasMessage(
-                            "Failed to find event:\n  LoggingEvent{level=WARN, mdc={another=slightly different value, key=value}, marker=Optional.empty, throwable=Optional.empty, message='Something may be wrong', arguments=[]}"
+                            "Failed to find event:\n  LoggingEvent{level=WARN, mdc={another=slightly different value, key=value}, markers=[], keyValuePairs=[], throwable=Optional.empty, message='Something may be wrong', arguments=[]}"
                                     + loggerContainedMessage(loggingEvent));
         }
 
@@ -232,7 +232,7 @@ class TestLoggerAssertionsTest {
                                     () -> performAssert(loggerAssert, Level.WARN, "Something may be wrong"))
                             .isInstanceOf(AssertionError.class)
                             .hasMessage(
-                                    "Failed to find event:\n  LoggingEvent{level=WARN, mdc={}, marker=Optional.empty, throwable=Optional.empty, message='Something may be wrong', arguments=[]}"
+                                    "Failed to find event:\n  LoggingEvent{level=WARN, mdc={}, markers=[], keyValuePairs=[], throwable=Optional.empty, message='Something may be wrong', arguments=[]}"
                                             + loggerContainedMessage());
                 }
 
@@ -247,7 +247,7 @@ class TestLoggerAssertionsTest {
                                                     loggerAssert, Level.WARN, "Something may be wrong", "Extra context"))
                             .isInstanceOf(AssertionError.class)
                             .hasMessage(
-                                    "Failed to find event:\n  LoggingEvent{level=WARN, mdc={}, marker=Optional.empty, throwable=Optional.empty, message='Something may be wrong', arguments=[Extra context]}"
+                                    "Failed to find event:\n  LoggingEvent{level=WARN, mdc={}, markers=[], keyValuePairs=[], throwable=Optional.empty, message='Something may be wrong', arguments=[Extra context]}"
                                             + loggerContainedMessage(loggingEvent));
                 }
 
@@ -264,7 +264,7 @@ class TestLoggerAssertionsTest {
                                                     loggerAssert, Level.WARN, "Something may be wrong", "Extra context"))
                             .isInstanceOf(AssertionError.class)
                             .hasMessage(
-                                    "Failed to find event:\n  LoggingEvent{level=WARN, mdc={}, marker=Optional.empty, throwable=Optional.empty, message='Something may be wrong', arguments=[Extra context]}"
+                                    "Failed to find event:\n  LoggingEvent{level=WARN, mdc={}, markers=[], keyValuePairs=[], throwable=Optional.empty, message='Something may be wrong', arguments=[Extra context]}"
                                             + loggerContainedMessage(firstEvent, secondEvent));
                 }
 
@@ -283,7 +283,7 @@ class TestLoggerAssertionsTest {
                                                     "Another"))
                             .isInstanceOf(AssertionError.class)
                             .hasMessage(
-                                    "Failed to find event:\n  LoggingEvent{level=WARN, mdc={}, marker=Optional.empty, throwable=Optional.empty, message='Something may be wrong', arguments=[Extra context, Another]}"
+                                    "Failed to find event:\n  LoggingEvent{level=WARN, mdc={}, markers=[], keyValuePairs=[], throwable=Optional.empty, message='Something may be wrong', arguments=[Extra context, Another]}"
                                             + loggerContainedMessage(loggingEvent));
                 }
 
@@ -331,7 +331,7 @@ class TestLoggerAssertionsTest {
                                                     loggerAssert, throwable, Level.ERROR, "There was a problem!", "context"))
                             .isInstanceOf(AssertionError.class)
                             .hasMessage(
-                                    "Failed to find event:\n  LoggingEvent{level=ERROR, mdc={}, marker=Optional.empty, throwable=Optional[throwable], message='There was a problem!', arguments=[context]}"
+                                    "Failed to find event:\n  LoggingEvent{level=ERROR, mdc={}, markers=[], keyValuePairs=[], throwable=Optional[throwable], message='There was a problem!', arguments=[context]}"
                                             + loggerContainedMessage(loggingEvent));
                 }
 
@@ -344,7 +344,7 @@ class TestLoggerAssertionsTest {
                                     () -> performAssert(loggerAssert, throwable, Level.ERROR, "There was a problem!"))
                             .isInstanceOf(AssertionError.class)
                             .hasMessage(
-                                    "Failed to find event:\n  LoggingEvent{level=ERROR, mdc={}, marker=Optional.empty, throwable=Optional[throwable], message='There was a problem!', arguments=[]}"
+                                    "Failed to find event:\n  LoggingEvent{level=ERROR, mdc={}, markers=[], keyValuePairs=[], throwable=Optional[throwable], message='There was a problem!', arguments=[]}"
                                             + loggerContainedMessage(loggingEvent));
                 }
 
@@ -477,7 +477,7 @@ class TestLoggerAssertionsTest {
                 assertThatThrownBy(() -> performAssert(loggerAssert, Level.WARN, "Something may be wrong"))
                         .isInstanceOf(AssertionError.class)
                         .hasMessage(
-                                "Found LoggingEvent{level=WARN, mdc={}, marker=Optional.empty, throwable=Optional.empty, message='Something may be wrong', arguments=[]}, even though we expected not to");
+                                "Found LoggingEvent{level=WARN, mdc={}, markers=[], keyValuePairs=[], throwable=Optional.empty, message='Something may be wrong', arguments=[]}, even though we expected not to");
             }
 
             @Test
@@ -574,7 +574,7 @@ class TestLoggerAssertionsTest {
                                                     loggerAssert, throwable, Level.ERROR, "There was a problem!", "context"))
                             .isInstanceOf(AssertionError.class)
                             .hasMessage(
-                                    "Found LoggingEvent{level=ERROR, mdc={}, marker=Optional.empty, throwable=Optional[throwable], message='There was a problem!', arguments=[context]}, even though we expected not to");
+                                    "Found LoggingEvent{level=ERROR, mdc={}, markers=[], keyValuePairs=[], throwable=Optional[throwable], message='There was a problem!', arguments=[context]}, even though we expected not to");
                 }
 
                 @Test
@@ -586,7 +586,7 @@ class TestLoggerAssertionsTest {
                                     () -> performAssert(loggerAssert, throwable, Level.ERROR, "There was a problem!"))
                             .isInstanceOf(AssertionError.class)
                             .hasMessage(
-                                    "Found LoggingEvent{level=ERROR, mdc={}, marker=Optional.empty, throwable=Optional[throwable], message='There was a problem!', arguments=[]}, even though we expected not to");
+                                    "Found LoggingEvent{level=ERROR, mdc={}, markers=[], keyValuePairs=[], throwable=Optional[throwable], message='There was a problem!', arguments=[]}, even though we expected not to");
                 }
 
                 @Test
