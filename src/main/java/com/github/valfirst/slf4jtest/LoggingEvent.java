@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import org.slf4j.Marker;
+import org.slf4j.event.KeyValuePair;
 import org.slf4j.event.Level;
 import org.slf4j.helpers.MessageFormatter;
 
@@ -28,7 +29,8 @@ import org.slf4j.helpers.MessageFormatter;
  * <ul>
  *   <li>{@link #getLevel()}
  *   <li>{@link #getMdc()}
- *   <li>{@link #getMarker()}
+ *   <li>{@link #getMarkers()}
+ *   <li>{@link #getKeyValuePairs()}
  *   <li>{@link #getThrowable()}
  *   <li>{@link #getMessage()}
  *   <li>{@link #getArguments()}
@@ -45,10 +47,12 @@ import org.slf4j.helpers.MessageFormatter;
 public class LoggingEvent {
     private static final DateTimeFormatter ISO_FORMAT =
             new DateTimeFormatterBuilder().appendInstant(3).toFormatter();
+    private static final Object[] emptyObjectArray = {};
 
     private final Level level;
     private final SortedMap<String, String> mdc;
-    private final Optional<Marker> marker;
+    private final List<Marker> markers;
+    private final List<KeyValuePair> keyValuePairs;
     private final Optional<Throwable> throwable;
     private final String message;
     private final List<Object> arguments;
@@ -319,6 +323,40 @@ public class LoggingEvent {
         return new LoggingEvent(Level.ERROR, mdc, marker, throwable, message, arguments);
     }
 
+    /**
+     * Create a {@link LoggingEvent} from an SLF4J {@link org.slf4j.event.LoggingEvent}.
+     *
+     * @since 3.0.0
+     */
+    public static LoggingEvent fromSlf4jEvent(org.slf4j.event.LoggingEvent event) {
+        return fromSlf4jEvent(event, Collections.emptyMap());
+    }
+
+    /**
+     * Create a {@link LoggingEvent} with an MDC from an SLF4J {@link org.slf4j.event.LoggingEvent}.
+     *
+     * @since 3.0.0
+     */
+    public static LoggingEvent fromSlf4jEvent(
+            org.slf4j.event.LoggingEvent event, Map<String, String> mdc) {
+        List<Marker> markers = event.getMarkers();
+        List<KeyValuePair> keyValuePairs = event.getKeyValuePairs();
+        Object[] arguments = event.getArgumentArray();
+        return new LoggingEvent(
+                empty(),
+                event.getLevel(),
+                mdc,
+                markers == null
+                        ? Collections.emptyList()
+                        : Collections.unmodifiableList(new ArrayList<>(markers)),
+                keyValuePairs == null
+                        ? Collections.emptyList()
+                        : Collections.unmodifiableList(new ArrayList<>(keyValuePairs)),
+                ofNullable(event.getThrowable()),
+                event.getMessage(),
+                arguments == null ? emptyObjectArray : arguments);
+    }
+
     public LoggingEvent(final Level level, final String message, final Object... arguments) {
         this(level, Collections.emptySortedMap(), empty(), empty(), message, arguments);
     }
@@ -394,14 +432,23 @@ public class LoggingEvent {
             final Optional<Throwable> throwable,
             final String message,
             final Object... arguments) {
-        this(empty(), level, mdc, marker, throwable, message, arguments);
+        this(
+                empty(),
+                level,
+                mdc,
+                marker.isPresent() ? Collections.singletonList(marker.get()) : Collections.emptyList(),
+                Collections.emptyList(),
+                throwable,
+                message,
+                arguments);
     }
 
     LoggingEvent(
             final Optional<TestLogger> creatingLogger,
             final Level level,
             final Map<String, String> mdc,
-            final Optional<Marker> marker,
+            final List<Marker> markers,
+            final List<KeyValuePair> keyValuePairs,
             final Optional<Throwable> throwable,
             final String message,
             final Object... arguments) {
@@ -412,10 +459,14 @@ public class LoggingEvent {
                 requireNonNull(mdc).isEmpty()
                         ? Collections.emptySortedMap()
                         : Collections.unmodifiableSortedMap(new TreeMap<>(mdc));
-        this.marker = requireNonNull(marker);
+        this.markers = markers;
+        this.keyValuePairs = keyValuePairs;
         this.throwable = requireNonNull(throwable);
         this.message = message;
-        this.arguments = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(arguments)));
+        this.arguments =
+                arguments.length == 0
+                        ? Collections.emptyList()
+                        : Collections.unmodifiableList(new ArrayList<>(Arrays.asList(arguments)));
     }
 
     public Level getLevel() {
@@ -433,8 +484,39 @@ public class LoggingEvent {
         return mdc;
     }
 
+    /**
+     * Get the marker of the event.
+     *
+     * @deprecated As events created using the SLF4J fluent API can contain multiple markers, this
+     *     method is deprecated in favor of {@link #getMarkers}.
+     * @throws IllegalStateException if the event has more than one marker.
+     */
+    @Deprecated
     public Optional<Marker> getMarker() {
-        return marker;
+        if (markers.isEmpty()) return empty();
+        if (markers.size() == 1) return Optional.of(markers.get(0));
+        throw new IllegalStateException("LoggingEvent has more than one marker");
+    }
+
+    /**
+     * Get the markers of the event. If the event has no markers, an empty list is returned.
+     *
+     * @return an unmodifiable copy of the markers when the event was created.
+     * @since 3.0.0
+     */
+    public List<Marker> getMarkers() {
+        return markers;
+    }
+
+    /**
+     * Get the key/value pairs of the event. If the event has no key/value pairs, an empty list is
+     * returned.
+     *
+     * @return an unmodifiable copy of the key/value pairs when the event was created.
+     * @since 3.0.0
+     */
+    public List<KeyValuePair> getKeyValuePairs() {
+        return keyValuePairs;
     }
 
     public String getMessage() {
@@ -530,7 +612,8 @@ public class LoggingEvent {
         LoggingEvent that = (LoggingEvent) o;
         return level == that.level
                 && Objects.equals(mdc, that.mdc)
-                && Objects.equals(marker, that.marker)
+                && Objects.equals(markers, that.markers)
+                && Objects.equals(keyValuePairs, that.keyValuePairs)
                 && Objects.equals(throwable, that.throwable)
                 && Objects.equals(message, that.message)
                 && Objects.equals(arguments, that.arguments);
@@ -538,7 +621,7 @@ public class LoggingEvent {
 
     @Override
     public int hashCode() {
-        return Objects.hash(level, mdc, marker, throwable, message, arguments);
+        return Objects.hash(level, mdc, markers, keyValuePairs, throwable, message, arguments);
     }
 
     @Override
@@ -548,13 +631,14 @@ public class LoggingEvent {
                 + level
                 + ", mdc="
                 + mdc
-                + ", marker="
-                + marker
+                + ", markers="
+                + markers
+                + ", keyValuePairs="
+                + keyValuePairs
                 + ", throwable="
                 + throwable
-                + ", message='"
-                + message
-                + '\''
+                + ", message="
+                + (message == null ? "null" : '\'' + message + '\'')
                 + ", arguments="
                 + arguments
                 + '}';

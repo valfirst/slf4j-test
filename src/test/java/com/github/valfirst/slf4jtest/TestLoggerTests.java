@@ -25,11 +25,13 @@ import static org.slf4j.event.Level.TRACE;
 import static org.slf4j.event.Level.WARN;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -932,5 +934,42 @@ class TestLoggerTests {
                     levelMarkerEnabledMap.get(disabledLevel).test(testLogger, marker),
                     "Logger level set to " + levelToTest + " means " + levelToTest + " should be disabled");
         }
+    }
+
+    @Test
+    void fluentFull() {
+        testLogger
+                .atWarn()
+                .addMarker(marker)
+                .addKeyValue("KEY1", 1)
+                .addKeyValue("KEY2", () -> 2L)
+                .setCause(throwable)
+                .setMessage(() -> MESSAGE)
+                .addArgument(arg1)
+                .addArgument(() -> arg2)
+                .addArgument("arg3")
+                .log();
+        List<LoggingEvent> events = testLogger.getLoggingEvents();
+        assertThat(events.size(), is(1));
+        LoggingEvent event = events.get(0);
+        assertThat(event.getLevel(), is(WARN));
+        assertThat(event.getMdc(), is(mdcValues));
+        assertThat(event.getMarkers(), is(asList(marker)));
+        List<TestLoggingEventBuilder.TestKeyValuePair> expectedKeyValues =
+                asList(
+                        new TestLoggingEventBuilder.TestKeyValuePair("KEY1", Integer.valueOf(1)),
+                        new TestLoggingEventBuilder.TestKeyValuePair("KEY2", Long.valueOf(2L)));
+        assertThat(event.getKeyValuePairs(), is(expectedKeyValues));
+        assertThat(event.getThrowable(), is(Optional.of(throwable)));
+        assertThat(event.getMessage(), is(MESSAGE));
+        assertThat(event.getArguments(), is(asList(args)));
+    }
+
+    @Test
+    void fluentCaptureNotEnabled() {
+        TestLoggerFactory factory = new TestLoggerFactory(null, DEBUG);
+        TestLogger testLogger = new TestLogger(LOGGER_NAME, factory);
+        testLogger.atTrace().log();
+        assertThat(testLogger.getLoggingEvents(), is(Collections.emptyList()));
     }
 }

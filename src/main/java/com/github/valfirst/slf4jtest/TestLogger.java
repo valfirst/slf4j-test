@@ -14,9 +14,12 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
+import org.slf4j.event.KeyValuePair;
 import org.slf4j.event.Level;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
+import org.slf4j.spi.LoggingEventAware;
+import org.slf4j.spi.LoggingEventBuilder;
 import uk.org.lidalia.lang.ThreadLocal;
 
 /**
@@ -38,7 +41,7 @@ import uk.org.lidalia.lang.ThreadLocal;
  * assumptions about this hierarchy.
  */
 @SuppressWarnings({"PMD.ExcessivePublicCount", "PMD.TooManyMethods"})
-public class TestLogger implements Logger {
+public class TestLogger implements Logger, LoggingEventAware {
 
     private final String name;
     private final TestLoggerFactory testLoggerFactory;
@@ -57,6 +60,12 @@ public class TestLogger implements Logger {
 
     public String getName() {
         return name;
+    }
+
+    /** Make a {@link TestLoggingEventBuilder}. */
+    @Override
+    public LoggingEventBuilder makeLoggingEventBuilder(Level level) {
+        return new TestLoggingEventBuilder(this, level);
     }
 
     /**
@@ -415,6 +424,14 @@ public class TestLogger implements Logger {
         log(Level.ERROR, marker, msg, throwable);
     }
 
+    @Override
+    public void log(org.slf4j.event.LoggingEvent event) {
+        // The fluent logging API calls this method only if the level is enabled.
+        if (enabledByGlobalCaptureLevel(event.getLevel())) {
+            addLoggingEvent(LoggingEvent.fromSlf4jEvent(event, mdc()));
+        }
+    }
+
     private void log(final Level level, final String format, final Object... args) {
         log(level, format, Optional.empty(), args);
     }
@@ -450,14 +467,35 @@ public class TestLogger implements Logger {
             final Optional<Throwable> throwable,
             final String format,
             final Object... args) {
+        addLoggingEvent(
+                level,
+                marker.isPresent() ? Collections.singletonList(marker.get()) : Collections.emptyList(),
+                Collections.emptyList(),
+                throwable,
+                format,
+                args);
+    }
+
+    private void addLoggingEvent(
+            final Level level,
+            final List<Marker> markers,
+            final List<KeyValuePair> keyValuePairs,
+            final Optional<Throwable> throwable,
+            final String format,
+            final Object... args) {
         if (enabledLevels.get().contains(level) && enabledByGlobalCaptureLevel(level)) {
             final LoggingEvent event =
-                    new LoggingEvent(Optional.of(this), level, mdc(), marker, throwable, format, args);
-            allLoggingEvents.add(event);
-            loggingEvents.get().add(event);
-            testLoggerFactory.addLoggingEvent(event);
-            optionallyPrint(event);
+                    new LoggingEvent(
+                            Optional.of(this), level, mdc(), markers, keyValuePairs, throwable, format, args);
+            addLoggingEvent(event);
         }
+    }
+
+    private void addLoggingEvent(final LoggingEvent event) {
+        allLoggingEvents.add(event);
+        loggingEvents.get().add(event);
+        testLoggerFactory.addLoggingEvent(event);
+        optionallyPrint(event);
     }
 
     private boolean enabledByGlobalCaptureLevel(Level level) {

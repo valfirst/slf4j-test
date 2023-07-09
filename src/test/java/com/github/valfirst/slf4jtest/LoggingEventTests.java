@@ -14,11 +14,11 @@ import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.slf4j.event.Level.DEBUG;
 import static org.slf4j.event.Level.ERROR;
@@ -46,6 +46,7 @@ import org.junitpioneer.jupiter.StdIo;
 import org.junitpioneer.jupiter.StdOut;
 import org.mockito.MockedStatic;
 import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import org.slf4j.event.Level;
 
 class LoggingEventTests {
@@ -54,7 +55,7 @@ class LoggingEventTests {
 
     private final Level level = TRACE;
     private final Map<String, String> mdc = Collections.singletonMap("key", "value");
-    private final Marker marker = mock(Marker.class);
+    private final Marker marker = MarkerFactory.getMarker("marker");
     private final Throwable throwable = new Throwable();
     private final String message = "message";
     private final Object arg1 = "arg1";
@@ -546,6 +547,63 @@ class LoggingEventTests {
         assertThrows(
                 NullPointerException.class,
                 () -> new LoggingEvent(level, (Map<String, String>) null, message));
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void getMarkerThrowsIllegalStateExceptionOnMultipleMarkers() {
+        TestLoggingEventBuilder builder = new TestLoggingEventBuilder(null, Level.INFO);
+        builder.addMarker(marker).addMarker(marker);
+        LoggingEvent event = LoggingEvent.fromSlf4jEvent(builder.toLoggingEvent());
+        assertThrows(IllegalStateException.class, () -> event.getMarker());
+    }
+
+    @Test
+    void fromSlf4jEventEmpty() {
+        LoggingEvent event =
+                LoggingEvent.fromSlf4jEvent(new TestLoggingEventBuilder(null, INFO).toLoggingEvent());
+        assertThat(event.getLevel(), is(INFO));
+        assertThat(event.getMdc(), is(Collections.emptyMap()));
+        assertThat(event.getMarkers(), is(Collections.emptyList()));
+        assertThat(event.getKeyValuePairs(), is(Collections.emptyList()));
+        assertThat(event.getThrowable(), is(empty()));
+        assertThat(event.getMessage(), is(nullValue()));
+        assertThat(event.getArguments(), is(Collections.emptyList()));
+        assertThat(
+                event.toString(),
+                is(
+                        "LoggingEvent{level=INFO, mdc={}, markers=[], keyValuePairs=[], throwable=Optional.empty, message=null, arguments=[]}"));
+    }
+
+    @Test
+    void fromSlf4jEventFull() {
+        LoggingEvent event =
+                LoggingEvent.fromSlf4jEvent(
+                        new TestLoggingEventBuilder(null, ERROR)
+                                .addMarker(marker)
+                                .addKeyValue("KEY1", 1)
+                                .addKeyValue("KEY2", 2L)
+                                .setCause(throwable)
+                                .setMessage(message)
+                                .addArgument(arg1)
+                                .addArgument(arg2)
+                                .toLoggingEvent(),
+                        mdc);
+        assertThat(event.getLevel(), is(ERROR));
+        assertThat(event.getMdc(), is(mdc));
+        assertThat(event.getMarkers(), is(asList(marker)));
+        List<TestLoggingEventBuilder.TestKeyValuePair> expectedKeyValues =
+                asList(
+                        new TestLoggingEventBuilder.TestKeyValuePair("KEY1", Integer.valueOf(1)),
+                        new TestLoggingEventBuilder.TestKeyValuePair("KEY2", Long.valueOf(2L)));
+        assertThat(event.getKeyValuePairs(), is(expectedKeyValues));
+        assertThat(event.getThrowable(), is(of(throwable)));
+        assertThat(event.getMessage(), is(message));
+        assertThat(event.getArguments(), is(args));
+        assertThat(
+                event.toString(),
+                is(
+                        "LoggingEvent{level=ERROR, mdc={key=value}, markers=[marker], keyValuePairs=[KEY1=\"1\", KEY2=\"2\"], throwable=Optional[java.lang.Throwable], message='message', arguments=[arg1, arg2]}"));
     }
 
     public interface TriFunction<A, B, C, R> {
