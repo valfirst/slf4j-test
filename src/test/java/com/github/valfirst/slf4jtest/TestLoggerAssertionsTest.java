@@ -677,9 +677,7 @@ class TestLoggerAssertionsTest {
                                     .toLoggingEvent());
             Predicate<LoggingEvent> predicate =
                     new TestLoggerAssert.PredicateBuilder()
-                            .withKeyValuePairs(
-                                    new KeyValuePair("KEY2", 2222),
-                                    new KeyValuePair("KEY1", 1111))
+                            .withKeyValuePairs(new KeyValuePair("KEY2", 2222), new KeyValuePair("KEY1", 1111))
                             .build();
             assertThat(predicate.test(event)).isFalse();
         }
@@ -694,9 +692,7 @@ class TestLoggerAssertionsTest {
                                     .toLoggingEvent());
             Predicate<LoggingEvent> predicate =
                     new TestLoggerAssert.PredicateBuilder()
-                            .withKeyValuePairs(
-                                    new KeyValuePair("KEY1", 1111),
-                                    new KeyValuePair("KEY2", 2222))
+                            .withKeyValuePairs(new KeyValuePair("KEY1", 1111), new KeyValuePair("KEY2", 2222))
                             .build();
             assertThat(predicate.test(event)).isTrue();
         }
