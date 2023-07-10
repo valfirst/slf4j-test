@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import org.slf4j.Marker;
+import org.slf4j.event.KeyValuePair;
 import org.slf4j.event.Level;
 
 /**
@@ -207,7 +208,9 @@ public class TestLoggerAssert extends AbstractTestLoggerAssert<TestLoggerAssert>
 
     private Predicate<LoggingEvent> buildPredicate(LoggingEvent event) {
         return new PredicateBuilder()
-                .withMarker(event.getMarker().orElse(null))
+                .withMarkers(event.getMarkers().toArray(new Marker[event.getMarkers().size()]))
+                .withKeyValuePairs(
+                        event.getKeyValuePairs().toArray(new KeyValuePair[event.getKeyValuePairs().size()]))
                 .withThrowable(event.getThrowable().orElse(null))
                 .withLevel(event.getLevel())
                 .withMessage(event.getMessage())
@@ -227,6 +230,7 @@ public class TestLoggerAssert extends AbstractTestLoggerAssert<TestLoggerAssert>
         private Predicate<LoggingEvent> messagePredicate = IGNORE_PREDICATE;
         private Predicate<LoggingEvent> argumentsPredicate = IGNORE_PREDICATE;
         private Predicate<LoggingEvent> markerPredicate = IGNORE_PREDICATE;
+        private Predicate<LoggingEvent> keyValuePairsPredicate = IGNORE_PREDICATE;
         private Predicate<LoggingEvent> mdcPredicate = IGNORE_PREDICATE;
         private Predicate<LoggingEvent> throwablePredicate = IGNORE_PREDICATE;
         private Predicate<LoggingEvent> levelPredicate = IGNORE_PREDICATE;
@@ -240,8 +244,23 @@ public class TestLoggerAssert extends AbstractTestLoggerAssert<TestLoggerAssert>
             return this;
         }
 
+        /**
+         * @deprecated There can be more than one marker in a logging event. Use {@link #withMarkers}
+         *     instead.
+         */
+        @Deprecated
         public PredicateBuilder withMarker(Marker marker) {
-            markerPredicate = event -> event.getMarker().equals(Optional.ofNullable(marker));
+            return withMarkers(marker == null ? new Marker[] {} : new Marker[] {marker});
+        }
+
+        public PredicateBuilder withMarkers(Marker... markers) {
+            markerPredicate = event -> event.getMarkers().equals(Arrays.asList(markers));
+            return this;
+        }
+
+        public PredicateBuilder withKeyValuePairs(KeyValuePair... keyValuePair) {
+            keyValuePairsPredicate =
+                    event -> event.getKeyValuePairs().equals(Arrays.asList(keyValuePair));
             return this;
         }
 
@@ -280,6 +299,7 @@ public class TestLoggerAssert extends AbstractTestLoggerAssert<TestLoggerAssert>
         public Predicate<LoggingEvent> build() {
             return levelPredicate
                     .and(markerPredicate)
+                    .and(keyValuePairsPredicate)
                     .and(messagePredicate)
                     .and(argumentsPredicate)
                     .and(throwablePredicate)
