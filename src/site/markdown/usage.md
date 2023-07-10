@@ -77,22 +77,103 @@ In order to have robust tests the in memory state of SLF4J Test must be in a
 known state for each test run, which in turn implies that a test should clean up
 after itself. The simplest way to do so is via a call to
 
-    TestLoggerFactory.clear()
+```java
+TestLoggerFactory.clear()
+```
 
-in a tear down method of some kind. If you are using JUnit then SLF4J Test
-provides a Rule that will do this for you if you provide the following line in
-your test class:
-
-    @Rule public TestRule resetLoggingEvents = new TestLoggerFactoryResetRule();
+in a tear down method of some kind.
 
 More nuanced state resetting can be done on a per logger basis:
 
-    TestLogger.clear()
+```java
+TestLogger.clear()
+```
 
 or more aggressive clears will reset state across all threads:
 
-    TestLoggerFactory.clearAll()
-    TestLogger.clearAll()
+```java
+TestLoggerFactory.clearAll()
+TestLogger.clearAll()
+```
+     
+#### JUnit 4
+
+If you are using JUnit 4 then SLF4J Test provides a `@Rule` that will do this
+for you if you provide the following line in your test class:
+
+```java
+@Rule public TestRule resetLoggingEvents = new TestLoggerFactoryResetRule();
+```
+
+#### JUnit 5
+SLF4J Test provides JUnit Platform extension which can be registered in any supported way.
+
+##### Declarative Extension Registration
+`TestLoggerFactoryExtension` can be registered declaratively via `@ExtendWith` annotation:
+
+```java
+import org.junit.jupiter.api.extension.ExtendWith;
+import com.github.valfirst.slf4jtest.TestLoggerFactoryExtension;
+
+@ExtendWith(TestLoggerFactoryExtension.class)
+class BasicJUnit5Test {
+    ...
+}
+```
+
+It is possible to configure stage which cleanup should be performed at
+using `@TestLoggerFactorySettings` annotation:
+
+```java
+import org.junit.jupiter.api.extension.ExtendWith;
+import com.github.valfirst.slf4jtest.CleanupStage;
+import com.github.valfirst.slf4jtest.TestLoggerFactoryExtension;
+import com.github.valfirst.slf4jtest.TestLoggerFactorySettings;
+
+@ExtendWith(TestLoggerFactoryExtension.class)
+@TestLoggerFactorySettings(cleanupStage = CleanupStage.BEFORE_EACH)
+class BasicJUnit5Test {
+    ...
+}
+```
+
+##### Programmatic Extension Registration
+`TestLoggerFactoryExtension` can be registered programmatically by annotating field in test classes
+with `@RegisterExtension`:
+
+```java
+import org.junit.jupiter.api.extension.RegisterExtension;
+import com.github.valfirst.slf4jtest.TestLoggerFactoryExtension;
+
+class BasicJUnit5Test {
+
+    @RegisterExtension
+    static TestLoggerFactoryExtension extension = new TestLoggerFactoryExtension();
+    ...
+}
+```
+
+Also, it is possible to configure stage which clean up should happen at:
+
+```java
+import org.junit.jupiter.api.extension.RegisterExtension;
+import com.github.valfirst.slf4jtest.CleanupStage;
+import com.github.valfirst.slf4jtest.TestLoggerFactoryExtension;
+
+class BasicJUnit5Test {
+
+    @RegisterExtension
+    static TestLoggerFactoryExtension extension = new TestLoggerFactoryExtension(CleanupStage.BEFORE_EACH);
+   ...
+}
+```
+
+
+##### Automatic Extension Registration
+SLF4J Test supports automatic extension registration via ServiceLoader mechanism.
+This feature is considered advanced in JUnit Platform and
+[it requires explicit enabling](https://junit.org/junit5/docs/current/user-guide/#extensions-registration-automatic-enabling).
+
 
 ### Parallel Testing
 
