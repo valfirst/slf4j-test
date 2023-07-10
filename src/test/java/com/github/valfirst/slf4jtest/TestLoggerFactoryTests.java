@@ -240,7 +240,7 @@ class TestLoggerFactoryTests {
     }
 
     @Test
-    void printLevelTakenFromOverridableProperties() throws Exception {
+    void printLevelTakenFromOverridableProperties() {
         final OverridableProperties properties = mock(OverridableProperties.class);
         when(properties.getProperty("print.level", "OFF")).thenReturn("INFO");
         when(properties.getProperty("capture.level", "TRACE")).thenReturn("INFO");
@@ -249,7 +249,7 @@ class TestLoggerFactoryTests {
     }
 
     @Test
-    void printLevelInvalidInOverridableProperties() throws Exception {
+    void printLevelInvalidInOverridableProperties() {
         final OverridableProperties properties = mock(OverridableProperties.class);
         final String invalidLevelName = "nonsense";
         when(properties.getProperty("print.level", "OFF")).thenReturn(invalidLevelName);
@@ -274,7 +274,7 @@ class TestLoggerFactoryTests {
     }
 
     @Test
-    void captureLevelTakenFromOverridableProperties() throws Exception {
+    void captureLevelTakenFromOverridableProperties() {
         final OverridableProperties properties = mock(OverridableProperties.class);
         when(properties.getProperty("print.level", "OFF")).thenReturn("INFO");
         when(properties.getProperty("capture.level", "TRACE")).thenReturn("INFO");
@@ -283,7 +283,7 @@ class TestLoggerFactoryTests {
     }
 
     @Test
-    void captureLevelInvalidInOverridableProperties() throws Exception {
+    void captureLevelInvalidInOverridableProperties() {
         final OverridableProperties properties = mock(OverridableProperties.class);
         when(properties.getProperty("print.level", "OFF")).thenReturn("INFO");
         final String invalidLevelName = "nonsense";

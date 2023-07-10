@@ -795,7 +795,7 @@ class TestLoggerTests {
     }
 
     @Test
-    void clearChangesLevelsAllThreads() throws Exception {
+    void clearChangesLevelsAllThreads() {
         testLogger.setEnabledLevelsForAllThreads(WARN, ERROR);
         testLogger.clear();
         assertEquals(EnumSet.allOf(Level.class), testLogger.getEnabledLevels());
@@ -954,11 +954,11 @@ class TestLoggerTests {
         LoggingEvent event = events.get(0);
         assertThat(event.getLevel(), is(WARN));
         assertThat(event.getMdc(), is(mdcValues));
-        assertThat(event.getMarkers(), is(asList(marker)));
+        assertThat(event.getMarkers(), is(singletonList(marker)));
         List<TestLoggingEventBuilder.TestKeyValuePair> expectedKeyValues =
                 asList(
-                        new TestLoggingEventBuilder.TestKeyValuePair("KEY1", Integer.valueOf(1)),
-                        new TestLoggingEventBuilder.TestKeyValuePair("KEY2", Long.valueOf(2L)));
+                        new TestLoggingEventBuilder.TestKeyValuePair("KEY1", 1),
+                        new TestLoggingEventBuilder.TestKeyValuePair("KEY2", 2L));
         assertThat(event.getKeyValuePairs(), is(expectedKeyValues));
         assertThat(event.getThrowable(), is(Optional.of(throwable)));
         assertThat(event.getMessage(), is(MESSAGE));

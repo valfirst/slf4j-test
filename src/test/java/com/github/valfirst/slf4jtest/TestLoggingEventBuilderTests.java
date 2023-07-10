@@ -32,8 +32,8 @@ class TestLoggingEventBuilderTests {
                         .toLoggingEvent();
         List<TestLoggingEventBuilder.TestKeyValuePair> expected =
                 asList(
-                        new TestLoggingEventBuilder.TestKeyValuePair("KEY1", Integer.valueOf(1)),
-                        new TestLoggingEventBuilder.TestKeyValuePair("KEY1", Long.valueOf(2L)));
+                        new TestLoggingEventBuilder.TestKeyValuePair("KEY1", 1),
+                        new TestLoggingEventBuilder.TestKeyValuePair("KEY1", 2L));
         assertThat(event.getKeyValuePairs(), is(expected));
     }
 

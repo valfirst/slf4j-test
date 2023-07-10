@@ -469,7 +469,7 @@ public class TestLogger implements Logger, LoggingEventAware {
             final Object... args) {
         addLoggingEvent(
                 level,
-                marker.isPresent() ? Collections.singletonList(marker.get()) : Collections.emptyList(),
+                marker.map(Collections::singletonList).orElseGet(Collections::emptyList),
                 Collections.emptyList(),
                 throwable,
                 format,

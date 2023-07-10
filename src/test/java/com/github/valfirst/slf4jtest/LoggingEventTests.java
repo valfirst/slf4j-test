@@ -555,7 +555,7 @@ class LoggingEventTests {
         TestLoggingEventBuilder builder = new TestLoggingEventBuilder(null, Level.INFO);
         builder.addMarker(marker).addMarker(marker);
         LoggingEvent event = LoggingEvent.fromSlf4jEvent(builder.toLoggingEvent());
-        assertThrows(IllegalStateException.class, () -> event.getMarker());
+        assertThrows(IllegalStateException.class, event::getMarker);
     }
 
     @Test
@@ -591,11 +591,11 @@ class LoggingEventTests {
                         mdc);
         assertThat(event.getLevel(), is(ERROR));
         assertThat(event.getMdc(), is(mdc));
-        assertThat(event.getMarkers(), is(asList(marker)));
+        assertThat(event.getMarkers(), is(Collections.singletonList(marker)));
         List<TestLoggingEventBuilder.TestKeyValuePair> expectedKeyValues =
                 asList(
-                        new TestLoggingEventBuilder.TestKeyValuePair("KEY1", Integer.valueOf(1)),
-                        new TestLoggingEventBuilder.TestKeyValuePair("KEY2", Long.valueOf(2L)));
+                        new TestLoggingEventBuilder.TestKeyValuePair("KEY1", 1),
+                        new TestLoggingEventBuilder.TestKeyValuePair("KEY2", 2L));
         assertThat(event.getKeyValuePairs(), is(expectedKeyValues));
         assertThat(event.getThrowable(), is(of(throwable)));
         assertThat(event.getMessage(), is(message));

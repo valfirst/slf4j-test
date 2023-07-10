@@ -242,11 +242,7 @@ class TestMDCAdapterTests {
         testMDCAdapter.setInherit(true);
         testMDCAdapter.put(key, value);
         final AtomicReference<String> result = new AtomicReference<>();
-        Thread thread =
-                new Thread(
-                        () -> {
-                            result.set(testMDCAdapter.get(key));
-                        });
+        Thread thread = new Thread(() -> result.set(testMDCAdapter.get(key)));
         thread.start();
         thread.join();
         assertEquals(value, result.get());
@@ -257,11 +253,7 @@ class TestMDCAdapterTests {
         testMDCAdapter.setInherit(false);
         testMDCAdapter.put(key, value);
         final AtomicReference<String> result = new AtomicReference<>(value);
-        Thread thread =
-                new Thread(
-                        () -> {
-                            result.set(testMDCAdapter.get(key));
-                        });
+        Thread thread = new Thread(() -> result.set(testMDCAdapter.get(key)));
         thread.start();
         thread.join();
         assertNull(result.get());
@@ -271,11 +263,7 @@ class TestMDCAdapterTests {
     void testMdcAdapterNothingIsInheritedWhenSet() throws InterruptedException {
         testMDCAdapter.setInherit(true);
         final AtomicReference<String> result = new AtomicReference<>(value);
-        Thread thread =
-                new Thread(
-                        () -> {
-                            result.set(testMDCAdapter.get(key));
-                        });
+        Thread thread = new Thread(() -> result.set(testMDCAdapter.get(key)));
         thread.start();
         thread.join();
         assertNull(result.get());
@@ -294,7 +282,7 @@ class TestMDCAdapterTests {
     }
 
     @Test
-    void testOptionsCanBeSetToTrue() throws Exception {
+    void testOptionsCanBeSetToTrue() {
         final OverridableProperties properties = mock(OverridableProperties.class);
         when(properties.getProperty(anyString(), anyString())).thenReturn("true");
         TestMDCAdapter localTestMDCAdapter = new TestMDCAdapter(properties);
@@ -304,7 +292,7 @@ class TestMDCAdapterTests {
     }
 
     @Test
-    void testOptionsCanBeSetToFalse() throws Exception {
+    void testOptionsCanBeSetToFalse() {
         final OverridableProperties properties = mock(OverridableProperties.class);
         when(properties.getProperty(anyString(), anyString())).thenReturn("false");
         TestMDCAdapter localTestMDCAdapter = new TestMDCAdapter(properties);
@@ -360,13 +348,13 @@ class TestMDCAdapterTests {
         public String toString() {
             return "TestMDCAdapterOptions:{"
                     + "enable:"
-                    + String.valueOf(enable)
+                    + enable
                     + ",inherit:"
-                    + String.valueOf(inherit)
+                    + inherit
                     + ",returnNullCopyWhenMdcNotSet:"
-                    + String.valueOf(returnNullCopyWhenMdcNotSet)
+                    + returnNullCopyWhenMdcNotSet
                     + ",allowNullValues:"
-                    + String.valueOf(allowNullValues)
+                    + allowNullValues
                     + "}";
         }
     }

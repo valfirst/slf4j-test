@@ -3,7 +3,7 @@ package com.github.valfirst.slf4jtest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 import org.junit.jupiter.api.AfterAll;
@@ -13,7 +13,7 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 
 class JulConfigTests {
 
-    private static String message = "message";
+    private static final String message = "message";
 
     @BeforeEach
     void beforeEach() {
@@ -46,7 +46,7 @@ class JulConfigTests {
         testLogger.clear();
         logger.fine(message);
         List<LoggingEvent> events = testLogger.getLoggingEvents();
-        List<LoggingEvent> expected = Arrays.asList(LoggingEvent.debug(message));
+        List<LoggingEvent> expected = Collections.singletonList(LoggingEvent.debug(message));
         assertEquals(expected, events);
     }
 }

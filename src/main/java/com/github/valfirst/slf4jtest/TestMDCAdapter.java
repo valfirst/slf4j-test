@@ -47,7 +47,7 @@ public class TestMDCAdapter extends BasicMDCAdapter {
 
     static boolean getBooleanProperty(
             OverridableProperties properties, String propertyKey, boolean defaultValue) {
-        return Boolean.valueOf(properties.getProperty(propertyKey, String.valueOf(defaultValue)));
+        return Boolean.parseBoolean(properties.getProperty(propertyKey, String.valueOf(defaultValue)));
     }
 
     @Override
@@ -129,10 +129,12 @@ public class TestMDCAdapter extends BasicMDCAdapter {
         if (!enable) return;
         clear();
         if (contextMap == null) return;
-        if (contextMap.keySet().contains(null))
+        if (contextMap.containsKey(null)) {
             throw new IllegalArgumentException("key cannot be null");
-        if (!allowNullValues && contextMap.values().contains(null))
+        }
+        if (!allowNullValues && contextMap.containsValue(null)) {
             throw new IllegalArgumentException("val cannot be null");
+        }
         value.set(new HashMap<>(contextMap));
     }
 
