@@ -245,7 +245,7 @@ an application will create a `logging.properties` file containing
 and set the system property `java.util.logging.config.file` on the
 command line to the full path of the file. But this is not
 practical for running unit tests. Instead, the configuration is done
-programatically in the test code.
+programmatically in the test code.
 
 SLF4J Test has code to make this easier. Calling
 [`JulConfig.setup()`](apidocs/com/github/valfirst/slf4jtest/JulConfig.html#setup--)
@@ -283,16 +283,16 @@ match that of the backend expected to be used at run-time.
 
 The configuration can be changed in the property file `slf4jtest.properties`,
 using system properties specified as command line arguments to the JVM,
-or programatically. The property file and the system properties are read
+or programmatically. The property file and the system properties are read
 at start-up time, with system properties overriding the property file.
-Note that changing the values programatically affects all threads.
+Note that changing the values programmatically affects all threads.
 
 #### Completely Disable the MDC
 The backend does not even have to implement the MDC at all.
 If the log4j2 adapter or logback is used, there is full support for the MDC.
 Using the java.util.logging adapter, there is an MDC, but it cannot be used
 by log appenders.
-In the slf4j-simple, the MDC implentation is a no-op.
+In the slf4j-simple, the MDC implementation is a no-op.
 
 It is possible to disable the MDC completely by specifying
 
@@ -416,7 +416,7 @@ in the classic way like
         "With an argument {}",
         myObj.calculateValue());
 
-Alternatively, you can create the `LoggingEvent` from a an existing SLF4J
+Alternatively, you can create the `LoggingEvent` from an existing SLF4J
 logging event, like
 
     
@@ -427,7 +427,7 @@ logging event, like
             .addMarker(MarkerFactory.getMarker("ForYourEyesOnly"))
             .toLoggingEvent());
 
-This approach is neccessary if you use the features available
+This approach is necessary if you use the features available
 in the fluent API only. This includes multiple markers and key/value pairs.
 
 The `TestLoggingEventBuilder` adds the `toLoggingEvent` method

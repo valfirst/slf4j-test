@@ -475,7 +475,7 @@ public class LoggingEvent {
 
     /**
      * Get the MDC of the event. For events created by {@link TestLogger}, this is an unmodifiable
-     * copy of the MDC of the the thread when the event was created. For events constructed directly,
+     * copy of the MDC of the thread when the event was created. For events constructed directly,
      * this is unmodifiable copy of the MDC passed to the constructor, if any. If no MDC was used for
      * construction, the copy is an empty map. The copy is a {@link SortedMap}, in order to make it
      * easier to spot discrepancies in case an assertion fails. Natural ordering of the keys is used.

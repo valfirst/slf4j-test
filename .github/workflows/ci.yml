@@ -54,7 +54,7 @@ jobs:
             echo No CODACY_PROJECT_TOKEN and/or CODACY_API_TOKEN, the publishing to Codacy is skipped;
           fi;
 
-      - name: Anazlyze with SonarCloud
+      - name: Analyze with SonarCloud
         if: matrix.java == '11'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

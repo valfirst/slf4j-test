@@ -515,7 +515,7 @@ public class TestLogger implements Logger, LoggingEventAware {
     }
 
     /**
-     * Get the enabled levels levels enabled for this logger on this thread.
+     * Get the levels enabled for this logger on this thread.
      *
      * @return the set of levels as an unmodifiable {@link Set}.
      */
