@@ -672,14 +672,14 @@ class TestLoggerAssertionsTest {
             LoggingEvent event =
                     LoggingEvent.fromSlf4jEvent(
                             new TestLoggingEventBuilder(null, Level.ERROR)
-                                    .addKeyValue("KEY1", Integer.valueOf(1111))
-                                    .addKeyValue("KEY2", Integer.valueOf(2222))
+                                    .addKeyValue("KEY1", 1111)
+                                    .addKeyValue("KEY2", 2222)
                                     .toLoggingEvent());
             Predicate<LoggingEvent> predicate =
                     new TestLoggerAssert.PredicateBuilder()
                             .withKeyValuePairs(
-                                    new KeyValuePair("KEY2", Integer.valueOf(2222)),
-                                    new KeyValuePair("KEY1", Integer.valueOf(1111)))
+                                    new KeyValuePair("KEY2", 2222),
+                                    new KeyValuePair("KEY1", 1111))
                             .build();
             assertThat(predicate.test(event)).isFalse();
         }
@@ -689,14 +689,14 @@ class TestLoggerAssertionsTest {
             LoggingEvent event =
                     LoggingEvent.fromSlf4jEvent(
                             new TestLoggingEventBuilder(null, Level.ERROR)
-                                    .addKeyValue("KEY1", Integer.valueOf(1111))
-                                    .addKeyValue("KEY2", Integer.valueOf(2222))
+                                    .addKeyValue("KEY1", 1111)
+                                    .addKeyValue("KEY2", 2222)
                                     .toLoggingEvent());
             Predicate<LoggingEvent> predicate =
                     new TestLoggerAssert.PredicateBuilder()
                             .withKeyValuePairs(
-                                    new KeyValuePair("KEY1", Integer.valueOf(1111)),
-                                    new KeyValuePair("KEY2", Integer.valueOf(2222)))
+                                    new KeyValuePair("KEY1", 1111),
+                                    new KeyValuePair("KEY2", 2222))
                             .build();
             assertThat(predicate.test(event)).isTrue();
         }
