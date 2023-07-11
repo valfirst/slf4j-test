@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestLoggingEventBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SLF4J Test</a> &gt; <a href="index.source.html" class="el_package">com.github.valfirst.slf4jtest</a> &gt; <span class="el_source">TestLoggingEventBuilder.java</span></div><h1>TestLoggingEventBuilder.java</h1><pre class="source lang-java linenums">package com.github.valfirst.slf4jtest;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Supplier;
+import org.slf4j.Logger;
+import org.slf4j.Marker;
+import org.slf4j.event.DefaultLoggingEvent;
+import org.slf4j.event.KeyValuePair;
+import org.slf4j.event.Level;
+import org.slf4j.event.LoggingEvent;
+import org.slf4j.helpers.CheckReturnValue;
+import org.slf4j.spi.DefaultLoggingEventBuilder;
+import org.slf4j.spi.LoggingEventBuilder;
+
+/**
+ * A {@link LoggingEventBuilder} which changes the following compared to {@link
+ * DefaultLoggingEventBuilder}:
+ *
+ * &lt;ul&gt;
+ *   &lt;li&gt;The {@link #toLoggingEvent} method is added to build the event without logging it.
+ *   &lt;li&gt;The return type of the fluent methods is {@link TestLoggingEventBuilder}. This allows
+ *       {@link #toLoggingEvent} to be used in a fluent manner.
+ *   &lt;li&gt;The {@link KeyValuePair} implementation overrides the {@link Object#equals} and {@link
+ *       Object#hashCode} methods. This allows tests for equality in test assertions.
+ * &lt;/ul&gt;
+ */
+public class TestLoggingEventBuilder extends DefaultLoggingEventBuilder {
+
+    public TestLoggingEventBuilder(Logger logger, Level level) {
+<span class="fc" id="L32">        super(logger, level);</span>
+<span class="fc" id="L33">        loggingEvent = new TestLoggingEvent(level, logger);</span>
+<span class="fc" id="L34">    }</span>
+
+    /** Build the event, without logging it. */
+    public LoggingEvent toLoggingEvent() {
+<span class="fc" id="L38">        return loggingEvent;</span>
+    }
+
+    static class TestLoggingEvent extends DefaultLoggingEvent {
+
+<span class="fc" id="L43">        private List&lt;KeyValuePair&gt; keyValuePairs = null;</span>
+
+        public TestLoggingEvent(Level level, Logger logger) {
+<span class="fc" id="L46">            super(level, logger);</span>
+<span class="fc" id="L47">        }</span>
+
+        @Override
+        public void addKeyValue(String key, Object value) {
+<span class="fc bfc" id="L51" title="All 2 branches covered.">            if (keyValuePairs == null) keyValuePairs = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L52">            keyValuePairs.add(new TestKeyValuePair(key, value));</span>
+<span class="fc" id="L53">        }</span>
+
+        @Override
+        public List&lt;KeyValuePair&gt; getKeyValuePairs() {
+<span class="fc" id="L57">            return keyValuePairs;</span>
+        }
+    }
+
+    /**
+     * Extension of {@link KeyValuePair} with overridden {@link Object#equals} and {@link
+     * Object#hashCode} methods. This class must be used on the left hand side of {@link
+     * Object#equals} instead of {@link KeyValuePair}. {@link KeyValuePair} can be used on the right
+     * hand side.
+     */
+    public static class TestKeyValuePair extends KeyValuePair {
+        public TestKeyValuePair(String key, Object value) {
+<span class="fc" id="L69">            super(key, value);</span>
+<span class="fc" id="L70">        }</span>
+
+        @Override
+        public boolean equals(Object o) {
+<span class="fc bfc" id="L74" title="All 2 branches covered.">            if (this == o) return true;</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">            if (!(o instanceof KeyValuePair)) return false;</span>
+<span class="fc" id="L76">            KeyValuePair that = (KeyValuePair) o;</span>
+<span class="fc" id="L77">            return Arrays.deepEquals(new Object[] {key, value}, new Object[] {that.key, that.value});</span>
+        }
+
+        @Override
+        public int hashCode() {
+<span class="fc" id="L82">            return Arrays.deepHashCode(new Object[] {key, value});</span>
+        }
+    }
+
+    @CheckReturnValue
+    @Override
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public TestLoggingEventBuilder setCause(Throwable cause) {
+<span class="fc" id="L90">        return (TestLoggingEventBuilder) super.setCause(cause);</span>
+    }
+
+    @CheckReturnValue
+    @Override
+    public TestLoggingEventBuilder addMarker(Marker marker) {
+<span class="fc" id="L96">        return (TestLoggingEventBuilder) super.addMarker(marker);</span>
+    }
+
+    @CheckReturnValue
+    @Override
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public TestLoggingEventBuilder addArgument(Object p) {
+<span class="fc" id="L103">        return (TestLoggingEventBuilder) super.addArgument(p);</span>
+    }
+
+    @CheckReturnValue
+    @Override
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public TestLoggingEventBuilder addArgument(Supplier&lt;?&gt; objectSupplier) {
+<span class="fc" id="L110">        return (TestLoggingEventBuilder) super.addArgument(objectSupplier);</span>
+    }
+
+    @CheckReturnValue
+    @Override
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public TestLoggingEventBuilder addKeyValue(String key, Object value) {
+<span class="fc" id="L117">        return (TestLoggingEventBuilder) super.addKeyValue(key, value);</span>
+    }
+
+    @CheckReturnValue
+    @Override
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public TestLoggingEventBuilder addKeyValue(String key, Supplier&lt;Object&gt; valueSupplier) {
+<span class="fc" id="L124">        return (TestLoggingEventBuilder) super.addKeyValue(key, valueSupplier);</span>
+    }
+
+    @CheckReturnValue
+    @Override
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public TestLoggingEventBuilder setMessage(String message) {
+<span class="fc" id="L131">        return (TestLoggingEventBuilder) super.setMessage(message);</span>
+    }
+
+    @CheckReturnValue
+    @Override
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public TestLoggingEventBuilder setMessage(Supplier&lt;String&gt; messageSupplier) {
+<span class="fc" id="L138">        return (TestLoggingEventBuilder) super.setMessage(messageSupplier);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

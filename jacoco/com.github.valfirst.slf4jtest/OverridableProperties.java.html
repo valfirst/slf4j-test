@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OverridableProperties.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SLF4J Test</a> &gt; <a href="index.source.html" class="el_package">com.github.valfirst.slf4jtest</a> &gt; <span class="el_source">OverridableProperties.java</span></div><h1>OverridableProperties.java</h1><pre class="source lang-java linenums">package com.github.valfirst.slf4jtest;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
+import java.util.Properties;
+
+class OverridableProperties {
+<span class="fc" id="L9">    private static final Properties EMPTY_PROPERTIES = new Properties();</span>
+    private final String propertySourceName;
+    private final Properties properties;
+
+<span class="fc" id="L13">    OverridableProperties(final String propertySourceName) throws IOException {</span>
+<span class="fc" id="L14">        this.propertySourceName = propertySourceName;</span>
+<span class="fc" id="L15">        this.properties = getProperties();</span>
+<span class="fc" id="L16">    }</span>
+
+    private Properties getProperties() throws IOException {
+        InputStream resourceAsStream =
+<span class="fc" id="L20">                Thread.currentThread()</span>
+<span class="fc" id="L21">                        .getContextClassLoader()</span>
+<span class="fc" id="L22">                        .getResourceAsStream(propertySourceName + &quot;.properties&quot;);</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (resourceAsStream != null) {</span>
+<span class="fc" id="L24">            return loadProperties(resourceAsStream);</span>
+        }
+<span class="fc" id="L26">        return EMPTY_PROPERTIES;</span>
+    }
+
+    private static Properties loadProperties(InputStream propertyResource) throws IOException {
+<span class="fc" id="L30">        try (InputStream closablePropertyResource = propertyResource) {</span>
+<span class="fc" id="L31">            final Properties loadedProperties = new Properties();</span>
+<span class="fc" id="L32">            loadedProperties.load(closablePropertyResource);</span>
+<span class="fc" id="L33">            return loadedProperties;</span>
+        }
+    }
+
+    String getProperty(final String propertyKey, final String defaultValue) {
+<span class="fc" id="L38">        final String propertyFileProperty = properties.getProperty(propertyKey, defaultValue);</span>
+<span class="fc" id="L39">        return System.getProperty(propertySourceName + &quot;.&quot; + propertyKey, propertyFileProperty);</span>
+    }
+
+    public static OverridableProperties createUnchecked(final String propertySourceName) {
+        try {
+<span class="fc" id="L44">            return new OverridableProperties(propertySourceName);</span>
+<span class="fc" id="L45">        } catch (IOException e) {</span>
+<span class="fc" id="L46">            throw new UncheckedIOException(e);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

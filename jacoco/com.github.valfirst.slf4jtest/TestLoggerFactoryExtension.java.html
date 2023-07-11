@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestLoggerFactoryExtension.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SLF4J Test</a> &gt; <a href="index.source.html" class="el_package">com.github.valfirst.slf4jtest</a> &gt; <span class="el_source">TestLoggerFactoryExtension.java</span></div><h1>TestLoggerFactoryExtension.java</h1><pre class="source lang-java linenums">package com.github.valfirst.slf4jtest;
+
+import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
+
+import java.util.Optional;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+
+/**
+ * @author Valery Yatsynovich
+ */
+public class TestLoggerFactoryExtension implements BeforeEachCallback, BeforeTestExecutionCallback {
+
+    private final CleanupStage cleanupStage;
+
+    public TestLoggerFactoryExtension() {
+<span class="fc" id="L18">        this(CleanupStage.BEFORE_TEST_EXECUTION);</span>
+<span class="fc" id="L19">    }</span>
+
+<span class="fc" id="L21">    public TestLoggerFactoryExtension(CleanupStage cleanupStage) {</span>
+<span class="fc" id="L22">        this.cleanupStage = cleanupStage;</span>
+<span class="fc" id="L23">    }</span>
+
+    @Override
+    public void beforeEach(ExtensionContext context) {
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (calculateCleanupStage(context) == CleanupStage.BEFORE_EACH) {</span>
+<span class="fc" id="L28">            TestLoggerFactory.clear();</span>
+        }
+<span class="fc" id="L30">    }</span>
+
+    @Override
+    public void beforeTestExecution(ExtensionContext context) {
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (calculateCleanupStage(context) == CleanupStage.BEFORE_TEST_EXECUTION) {</span>
+<span class="fc" id="L35">            TestLoggerFactory.clear();</span>
+        }
+<span class="fc" id="L37">    }</span>
+
+    private CleanupStage calculateCleanupStage(ExtensionContext context) {
+        // Inspired by Mockito
+<span class="fc" id="L41">        return this.retrieveAnnotationFromTestClasses(context)</span>
+<span class="fc" id="L42">                .map(TestLoggerFactorySettings::cleanupStage)</span>
+<span class="fc" id="L43">                .orElse(cleanupStage);</span>
+    }
+
+    private Optional&lt;TestLoggerFactorySettings&gt; retrieveAnnotationFromTestClasses(
+            final ExtensionContext context) {
+<span class="fc" id="L48">        ExtensionContext currentContext = context;</span>
+        Optional&lt;TestLoggerFactorySettings&gt; annotation;
+
+        do {
+<span class="fc" id="L52">            annotation = findAnnotation(currentContext.getElement(), TestLoggerFactorySettings.class);</span>
+
+<span class="fc bfc" id="L54" title="All 2 branches covered.">            if (!currentContext.getParent().isPresent()) {</span>
+<span class="fc" id="L55">                break;</span>
+            }
+
+<span class="fc" id="L58">            currentContext = currentContext.getParent().get();</span>
+<span class="fc bfc" id="L59" title="All 4 branches covered.">        } while (!annotation.isPresent() &amp;&amp; currentContext != context.getRoot());</span>
+
+<span class="fc" id="L61">        return annotation;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

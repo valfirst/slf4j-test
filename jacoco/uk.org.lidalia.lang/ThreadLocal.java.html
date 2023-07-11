@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ThreadLocal.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SLF4J Test</a> &gt; <a href="index.source.html" class="el_package">uk.org.lidalia.lang</a> &gt; <span class="el_source">ThreadLocal.java</span></div><h1>ThreadLocal.java</h1><pre class="source lang-java linenums">package uk.org.lidalia.lang;
+
+import static java.lang.Thread.currentThread;
+import static java.util.Objects.requireNonNull;
+import static java.util.Optional.ofNullable;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
+
+/**
+ * This class was written by Robert Elliot and is originally located at
+ * https://github.com/Mahoney/lidalia-lang
+ *
+ * &lt;p&gt;A ThreadLocal that has no {@link ClassLoader} leaks associated with it and does not permit
+ * null.
+ *
+ * &lt;p&gt;Values for all {@link Thread}s can be reset from any {@link Thread}.
+ *
+ * @param &lt;T&gt; the type of the thread local variable
+ */
+public class ThreadLocal&lt;T&gt; {
+
+<span class="fc" id="L25">    private final Map&lt;Thread, T&gt; contents = new ConcurrentHashMap&lt;&gt;();</span>
+    private final Supplier&lt;T&gt; initialValueCreator;
+<span class="fc" id="L27">    private final Supplier&lt;T&gt; threadValueInitialiser =</span>
+<span class="fc" id="L28">            new Supplier&lt;T&gt;() {</span>
+                @Override
+                public T get() {
+<span class="fc" id="L31">                    final T initialValue = initialValueCreator.get();</span>
+<span class="fc" id="L32">                    set(initialValue);</span>
+<span class="fc" id="L33">                    return initialValue;</span>
+                }
+            };
+
+    /**
+     * @param initialValue the value this thread local will initially have for all {@link Thread}s.
+     *     This should not be mutable, as it will be shared between all {@link Thread}s.
+     */
+    public ThreadLocal(final T initialValue) {
+<span class="fc" id="L42">        this(() -&gt; requireNonNull(initialValue));</span>
+<span class="fc" id="L43">    }</span>
+
+    /**
+     * @param initialValueCreator a {@link Supplier} whose get method is called on a per {@link
+     *     Thread} basis in order to establish the initial value for that {@link Thread}, allowing a
+     *     different initial instance per {@link Thread}.
+     */
+<span class="fc" id="L50">    public ThreadLocal(final Supplier&lt;T&gt; initialValueCreator) {</span>
+<span class="fc" id="L51">        this.initialValueCreator = requireNonNull(initialValueCreator);</span>
+<span class="fc" id="L52">    }</span>
+
+    /**
+     * @param value the new value for the calling {@link Thread} - does not affect the value for any
+     *     other {@link Thread}.
+     */
+    public void set(final T value) {
+<span class="fc" id="L59">        contents.put(currentThread(), requireNonNull(value));</span>
+<span class="fc" id="L60">    }</span>
+
+    /**
+     * @return the value for the calling {@link Thread}, or the initial value if this has not been set
+     *     or has been removed.
+     */
+    public T get() {
+<span class="fc" id="L67">        return ofNullable(contents.get(currentThread())).orElseGet(threadValueInitialiser);</span>
+    }
+
+    /**
+     * Removes the value for the calling {@link Thread}. A subsequent call to {@link #get()} will
+     * return the initial value.
+     */
+    public void remove() {
+<span class="fc" id="L75">        contents.remove(currentThread());</span>
+<span class="fc" id="L76">    }</span>
+
+    /**
+     * Removes the values for ALL {@link Thread}s. Subsequent calls to {@link #get()} will return the
+     * initial value.
+     */
+    public void reset() {
+<span class="fc" id="L83">        contents.clear();</span>
+<span class="fc" id="L84">    }</span>
+
+    public Collection&lt;T&gt; allValues() {
+<span class="nc" id="L87">        return contents.values();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

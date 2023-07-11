@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestMDCAdapter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SLF4J Test</a> &gt; <a href="index.source.html" class="el_package">com.github.valfirst.slf4jtest</a> &gt; <span class="el_source">TestMDCAdapter.java</span></div><h1>TestMDCAdapter.java</h1><pre class="source lang-java linenums">package com.github.valfirst.slf4jtest;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+import org.slf4j.MDC;
+import org.slf4j.helpers.BasicMDCAdapter;
+
+public class TestMDCAdapter extends BasicMDCAdapter {
+
+    private final ThreadLocal&lt;Map&lt;String, String&gt;&gt; value;
+    private final boolean initialEnable;
+    private final boolean initialInherit;
+    private final boolean initialReturnNullCopyWhenMdcNotSet;
+    private final boolean initialAllowNullValues;
+    private volatile boolean enable;
+    private volatile boolean inherit;
+    private volatile boolean returnNullCopyWhenMdcNotSet;
+    private volatile boolean allowNullValues;
+
+    public TestMDCAdapter() {
+<span class="fc" id="L23">        this(OverridableProperties.createUnchecked(&quot;slf4jtest&quot;));</span>
+<span class="fc" id="L24">    }</span>
+
+<span class="fc" id="L26">    TestMDCAdapter(OverridableProperties properties) {</span>
+<span class="fc" id="L27">        enable = initialEnable = getBooleanProperty(properties, &quot;mdc.enable&quot;, true);</span>
+<span class="fc" id="L28">        inherit = initialInherit = getBooleanProperty(properties, &quot;mdc.inherit&quot;, false);</span>
+<span class="fc" id="L29">        returnNullCopyWhenMdcNotSet =</span>
+                initialReturnNullCopyWhenMdcNotSet =
+<span class="fc" id="L31">                        getBooleanProperty(properties, &quot;mdc.return.null.copy.when.mdc.not.set&quot;, false);</span>
+<span class="fc" id="L32">        allowNullValues =</span>
+<span class="fc" id="L33">                initialAllowNullValues = getBooleanProperty(properties, &quot;mdc.allow.null.values&quot;, true);</span>
+
+<span class="fc" id="L35">        value =</span>
+<span class="fc" id="L36">                new InheritableThreadLocal&lt;Map&lt;String, String&gt;&gt;() {</span>
+                    @Override
+                    protected Map&lt;String, String&gt; childValue(Map&lt;String, String&gt; parentValue) {
+<span class="pc bpc" id="L39" title="2 of 6 branches missed.">                        if (enable &amp;&amp; inherit &amp;&amp; parentValue != null) {</span>
+<span class="fc" id="L40">                            return new HashMap&lt;&gt;(parentValue);</span>
+                        } else {
+<span class="fc" id="L42">                            return null;</span>
+                        }
+                    }
+                };
+<span class="fc" id="L46">    }</span>
+
+    static boolean getBooleanProperty(
+            OverridableProperties properties, String propertyKey, boolean defaultValue) {
+<span class="fc" id="L50">        return Boolean.parseBoolean(properties.getProperty(propertyKey, String.valueOf(defaultValue)));</span>
+    }
+
+    @Override
+    public void put(final String key, final String val) {
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (!enable) return;</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (key == null) throw new IllegalArgumentException(&quot;key cannot be null&quot;);</span>
+<span class="fc bfc" id="L57" title="All 4 branches covered.">        if (val == null &amp;&amp; !allowNullValues) throw new IllegalArgumentException(&quot;val cannot be null&quot;);</span>
+<span class="fc" id="L58">        Map&lt;String, String&gt; map = value.get();</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (map == null) {</span>
+<span class="fc" id="L60">            map = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L61">            value.set(map);</span>
+        }
+<span class="fc" id="L63">        map.put(key, val);</span>
+<span class="fc" id="L64">    }</span>
+
+    @Override
+    public String get(final String key) {
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        if (!enable) return null;</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (key == null) throw new IllegalArgumentException(&quot;key cannot be null&quot;);</span>
+<span class="fc" id="L70">        Map&lt;String, String&gt; map = value.get();</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (map != null) {</span>
+<span class="fc" id="L72">            return map.get(key);</span>
+        } else {
+<span class="fc" id="L74">            return null;</span>
+        }
+    }
+
+    @Override
+    public void remove(final String key) {
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (!enable) return;</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        if (key == null) throw new IllegalArgumentException(&quot;key cannot be null&quot;);</span>
+<span class="fc" id="L82">        Map&lt;String, String&gt; map = value.get();</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        if (map != null) map.remove(key);</span>
+<span class="fc" id="L84">    }</span>
+
+    @Override
+    public void clear() {
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        if (!enable) return;</span>
+<span class="fc" id="L89">        Map&lt;String, String&gt; map = value.get();</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (map == null) return;</span>
+<span class="fc" id="L91">        map.clear();</span>
+<span class="fc" id="L92">        value.remove();</span>
+<span class="fc" id="L93">    }</span>
+
+    /**
+     * Return a copy of the current thread's context map. {@code null} is returned if
+     *
+     * &lt;ul&gt;
+     *   &lt;li&gt;The MDC functionality is disabled, c.f. &lt;code&gt;setEnable&lt;/code&gt;, or
+     *   &lt;li&gt;&quot;return null when empty&quot; is enabled, c.f. &lt;code&gt;setReturnNullCopyWhenMdcNotSet&lt;/code&gt;,
+     *       and &lt;code&gt;put&lt;/code&gt; has not been called.
+     * &lt;/ul&gt;
+     *
+     * @return A copy of the current thread's context map.
+     */
+    @Override
+    public Map&lt;String, String&gt; getCopyOfContextMap() {
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (!enable) return null;</span>
+<span class="fc" id="L109">        Map&lt;String, String&gt; map = value.get();</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (map == null) {</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">            if (returnNullCopyWhenMdcNotSet) {</span>
+<span class="fc" id="L112">                return null;</span>
+            } else {
+<span class="fc" id="L114">                return new TreeMap&lt;&gt;();</span>
+            }
+        } else {
+<span class="fc" id="L117">            return new TreeMap&lt;&gt;(map);</span>
+        }
+    }
+
+    // Internal access
+    Map&lt;String, String&gt; getContextMap() {
+<span class="fc" id="L123">        Map&lt;String, String&gt; map = value.get();</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        return map == null ? Collections.emptySortedMap() : map;</span>
+    }
+
+    @Override
+    public void setContextMap(final Map&lt;String, String&gt; contextMap) {
+<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (!enable) return;</span>
+<span class="fc" id="L130">        clear();</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        if (contextMap == null) return;</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (contextMap.containsKey(null)) {</span>
+<span class="fc" id="L133">            throw new IllegalArgumentException(&quot;key cannot be null&quot;);</span>
+        }
+<span class="fc bfc" id="L135" title="All 4 branches covered.">        if (!allowNullValues &amp;&amp; contextMap.containsValue(null)) {</span>
+<span class="fc" id="L136">            throw new IllegalArgumentException(&quot;val cannot be null&quot;);</span>
+        }
+<span class="fc" id="L138">        value.set(new HashMap&lt;&gt;(contextMap));</span>
+<span class="fc" id="L139">    }</span>
+
+    /**
+     * Enable the MDC functionality for all threads.
+     *
+     * @param enable Whether to enable the MDC functionality. The default value is {@code true}.
+     */
+    public void setEnable(boolean enable) {
+<span class="fc" id="L147">        this.enable = enable;</span>
+<span class="fc" id="L148">    }</span>
+
+    /**
+     * Define whether child threads inherit a copy of the MDC from its parent thread. Note that the
+     * copy is taken when the {@link Thread} is constructed. This affects all threads.
+     *
+     * @param inherit Whether to enable inheritance. The default value is {@code false}.
+     */
+    public void setInherit(boolean inherit) {
+<span class="fc" id="L157">        this.inherit = inherit;</span>
+<span class="fc" id="L158">    }</span>
+
+    /**
+     * Define whether null values are allowed in the MDC. This affects all threads.
+     *
+     * @param allowNullValues Whether to allow nulls. The default value is {@code true}.
+     */
+    public void setAllowNullValues(boolean allowNullValues) {
+<span class="fc" id="L166">        this.allowNullValues = allowNullValues;</span>
+<span class="fc" id="L167">    }</span>
+
+    /**
+     * Define whether {@link #getCopyOfContextMap} returns {@code null} when no values have been set.
+     * This affects all threads.
+     *
+     * @param returnNullCopyWhenMdcNotSet Whether to return null. The default value is {@code false}.
+     *     If {@code false}, an empty map is returned instead.
+     */
+    public void setReturnNullCopyWhenMdcNotSet(boolean returnNullCopyWhenMdcNotSet) {
+<span class="fc" id="L177">        this.returnNullCopyWhenMdcNotSet = returnNullCopyWhenMdcNotSet;</span>
+<span class="fc" id="L178">    }</span>
+
+    /**
+     * Whether the MDC functionality is enabled.
+     *
+     * @return Whether the MDC functionality is enabled.
+     */
+    public boolean getEnable() {
+<span class="fc" id="L186">        return enable;</span>
+    }
+
+    /**
+     * Whether child threads inherit a copy of the MDC from its parent thread.
+     *
+     * @return Whether inheritance is enabled.
+     */
+    public boolean getInherit() {
+<span class="fc" id="L195">        return inherit;</span>
+    }
+
+    /**
+     * Whether null values are allowed in the MDC.
+     *
+     * @return Whether nulls are allowed.
+     */
+    public boolean getAllowNullValues() {
+<span class="fc" id="L204">        return allowNullValues;</span>
+    }
+
+    /**
+     * Whether {@link #getCopyOfContextMap} returns {@code null} when no values have been set.
+     *
+     * @return Whether to return null.
+     */
+    public boolean getReturnNullCopyWhenMdcNotSet() {
+<span class="fc" id="L213">        return returnNullCopyWhenMdcNotSet;</span>
+    }
+
+    /**
+     * Reset the options to values defined by the static configuration. This undoes to changes made
+     * using {@link #setEnable}, {@link #setInherit}, {@link #setAllowNullValues}, and {@link
+     * #setReturnNullCopyWhenMdcNotSet}.
+     */
+    public void restoreOptions() {
+<span class="fc" id="L222">        enable = initialEnable;</span>
+<span class="fc" id="L223">        inherit = initialInherit;</span>
+<span class="fc" id="L224">        returnNullCopyWhenMdcNotSet = initialReturnNullCopyWhenMdcNotSet;</span>
+<span class="fc" id="L225">        allowNullValues = initialAllowNullValues;</span>
+<span class="fc" id="L226">    }</span>
+
+    /** Access the current MDC adapter. Used to call the option setting methods. */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public static TestMDCAdapter getInstance() {
+<span class="fc" id="L231">        return (TestMDCAdapter) MDC.getMDCAdapter();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
