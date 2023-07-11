@@ -1,5 +1,94 @@
 ## Changelog
 
+### [slf4j-test-3.0.0](https://github.com/valfirst/slf4j-test/tree/slf4j-test-3.0.0) (2023-07-11)
+[Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-2.9.0...slf4j-test-3.0.0)
+
+**Breaking changes**
+
+- [#380](https://github.com/valfirst/slf4j-test/issues/380) via [#383](https://github.com/valfirst/slf4j-test/pull/383) - Switch from Lidalia Level to SLF4J Level (by [@karstenspang](https://github.com/karstenspang))
+
+  - `uk.org.lidalia.slf4jext.Level` is replaced with `org.slf4j.event.Level`
+
+    The `org.slf4j.event.Level` class has been present in SLF4J since version `1.7.15` from 2016. There is little reason for a client to use a version older than that.
+
+    Changing the `import` statement from one package to the other handles most of the changes. But some differences between the two `Level` classes remain.
+
+    #### Ordinal Values
+
+    In `uk.org.lidalia.slf4jext.Level`, `ERROR` has the lowest ordinal value, and `TRACE` has the highest. In `org.slf4j.event.Level`, it is the other way round. When comparing levels using `Enum.compareTo`, the equality sign will have to be reversed. In SLF4J Test, this is used to decide whether to print the log message.
+
+    #### `OFF` Level
+
+    `org.slf4j.event.Level` has no `OFF` level. This means that another way must be used to specify that printing is off. `null` is the only other value you can pass as an enum. The print level logic is changed to use `null` as "off".
+
+    #### `enableableLevels`
+
+    `uk.org.lidalia.slf4jext.Level` has the static method `enableableLevels` that returns the set of enum values corresponding to log levels that can be enabled. Since all values represent enableable levels in `org.slf4j.event.Level`, `EnumSet.allOf(Level.class)` provides the equivalent funtionality.
+
+  - Dependency `uk.org.lidalia:lidalia-slf4j-ext` is dropped
+
+- [#380](https://github.com/valfirst/slf4j-test/issues/380) via [#384](https://github.com/valfirst/slf4j-test/pull/384) - Remove Guava as dependency (by [@karstenspang](https://github.com/karstenspang))
+
+  - Guava Collections are replaced with Java Collections
+
+    Parameter and return types are changed to be simply `List`, `Map`, or `Set`, instead of the specific ones from Guava. The client can still pass the Guava ones as parameters if needed. In case the client assign a returned value to a specific type, code changes are needed.
+
+    Returned vales are wrapped using `java.util.Collections.unmodifiableList`/`Map`/`Set` after copying.
+
+    Internal values are implemented using `ArrayList`, `HashMap`, or `HashSet` wrapped to be made unmodifiable. As a special case, enabled log level sets are to be represented as `EnumSet<Level>`.
+
+  - Dependency `com.google.guava:guava` is dropped
+
+- [#312](https://github.com/valfirst/slf4j-test/issues/312), [#380](https://github.com/valfirst/slf4j-test/issues/380) via [#326](https://github.com/valfirst/slf4j-test/pull/326) - Use java.time's `Instant` rather than `joda-time` (by [@josephw](https://github.com/josephw))
+
+  - `org.joda.time.Instant` is replaced with `java.time.Instant`
+  - Dependency `joda-time:joda-time` is dropped
+
+- [#390](https://github.com/valfirst/slf4j-test/issues/390) via [#394](https://github.com/valfirst/slf4j-test/pull/394) - Avoid substitution of `null` values (by [@karstenspang](https://github.com/karstenspang))
+
+  `null`-s were replaced by other values:
+    - When a `LoggingEvent` was constructed with arguments, `null`-s were replaced with `Option.empty()`. If logging events were just compared, such replacement had no impact. So restoration of `null`-s is considered as an internal change here.
+    - If `null` value was inserted in the MDC, it was replaced with the string `"null"`. If MDC functionality were tested, such replacement could be annoying. In particular, the assertion failure message showed `null` in both the expected and the actual value. Now such substitution is eliminated, `null` value is always used.
+
+- [#409](https://github.com/valfirst/slf4j-test/issues/409) via [#411](https://github.com/valfirst/slf4j-test/pull/411) Drop static binders (by [@valfirst](https://github.com/valfirst))
+
+  slf4j-api 2.0.x relies on the `ServiceLoader` mechanism to find its logging backend. SLF4J 1.7.x and earlier versions relied on the static binder mechanism which is no loger honored by slf4j-api version 2.0.x. SLF4J Test doesn't support SLF4J 1.7.x and 1.8.x since version `2.4.0` (when breaking changes were introduced in SLf4J API). Thus static binders are removed:
+
+    - `org.slf4j.impl.StaticLoggerBinder`
+    - `org.slf4j.impl.StaticMDCBinder`
+    - `org.slf4j.impl.StaticMarkerBinder`
+
+**Implemented enhancements:**
+
+- [#398](https://github.com/valfirst/slf4j-test/issues/398) via [#399](https://github.com/valfirst/slf4j-test/pull/399) Add utility classes to support `java.util.logging` testing (by [@karstenspang](https://github.com/karstenspang))
+
+  - A helper class to do the `java.util.logging` setup is added, as well as a JUnit 5 extension that calls it.
+  - `jul-to-slf4j` bridge is added as an optional dependency.
+
+- [#392](https://github.com/valfirst/slf4j-test/issues/392) via [#401](https://github.com/valfirst/slf4j-test/pull/397) Implement MDC configuration management (by [@karstenspang](https://github.com/karstenspang))
+
+  There is now configuration for four aspects:
+    - Whether an MDC is supported at all.
+    - Whether the MDC is inherited by child threads.
+    - Whether `getCopyOfContextMap()` shall return an empty map or `null` if the MDC has not been set.
+    - Whether `null` is a legal value in an MDC entry. `null` keys are never allowed.
+
+- [#407](https://github.com/valfirst/slf4j-test/issues/407) via [#408](https://github.com/valfirst/slf4j-test/pull/408), [#412](https://github.com/valfirst/slf4j-test/pull/412) Add full support for the SLF4J fluent logging API (by [@karstenspang](https://github.com/karstenspang))
+
+  - `LoggingEvent` class supports multiple markers. This is allowed by the fluent API.
+  - `LoggingEvent` class stores the key/value pair list that can be generated fluent API.
+  - The new `TestLoggingEventBuilder` class can be used for fluently creating `LoggingEvent` instances for use as expected values.
+
+- [#183](https://github.com/valfirst/slf4j-test/issues/183) via [#410](https://github.com/valfirst/slf4j-test/pull/410) Add ability to configure cleanup stage (by [@valfirst](https://github.com/valfirst))
+
+  Now it is possible to configure JUnit 5 stage which cleanup should be performed at using `@TestLoggerFactorySettings` annotation or while programmatic extension registration is performed.
+
+**Fixes:**
+
+- [#400](https://github.com/valfirst/slf4j-test/issues/400) via [#401](https://github.com/valfirst/slf4j-test/pull/401) Fix Javadoc links (by [@karstenspang](https://github.com/karstenspang))
+
+- [#393](https://github.com/valfirst/slf4j-test/issues/393) via [#405](https://github.com/valfirst/slf4j-test/pull/405) Do not change the defaults for all threads at resetting enabled logging levels (by [@karstenspang](https://github.com/karstenspang))
+
 ### [slf4j-test-2.9.0](https://github.com/valfirst/slf4j-test/tree/slf4j-test-2.9.0) (2023-03-22)
 [Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-2.8.1...slf4j-test-2.9.0)
 
@@ -20,9 +109,9 @@
   assertThat(logger).hasLogged(new PredicateBuilder().withLevel(Level.WARN).withMessage("Something").build());
   ```
 
-  **Updates:**
-  - Bump `org.slf4j:slf4j-api` from `2.0.6` to `2.0.7`
-  - Bump `org.assertj:assertj-core` from `3.23.1` to `3.24.2`
+**Updates:**
+- Bump `org.slf4j:slf4j-api` from `2.0.6` to `2.0.7`
+- Bump `org.assertj:assertj-core` from `3.23.1` to `3.24.2`
 
 ### [slf4j-test-2.8.1](https://github.com/valfirst/slf4j-test/tree/slf4j-test-2.8.1) (2023-01-05)
 [Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-2.8.0...slf4j-test-2.8.1)
