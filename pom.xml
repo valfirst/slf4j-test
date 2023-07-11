@@ -350,34 +350,34 @@
                         is passed as VM argument when Maven the Surefire plugin is executed. -->
                     <execution>
                         <id>pre-unit-test</id>
-                        <phase>process-test-classes</phase>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
+                        <phase>process-test-classes</phase>
                     </execution>
                     <execution>
                         <id>jacoco-instrument</id>
-                        <phase>process-test-classes</phase>
                         <goals>
                             <goal>instrument</goal>
                         </goals>
+                        <phase>process-test-classes</phase>
                     </execution>
                     <execution>
                         <id>jacoco-restore-instrumented-classes</id>
-                        <phase>prepare-package</phase>
                         <goals>
                             <goal>restore-instrumented-classes</goal>
                         </goals>
+                        <phase>prepare-package</phase>
                     </execution>
 
                     <!-- Ensures that the code coverage report for unit tests is created
                         after unit tests have been run. -->
                     <execution>
                         <id>post-unit-test</id>
-                        <phase>prepare-package</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <phase>prepare-package</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -403,11 +403,11 @@
                 <version>${maven.surefire.version}</version>
                 <!-- https://stackoverflow.com/a/69305454/2067574 -->
                 <reportSets>
-                  <reportSet>
-                    <reports>
-                      <report>report-only</report>
-                    </reports>
-                  </reportSet>
+                    <reportSet>
+                        <reports>
+                            <report>report-only</report>
+                        </reports>
+                    </reportSet>
                 </reportSets>
             </plugin>
             <plugin>
