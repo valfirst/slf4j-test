@@ -72,7 +72,8 @@ class LoggingEventTests {
         LoggingEvent event = new LoggingEvent(level, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(emptyMap));
-        assertThat(event.getMarker(), is(empty()));
+        assertThat(event.getMarkers(), is(Collections.emptyList()));
+        assertThat(event.getKeyValuePairs(), is(Collections.emptyList()));
         assertThat(event.getThrowable(), is(empty()));
         assertThat(event.getMessage(), is(message));
         assertThat(event.getArguments(), is(args));
@@ -83,7 +84,8 @@ class LoggingEventTests {
         LoggingEvent event = new LoggingEvent(level, throwable, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(emptyMap));
-        assertThat(event.getMarker(), is(empty()));
+        assertThat(event.getMarkers(), is(Collections.emptyList()));
+        assertThat(event.getKeyValuePairs(), is(Collections.emptyList()));
         assertThat(event.getThrowable(), is(of(throwable)));
         assertThat(event.getMessage(), is(message));
         assertThat(event.getArguments(), is(args));
@@ -94,7 +96,8 @@ class LoggingEventTests {
         LoggingEvent event = new LoggingEvent(level, marker, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(emptyMap));
-        assertThat(event.getMarker(), is(of(marker)));
+        assertThat(event.getMarkers(), is(Collections.singletonList(marker)));
+        assertThat(event.getKeyValuePairs(), is(Collections.emptyList()));
         assertThat(event.getThrowable(), is(empty()));
         assertThat(event.getMessage(), is(message));
         assertThat(event.getArguments(), is(args));
@@ -105,7 +108,8 @@ class LoggingEventTests {
         LoggingEvent event = new LoggingEvent(level, marker, throwable, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(emptyMap));
-        assertThat(event.getMarker(), is(of(marker)));
+        assertThat(event.getMarkers(), is(Collections.singletonList(marker)));
+        assertThat(event.getKeyValuePairs(), is(Collections.emptyList()));
         assertThat(event.getThrowable(), is(of(throwable)));
         assertThat(event.getMessage(), is(message));
         assertThat(event.getArguments(), is(args));
@@ -116,7 +120,8 @@ class LoggingEventTests {
         LoggingEvent event = new LoggingEvent(level, mdc, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(mdc));
-        assertThat(event.getMarker(), is(empty()));
+        assertThat(event.getMarkers(), is(Collections.emptyList()));
+        assertThat(event.getKeyValuePairs(), is(Collections.emptyList()));
         assertThat(event.getThrowable(), is(empty()));
         assertThat(event.getMessage(), is(message));
         assertThat(event.getArguments(), is(args));
@@ -127,7 +132,8 @@ class LoggingEventTests {
         LoggingEvent event = new LoggingEvent(level, mdc, throwable, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(mdc));
-        assertThat(event.getMarker(), is(empty()));
+        assertThat(event.getMarkers(), is(Collections.emptyList()));
+        assertThat(event.getKeyValuePairs(), is(Collections.emptyList()));
         assertThat(event.getThrowable(), is(of(throwable)));
         assertThat(event.getMessage(), is(message));
         assertThat(event.getArguments(), is(args));
@@ -138,7 +144,8 @@ class LoggingEventTests {
         LoggingEvent event = new LoggingEvent(level, mdc, marker, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(mdc));
-        assertThat(event.getMarker(), is(of(marker)));
+        assertThat(event.getMarkers(), is(Collections.singletonList(marker)));
+        assertThat(event.getKeyValuePairs(), is(Collections.emptyList()));
         assertThat(event.getThrowable(), is(empty()));
         assertThat(event.getMessage(), is(message));
         assertThat(event.getArguments(), is(args));
@@ -149,7 +156,8 @@ class LoggingEventTests {
         LoggingEvent event = new LoggingEvent(level, mdc, marker, throwable, message, arg1, arg2);
         assertThat(event.getLevel(), is(level));
         assertThat(event.getMdc(), is(mdc));
-        assertThat(event.getMarker(), is(of(marker)));
+        assertThat(event.getMarkers(), is(Collections.singletonList(marker)));
+        assertThat(event.getKeyValuePairs(), is(Collections.emptyList()));
         assertThat(event.getThrowable(), is(of(throwable)));
         assertThat(event.getMessage(), is(message));
         assertThat(event.getArguments(), is(args));

@@ -58,7 +58,13 @@ public class TestLoggingEventBuilder extends DefaultLoggingEventBuilder {
         }
     }
 
-    static class TestKeyValuePair extends KeyValuePair {
+    /**
+     * Extension of {@link KeyValuePair} with overridden {@link Object#equals} and {@link
+     * Object#hashCode} methods. This class must be used on the left hand side of {@link
+     * Object#equals} instead of {@link KeyValuePair}. {@link KeyValuePair} can be used on the right
+     * hand side.
+     */
+    public static class TestKeyValuePair extends KeyValuePair {
         public TestKeyValuePair(String key, Object value) {
             super(key, value);
         }

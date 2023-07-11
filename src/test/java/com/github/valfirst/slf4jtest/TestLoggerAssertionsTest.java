@@ -17,6 +17,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.OngoingStubbing;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
+import org.slf4j.event.KeyValuePair;
 import org.slf4j.event.Level;
 
 @ExtendWith(MockitoExtension.class)
@@ -618,6 +621,80 @@ class TestLoggerAssertionsTest {
             assertions.anyThread().hasLevel(Level.ERROR).hasNumberOfLogs(0);
 
             verify(logger).getAllLoggingEvents();
+        }
+    }
+
+    @Nested
+    @SuppressWarnings("deprecation")
+    class DeprecatedMarkerPredicate {
+        private Marker marker = MarkerFactory.getMarker("marker");
+
+        @Test
+        void isFalseWithMultipleMarkers() {
+            LoggingEvent event =
+                    LoggingEvent.fromSlf4jEvent(
+                            new TestLoggingEventBuilder(null, Level.ERROR)
+                                    .addMarker(marker)
+                                    .addMarker(marker)
+                                    .toLoggingEvent());
+            Predicate<LoggingEvent> predicate =
+                    new TestLoggerAssert.PredicateBuilder().withMarker(marker).build();
+            assertThat(predicate.test(event)).isFalse();
+        }
+
+        @Test
+        void isTrueWithOneMarker() {
+            LoggingEvent event =
+                    LoggingEvent.fromSlf4jEvent(
+                            new TestLoggingEventBuilder(null, Level.ERROR).addMarker(marker).toLoggingEvent());
+            Predicate<LoggingEvent> predicate =
+                    new TestLoggerAssert.PredicateBuilder().withMarker(marker).build();
+            assertThat(predicate.test(event)).isTrue();
+        }
+
+        @Test
+        void isTrueWithNoMarkers() {
+            LoggingEvent event =
+                    LoggingEvent.fromSlf4jEvent(
+                            new TestLoggingEventBuilder(null, Level.ERROR).toLoggingEvent());
+            Predicate<LoggingEvent> predicate =
+                    new TestLoggerAssert.PredicateBuilder().withMarker(null).build();
+            assertThat(predicate.test(event)).isTrue();
+        }
+    }
+
+    @Nested
+    class KeyValuePairsPredicate {
+        private Marker marker = MarkerFactory.getMarker("marker");
+
+        @Test
+        void isFalseInWrongOrder() {
+            LoggingEvent event =
+                    LoggingEvent.fromSlf4jEvent(
+                            new TestLoggingEventBuilder(null, Level.ERROR)
+                                    .addKeyValue("KEY1", 1111)
+                                    .addKeyValue("KEY2", 2222)
+                                    .toLoggingEvent());
+            Predicate<LoggingEvent> predicate =
+                    new TestLoggerAssert.PredicateBuilder()
+                            .withKeyValuePairs(new KeyValuePair("KEY2", 2222), new KeyValuePair("KEY1", 1111))
+                            .build();
+            assertThat(predicate.test(event)).isFalse();
+        }
+
+        @Test
+        void isTrueInCorrectOrder() {
+            LoggingEvent event =
+                    LoggingEvent.fromSlf4jEvent(
+                            new TestLoggingEventBuilder(null, Level.ERROR)
+                                    .addKeyValue("KEY1", 1111)
+                                    .addKeyValue("KEY2", 2222)
+                                    .toLoggingEvent());
+            Predicate<LoggingEvent> predicate =
+                    new TestLoggerAssert.PredicateBuilder()
+                            .withKeyValuePairs(new KeyValuePair("KEY1", 1111), new KeyValuePair("KEY2", 2222))
+                            .build();
+            assertThat(predicate.test(event)).isTrue();
         }
     }
 
