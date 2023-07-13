@@ -48,7 +48,9 @@ public class TestLoggingEventBuilder extends DefaultLoggingEventBuilder {
 
         @Override
         public void addKeyValue(String key, Object value) {
-            if (keyValuePairs == null) keyValuePairs = new ArrayList<>();
+            if (keyValuePairs == null) {
+                keyValuePairs = new ArrayList<>();
+            }
             keyValuePairs.add(new TestKeyValuePair(key, value));
         }
 
@@ -71,8 +73,12 @@ public class TestLoggingEventBuilder extends DefaultLoggingEventBuilder {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof KeyValuePair)) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof KeyValuePair)) {
+                return false;
+            }
             KeyValuePair that = (KeyValuePair) o;
             return Arrays.deepEquals(new Object[] {key, value}, new Object[] {that.key, that.value});
         }

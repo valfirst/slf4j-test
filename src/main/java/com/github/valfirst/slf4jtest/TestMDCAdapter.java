@@ -52,9 +52,15 @@ public class TestMDCAdapter extends BasicMDCAdapter {
 
     @Override
     public void put(final String key, final String val) {
-        if (!enable) return;
-        if (key == null) throw new IllegalArgumentException("key cannot be null");
-        if (val == null && !allowNullValues) throw new IllegalArgumentException("val cannot be null");
+        if (!enable) {
+            return;
+        }
+        if (key == null) {
+            throw new IllegalArgumentException("key cannot be null");
+        }
+        if (val == null && !allowNullValues) {
+            throw new IllegalArgumentException("val cannot be null");
+        }
         Map<String, String> map = value.get();
         if (map == null) {
             map = new HashMap<>();
@@ -65,8 +71,12 @@ public class TestMDCAdapter extends BasicMDCAdapter {
 
     @Override
     public String get(final String key) {
-        if (!enable) return null;
-        if (key == null) throw new IllegalArgumentException("key cannot be null");
+        if (!enable) {
+            return null;
+        }
+        if (key == null) {
+            throw new IllegalArgumentException("key cannot be null");
+        }
         Map<String, String> map = value.get();
         if (map != null) {
             return map.get(key);
@@ -77,17 +87,27 @@ public class TestMDCAdapter extends BasicMDCAdapter {
 
     @Override
     public void remove(final String key) {
-        if (!enable) return;
-        if (key == null) throw new IllegalArgumentException("key cannot be null");
+        if (!enable) {
+            return;
+        }
+        if (key == null) {
+            throw new IllegalArgumentException("key cannot be null");
+        }
         Map<String, String> map = value.get();
-        if (map != null) map.remove(key);
+        if (map != null) {
+            map.remove(key);
+        }
     }
 
     @Override
     public void clear() {
-        if (!enable) return;
+        if (!enable) {
+            return;
+        }
         Map<String, String> map = value.get();
-        if (map == null) return;
+        if (map == null) {
+            return;
+        }
         map.clear();
         value.remove();
     }
@@ -105,7 +125,9 @@ public class TestMDCAdapter extends BasicMDCAdapter {
      */
     @Override
     public Map<String, String> getCopyOfContextMap() {
-        if (!enable) return null;
+        if (!enable) {
+            return null;
+        }
         Map<String, String> map = value.get();
         if (map == null) {
             if (returnNullCopyWhenMdcNotSet) {
@@ -126,9 +148,13 @@ public class TestMDCAdapter extends BasicMDCAdapter {
 
     @Override
     public void setContextMap(final Map<String, String> contextMap) {
-        if (!enable) return;
+        if (!enable) {
+            return;
+        }
         clear();
-        if (contextMap == null) return;
+        if (contextMap == null) {
+            return;
+        }
         if (contextMap.containsKey(null)) {
             throw new IllegalArgumentException("key cannot be null");
         }

@@ -19,7 +19,9 @@ public final class TestLoggerFactory implements ILoggerFactory {
             OverridableProperties properties, String propertyKey, String defaultValue) {
         try {
             final String printLevelProperty = properties.getProperty(propertyKey, defaultValue);
-            if ("OFF".equals(printLevelProperty)) return null;
+            if ("OFF".equals(printLevelProperty)) {
+                return null;
+            }
             return Level.valueOf(printLevelProperty);
         } catch (IllegalArgumentException e) {
             throw new IllegalStateException(

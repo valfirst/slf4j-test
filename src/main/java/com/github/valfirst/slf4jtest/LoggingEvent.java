@@ -493,8 +493,12 @@ public class LoggingEvent {
      */
     @Deprecated
     public Optional<Marker> getMarker() {
-        if (markers.isEmpty()) return empty();
-        if (markers.size() == 1) return Optional.of(markers.get(0));
+        if (markers.isEmpty()) {
+            return empty();
+        }
+        if (markers.size() == 1) {
+            return Optional.of(markers.get(0));
+        }
         throw new IllegalStateException("LoggingEvent has more than one marker");
     }
 
