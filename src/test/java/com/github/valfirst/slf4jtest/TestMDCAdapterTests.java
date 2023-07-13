@@ -13,10 +13,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.MDC;
 
 class TestMDCAdapterTests {
@@ -141,9 +145,13 @@ class TestMDCAdapterTests {
         testMDCAdapter.clear();
     }
 
-    @Test
-    void setContextMapSetsCopy() {
-        Map<String, String> newValues = new HashMap<>();
+    static Stream<Map<String, String>> contextMapsToSet() {
+        return Stream.of(new HashMap<>(), new TreeMap<>());
+    }
+
+    @ParameterizedTest
+    @MethodSource("contextMapsToSet")
+    void setContextMapSetsCopy(final Map<String, String> newValues) {
         newValues.put(key, value);
         testMDCAdapter.setContextMap(newValues);
         Map<String, String> expected = new HashMap<>(newValues);
@@ -168,20 +176,21 @@ class TestMDCAdapterTests {
         assertEquals("key cannot be null", illegalArgumentException.getMessage());
     }
 
-    @Test
-    void testElementNullValueThrowsIllegalArgumentExceptionIfForbidden() {
+    @ParameterizedTest
+    @MethodSource("contextMapsToSet")
+    void testElementNullValueThrowsIllegalArgumentExceptionIfForbidden(
+            final Map<String, String> map) {
         testMDCAdapter.setAllowNullValues(false);
-        final Map<String, String> map = new HashMap<>();
         map.put(key, null);
         IllegalArgumentException illegalArgumentException =
                 assertThrows(IllegalArgumentException.class, () -> testMDCAdapter.setContextMap(map));
         assertEquals("val cannot be null", illegalArgumentException.getMessage());
     }
 
-    @Test
-    void testElementNullValueDoesNotThrowIfAllowed() {
+    @ParameterizedTest
+    @MethodSource("contextMapsToSet")
+    void testElementNullValueDoesNotThrowIfAllowed(final Map<String, String> map) {
         testMDCAdapter.setAllowNullValues(true);
-        final Map<String, String> map = new HashMap<>();
         map.put(key, null);
         assertDoesNotThrow(() -> testMDCAdapter.setContextMap(map));
     }

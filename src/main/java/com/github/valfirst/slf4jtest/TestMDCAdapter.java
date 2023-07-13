@@ -3,6 +3,7 @@ package com.github.valfirst.slf4jtest;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import org.slf4j.MDC;
 import org.slf4j.helpers.BasicMDCAdapter;
@@ -155,7 +156,7 @@ public class TestMDCAdapter extends BasicMDCAdapter {
         if (contextMap == null) {
             return;
         }
-        if (contextMap.containsKey(null)) {
+        if (contextMap.keySet().stream().anyMatch(Objects::isNull)) {
             throw new IllegalArgumentException("key cannot be null");
         }
         if (!allowNullValues && contextMap.containsValue(null)) {
