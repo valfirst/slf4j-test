@@ -80,29 +80,35 @@ public class LevelAssert extends AbstractTestLoggerAssert&lt;LevelAssert&gt; {
 
     @Override
     public boolean equals(Object o) {
-<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (this == o) return true;</span>
-<span class="nc bnc" id="L84" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
-<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (!super.equals(o)) return false;</span>
-<span class="nc" id="L86">        LevelAssert that = (LevelAssert) o;</span>
-<span class="nc bnc" id="L87" title="All 2 branches missed.">        return level == that.level;</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (this == o) {</span>
+<span class="nc" id="L84">            return true;</span>
+        }
+<span class="nc bnc" id="L86" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L87">            return false;</span>
+        }
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        if (!super.equals(o)) {</span>
+<span class="nc" id="L90">            return false;</span>
+        }
+<span class="nc" id="L92">        LevelAssert that = (LevelAssert) o;</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        return level == that.level;</span>
     }
 
     @Override
     public int hashCode() {
-<span class="nc" id="L92">        return Objects.hash(super.hashCode(), level);</span>
+<span class="nc" id="L98">        return Objects.hash(super.hashCode(), level);</span>
     }
 
     private String eventsToLogMessage() {
-<span class="fc" id="L96">        return loggingEventsSupplier.get().stream()</span>
-<span class="fc" id="L97">                .map(e -&gt; &quot;- &quot; + e)</span>
-<span class="fc" id="L98">                .collect(Collectors.joining(&quot;\n&quot;));</span>
+<span class="fc" id="L102">        return loggingEventsSupplier.get().stream()</span>
+<span class="fc" id="L103">                .map(e -&gt; &quot;- &quot; + e)</span>
+<span class="fc" id="L104">                .collect(Collectors.joining(&quot;\n&quot;));</span>
     }
 
     private String eventsToLogMessage(Level level) {
-<span class="fc" id="L102">        return loggingEventsSupplier.get().stream()</span>
-<span class="pc" id="L103">                .filter(event -&gt; level.equals(event.getLevel()))</span>
-<span class="pc" id="L104">                .map(e -&gt; &quot;- &quot; + e)</span>
-<span class="fc" id="L105">                .collect(Collectors.joining(&quot;\n&quot;));</span>
+<span class="fc" id="L108">        return loggingEventsSupplier.get().stream()</span>
+<span class="pc" id="L109">                .filter(event -&gt; level.equals(event.getLevel()))</span>
+<span class="pc" id="L110">                .map(e -&gt; &quot;- &quot; + e)</span>
+<span class="fc" id="L111">                .collect(Collectors.joining(&quot;\n&quot;));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

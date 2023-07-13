@@ -48,13 +48,15 @@ public class TestLoggingEventBuilder extends DefaultLoggingEventBuilder {
 
         @Override
         public void addKeyValue(String key, Object value) {
-<span class="fc bfc" id="L51" title="All 2 branches covered.">            if (keyValuePairs == null) keyValuePairs = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L52">            keyValuePairs.add(new TestKeyValuePair(key, value));</span>
-<span class="fc" id="L53">        }</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">            if (keyValuePairs == null) {</span>
+<span class="fc" id="L52">                keyValuePairs = new ArrayList&lt;&gt;();</span>
+            }
+<span class="fc" id="L54">            keyValuePairs.add(new TestKeyValuePair(key, value));</span>
+<span class="fc" id="L55">        }</span>
 
         @Override
         public List&lt;KeyValuePair&gt; getKeyValuePairs() {
-<span class="fc" id="L57">            return keyValuePairs;</span>
+<span class="fc" id="L59">            return keyValuePairs;</span>
         }
     }
 
@@ -66,20 +68,24 @@ public class TestLoggingEventBuilder extends DefaultLoggingEventBuilder {
      */
     public static class TestKeyValuePair extends KeyValuePair {
         public TestKeyValuePair(String key, Object value) {
-<span class="fc" id="L69">            super(key, value);</span>
-<span class="fc" id="L70">        }</span>
+<span class="fc" id="L71">            super(key, value);</span>
+<span class="fc" id="L72">        }</span>
 
         @Override
         public boolean equals(Object o) {
-<span class="fc bfc" id="L74" title="All 2 branches covered.">            if (this == o) return true;</span>
-<span class="fc bfc" id="L75" title="All 2 branches covered.">            if (!(o instanceof KeyValuePair)) return false;</span>
-<span class="fc" id="L76">            KeyValuePair that = (KeyValuePair) o;</span>
-<span class="fc" id="L77">            return Arrays.deepEquals(new Object[] {key, value}, new Object[] {that.key, that.value});</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">            if (this == o) {</span>
+<span class="fc" id="L77">                return true;</span>
+            }
+<span class="fc bfc" id="L79" title="All 2 branches covered.">            if (!(o instanceof KeyValuePair)) {</span>
+<span class="fc" id="L80">                return false;</span>
+            }
+<span class="fc" id="L82">            KeyValuePair that = (KeyValuePair) o;</span>
+<span class="fc" id="L83">            return Arrays.deepEquals(new Object[] {key, value}, new Object[] {that.key, that.value});</span>
         }
 
         @Override
         public int hashCode() {
-<span class="fc" id="L82">            return Arrays.deepHashCode(new Object[] {key, value});</span>
+<span class="fc" id="L88">            return Arrays.deepHashCode(new Object[] {key, value});</span>
         }
     }
 
@@ -87,55 +93,55 @@ public class TestLoggingEventBuilder extends DefaultLoggingEventBuilder {
     @Override
     @SuppressWarnings(&quot;unchecked&quot;)
     public TestLoggingEventBuilder setCause(Throwable cause) {
-<span class="fc" id="L90">        return (TestLoggingEventBuilder) super.setCause(cause);</span>
+<span class="fc" id="L96">        return (TestLoggingEventBuilder) super.setCause(cause);</span>
     }
 
     @CheckReturnValue
     @Override
     public TestLoggingEventBuilder addMarker(Marker marker) {
-<span class="fc" id="L96">        return (TestLoggingEventBuilder) super.addMarker(marker);</span>
+<span class="fc" id="L102">        return (TestLoggingEventBuilder) super.addMarker(marker);</span>
     }
 
     @CheckReturnValue
     @Override
     @SuppressWarnings(&quot;unchecked&quot;)
     public TestLoggingEventBuilder addArgument(Object p) {
-<span class="fc" id="L103">        return (TestLoggingEventBuilder) super.addArgument(p);</span>
+<span class="fc" id="L109">        return (TestLoggingEventBuilder) super.addArgument(p);</span>
     }
 
     @CheckReturnValue
     @Override
     @SuppressWarnings(&quot;unchecked&quot;)
     public TestLoggingEventBuilder addArgument(Supplier&lt;?&gt; objectSupplier) {
-<span class="fc" id="L110">        return (TestLoggingEventBuilder) super.addArgument(objectSupplier);</span>
+<span class="fc" id="L116">        return (TestLoggingEventBuilder) super.addArgument(objectSupplier);</span>
     }
 
     @CheckReturnValue
     @Override
     @SuppressWarnings(&quot;unchecked&quot;)
     public TestLoggingEventBuilder addKeyValue(String key, Object value) {
-<span class="fc" id="L117">        return (TestLoggingEventBuilder) super.addKeyValue(key, value);</span>
+<span class="fc" id="L123">        return (TestLoggingEventBuilder) super.addKeyValue(key, value);</span>
     }
 
     @CheckReturnValue
     @Override
     @SuppressWarnings(&quot;unchecked&quot;)
     public TestLoggingEventBuilder addKeyValue(String key, Supplier&lt;Object&gt; valueSupplier) {
-<span class="fc" id="L124">        return (TestLoggingEventBuilder) super.addKeyValue(key, valueSupplier);</span>
+<span class="fc" id="L130">        return (TestLoggingEventBuilder) super.addKeyValue(key, valueSupplier);</span>
     }
 
     @CheckReturnValue
     @Override
     @SuppressWarnings(&quot;unchecked&quot;)
     public TestLoggingEventBuilder setMessage(String message) {
-<span class="fc" id="L131">        return (TestLoggingEventBuilder) super.setMessage(message);</span>
+<span class="fc" id="L137">        return (TestLoggingEventBuilder) super.setMessage(message);</span>
     }
 
     @CheckReturnValue
     @Override
     @SuppressWarnings(&quot;unchecked&quot;)
     public TestLoggingEventBuilder setMessage(Supplier&lt;String&gt; messageSupplier) {
-<span class="fc" id="L138">        return (TestLoggingEventBuilder) super.setMessage(messageSupplier);</span>
+<span class="fc" id="L144">        return (TestLoggingEventBuilder) super.setMessage(messageSupplier);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
