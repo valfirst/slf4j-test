@@ -1,5 +1,13 @@
 ## Changelog
 
+### [slf4j-test-3.0.1](https://github.com/valfirst/slf4j-test/tree/slf4j-test-3.0.1) (2023-07-13)
+[Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-3.0.0...slf4j-test-3.0.1)
+
+**Fixes:**
+
+- [#413](https://github.com/valfirst/slf4j-test/issues/413) via [#414](https://github.com/valfirst/slf4j-test/pull/414) Allow to use `TreeMap` as input parameter for `TestMDCAdapter::setContextMap` (by [@valfirst](https://github.com/valfirst))
+
+
 ### [slf4j-test-3.0.0](https://github.com/valfirst/slf4j-test/tree/slf4j-test-3.0.0) (2023-07-11)
 [Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-2.9.0...slf4j-test-3.0.0)
 
