@@ -215,7 +215,7 @@
 **Updates:**
 - [#228](https://github.com/valfirst/slf4j-test/pull/228) - Bump `org.slf4j:slf4j-api` from `2.0.0-alpha5` to `2.0.0-alpha6`
 
-  _NOTE:_ `slf4j-test:2.5.0` is compatible with `slf4j-api:2.0.0-alpha6`and higher and it is not compatible with previous versions (see [compatibility matrix](https://github.com/valfirst/slf4j-test/blob/master/README.md#compatibility-matrix) for more details). The root cause is breaking changes in SLF4J API:
+  _NOTE:_ `slf4j-test:2.5.0` is compatible with `slf4j-api:2.0.0-alpha6`and higher and it is not compatible with previous versions (see [compatibility matrix](https://github.com/valfirst/slf4j-test/blob/main/README.md#compatibility-matrix) for more details). The root cause is breaking changes in SLF4J API:
   - [breaking change 1](https://github.com/qos-ch/slf4j/commit/62a265d3c5a2bde82f2e025ee10f115564d951bb#diff-d9b428b7088f0b9ee7b67586509f3920e88f408e06258a0e2113c8cb8f4c8e37)
   - [breaking change 2](https://github.com/qos-ch/slf4j/commit/f09e33dd15f60b4480d9a60bfb9083ef739fea2f#diff-d9b428b7088f0b9ee7b67586509f3920e88f408e06258a0e2113c8cb8f4c8e37)
 - Bump `org.assertj:assertj-core` from `3.21.0` to `3.22.0`
@@ -263,7 +263,7 @@
 - [#190](https://github.com/valfirst/slf4j-test/pull/190) - Bump `org.slf4j:slf4j-api` from `2.0.0-alpha2` to `2.0.0-alpha4`
 - [#190](https://github.com/valfirst/slf4j-test/pull/190) - Update according to the changes in SLF4J API `2.0.0-alpha3`
 
-  _NOTE:_ `slf4j-test:2.4.0` is compatible with `slf4j-api:2.0.0-alpha3`and higher and it is not compatible with previous versions (see [compatibility matrix](https://github.com/valfirst/slf4j-test/blob/master/README.md#compatiblity-matrix) for more details). The root cause is [breaking change in SLF4J API](https://github.com/qos-ch/slf4j/commit/3e2381ea694c23c897433d675facd9a799a52256#diff-2f5a94db3233a499f03f72a41ebd7fed35029b270f9a7578c202db4ab1845b48).
+  _NOTE:_ `slf4j-test:2.4.0` is compatible with `slf4j-api:2.0.0-alpha3`and higher and it is not compatible with previous versions (see [compatibility matrix](https://github.com/valfirst/slf4j-test/blob/main/README.md#compatiblity-matrix) for more details). The root cause is [breaking change in SLF4J API](https://github.com/qos-ch/slf4j/commit/3e2381ea694c23c897433d675facd9a799a52256#diff-2f5a94db3233a499f03f72a41ebd7fed35029b270f9a7578c202db4ab1845b48).
 
 ### [slf4j-test-2.3.0](https://github.com/valfirst/slf4j-test/tree/slf4j-test-2.3.0) (2021-08-05)
 [Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-2.2.0...slf4j-test-2.3.0)
@@ -285,7 +285,7 @@
 
 **Updates:**
 
-- [#124](https://github.com/valfirst/slf4j-test/issues/124) via [#126](https://github.com/valfirst/slf4j-test/pull/126) - Add [an explicit license](https://github.com/valfirst/slf4j-test/blob/master/LICENSE) to the project
+- [#124](https://github.com/valfirst/slf4j-test/issues/124) via [#126](https://github.com/valfirst/slf4j-test/pull/126) - Add [an explicit license](https://github.com/valfirst/slf4j-test/blob/main/LICENSE) to the project
 - Bump `org.slf4j:slf4j-api` from 1.8.0-beta2 to 2.0.0-alpha2
 - Bump `joda-time:joda-time` from 2.10 to 2.10.10
 - Bump `com.google.guava:guava` from 26.0-jre to 30.1.1-jre
