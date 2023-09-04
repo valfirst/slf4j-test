@@ -56,9 +56,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.8</jdk.version>
-        <junit.version>4.13.2</junit.version>
-        <junit5.version>5.10.0</junit5.version>
-        <jacoco.version>0.8.10</jacoco.version>
         <pmd.version>6.55.0</pmd.version>
         <maven.surefire.version>3.1.2</maven.surefire.version>
     </properties>
@@ -68,7 +65,7 @@
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
-                <version>${junit5.version}</version>
+                <version>5.10.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -103,20 +100,17 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>3.24.2</version>
-            <scope>compile</scope>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>compile</scope>
+            <version>4.13.2</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <scope>compile</scope>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -335,7 +329,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.version}</version>
+                <version>0.8.10</version>
                 <executions>
                     <!-- Prepares the property pointing to the JaCoCo runtime agent which
                         is passed as VM argument when Maven the Surefire plugin is executed. -->
