@@ -79,7 +79,7 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-bom</artifactId>
-                <version>4.11.0</version>
+                <version>${mockito.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -137,18 +137,13 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-inline</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit-pioneer</groupId>
             <artifactId>junit-pioneer</artifactId>
-            <version>1.9.1</version>
+            <version>${junit-pioneer.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -501,10 +496,31 @@
             </build>
         </profile>
         <profile>
-            <id>spotless-checks</id>
+            <id>jdk-8-10</id>
+            <activation>
+                <jdk>(,11)</jdk>
+            </activation>
+            <properties>
+                <mockito.version>4.11.0</mockito.version>
+                <junit-pioneer.version>1.9.1</junit-pioneer.version>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.mockito</groupId>
+                    <artifactId>mockito-inline</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>jdk-11-and-higher</id>
             <activation>
                 <jdk>[11,)</jdk>
             </activation>
+            <properties>
+                <mockito.version>5.6.0</mockito.version>
+                <junit-pioneer.version>2.1.0</junit-pioneer.version>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
