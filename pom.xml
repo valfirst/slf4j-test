@@ -501,7 +501,7 @@
                 <jdk>(,11)</jdk>
             </activation>
             <properties>
-                <mockito.version>4.11.0</mockito.version>
+                <mockito.version>5.10.0</mockito.version>
                 <junit-pioneer.version>1.9.1</junit-pioneer.version>
             </properties>
             <dependencies>
