@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.SortedMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
@@ -414,8 +415,8 @@ class LoggingEventTests {
         Map<String, String> mdc = new HashMap<>();
         mdc.put("key", "value1");
         final LoggingEvent event = new LoggingEvent(level, mdc, message);
-        assertThrows(
-                UnsupportedOperationException.class, () -> event.getMdc().put("anything", "whatever"));
+        SortedMap<String, String> eventMdc = event.getMdc();
+        assertThrows(UnsupportedOperationException.class, () -> eventMdc.put("anything", "whatever"));
     }
 
     @Test
@@ -430,7 +431,8 @@ class LoggingEventTests {
     @Test
     void argsNotModifiable() {
         final LoggingEvent event = new LoggingEvent(level, message, arg1);
-        assertThrows(UnsupportedOperationException.class, () -> event.getArguments().add(arg2));
+        List<Object> eventArgs = event.getArguments();
+        assertThrows(UnsupportedOperationException.class, () -> eventArgs.add(arg2));
     }
 
     @Test
