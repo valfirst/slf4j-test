@@ -141,8 +141,10 @@ class TestMDCAdapterTests {
 
     @Test
     void clearWhenNotEnabled() {
+        testMDCAdapter.put(key, value);
         testMDCAdapter.setEnable(false);
         testMDCAdapter.clear();
+        assertEquals(Collections.singletonMap(key, value), testMDCAdapter.getContextMap());
     }
 
     static Stream<Map<String, String>> contextMapsToSet() {
@@ -165,6 +167,7 @@ class TestMDCAdapterTests {
         Map<String, String> newValues = new HashMap<>();
         newValues.put(key, value);
         testMDCAdapter.setContextMap(newValues);
+        assertEquals(new HashMap<>(), testMDCAdapter.getContextMap());
     }
 
     @Test
