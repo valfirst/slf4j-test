@@ -37,6 +37,8 @@ import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -515,7 +517,8 @@ class LoggingEventTests {
     @ParameterizedTest
     @StdIo
     @EnumSource(names = {"TRACE", "DEBUG", "INFO"})
-    void printInfoAndBelow(Level level, StdOut stdOut, StdErr stdErr) {
+    @EnabledForJreRange(max = JRE.JAVA_10) // old JUnit Pioneer is used for Java 8-10
+    void printInfoAndBelowOnJdkUpTo10(Level level, StdOut stdOut, StdErr stdErr) {
         LoggingEvent event = new LoggingEvent(level, "message with {}", "argument");
         event.print();
         assertThat(stdOut.capturedLines(), is(not(emptyArray())));
@@ -524,12 +527,35 @@ class LoggingEventTests {
 
     @ParameterizedTest
     @StdIo
+    @EnumSource(names = {"TRACE", "DEBUG", "INFO"})
+    @EnabledForJreRange(min = JRE.JAVA_11) // new JUnit Pioneer is used for Java 11+
+    void printInfoAndBelow(Level level, StdOut stdOut, StdErr stdErr) {
+        LoggingEvent event = new LoggingEvent(level, "message with {}", "argument");
+        event.print();
+        assertThat(stdOut.capturedLines(), is(not(emptyArray())));
+        assertThat(stdErr.capturedLines(), is(emptyArray()));
+    }
+
+    @ParameterizedTest
+    @StdIo
     @EnumSource(names = {"WARN", "ERROR"})
-    void printWarnAndAbove(Level level, StdOut stdOut, StdErr stdErr) {
+    @EnabledForJreRange(max = JRE.JAVA_10) // old JUnit Pioneer is used for Java 8-10
+    void printWarnAndAboveOnJdkUpTo10(Level level, StdOut stdOut, StdErr stdErr) {
         LoggingEvent event = new LoggingEvent(level, "message with {}", "argument");
         event.print();
         assertThat(stdErr.capturedLines(), is(not(emptyArray())));
         assertThat(stdOut.capturedLines(), is(arrayContaining("")));
+    }
+
+    @ParameterizedTest
+    @StdIo
+    @EnumSource(names = {"WARN", "ERROR"})
+    @EnabledForJreRange(min = JRE.JAVA_11) // new JUnit Pioneer is used for Java 11+
+    void printWarnAndAbove(Level level, StdOut stdOut, StdErr stdErr) {
+        LoggingEvent event = new LoggingEvent(level, "message with {}", "argument");
+        event.print();
+        assertThat(stdErr.capturedLines(), is(not(emptyArray())));
+        assertThat(stdOut.capturedLines(), is(emptyArray()));
     }
 
     @Test

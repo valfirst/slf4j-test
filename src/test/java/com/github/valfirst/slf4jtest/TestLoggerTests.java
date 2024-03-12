@@ -10,6 +10,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -41,6 +42,8 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.NullSource;
@@ -817,12 +820,25 @@ class TestLoggerTests {
     @ParameterizedTest
     @EnumSource(names = {"WARN", "ERROR"})
     @StdIo
-    void doesNotWhenPrintLevelGreaterThanEventLevel(Level printLevel, StdOut stdOut) {
+    @EnabledForJreRange(max = JRE.JAVA_10) // old JUnit Pioneer is used for Java 8-10
+    void doesNotWhenPrintLevelGreaterThanEventLevelOnJdkUpTo10(Level printLevel, StdOut stdOut) {
         TestLoggerFactory.getInstance().setPrintLevel(printLevel);
 
         testLogger.info(MESSAGE);
 
         assertThat(stdOut.capturedLines(), is(arrayContaining("")));
+    }
+
+    @ParameterizedTest
+    @EnumSource(names = {"WARN", "ERROR"})
+    @StdIo
+    @EnabledForJreRange(min = JRE.JAVA_11) // new JUnit Pioneer is used for Java 11+
+    void doesNotWhenPrintLevelGreaterThanEventLevel(Level printLevel, StdOut stdOut) {
+        TestLoggerFactory.getInstance().setPrintLevel(printLevel);
+
+        testLogger.info(MESSAGE);
+
+        assertThat(stdOut.capturedLines(), is(emptyArray()));
     }
 
     @Test
