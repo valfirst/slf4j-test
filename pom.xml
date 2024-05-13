@@ -518,7 +518,7 @@
                 <jdk>[11,)</jdk>
             </activation>
             <properties>
-                <mockito.version>5.11.0</mockito.version>
+                <mockito.version>5.12.0</mockito.version>
                 <junit-pioneer.version>2.2.0</junit-pioneer.version>
             </properties>
             <build>
