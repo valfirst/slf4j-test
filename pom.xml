@@ -519,7 +519,7 @@
             </activation>
             <properties>
                 <mockito.version>5.14.1</mockito.version>
-                <junit-pioneer.version>2.2.0</junit-pioneer.version>
+                <junit-pioneer.version>2.3.0</junit-pioneer.version>
             </properties>
             <build>
                 <plugins>
