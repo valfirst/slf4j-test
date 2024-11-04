@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
 
-    <googleAnalyticsAccountId>UA-15938495-2</googleAnalyticsAccountId>
-
     <skin>
         <groupId>org.apache.maven.skins</groupId>
         <artifactId>maven-fluido-skin</artifactId>
