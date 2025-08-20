@@ -1,7 +1,17 @@
 ## Changelog
 
+### [slf4j-test-3.0.3](https://github.com/valfirst/slf4j-test/tree/slf4j-test-3.0.3) (2025-08-21)
+[Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-3.0.2...slf4j-test-3.0.3)
+
+**Fixes:**
+- [#602](https://github.com/valfirst/slf4j-test/pull/602) Fix generation of POM (by [@valfirst](https://github.com/valfirst))
+
+
 ### [slf4j-test-3.0.2](https://github.com/valfirst/slf4j-test/tree/slf4j-test-3.0.2) (2025-08-20)
 [Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-3.0.1...slf4j-test-3.0.2)
+
+**Known issues:**
+ - The POM publihed in version `3.0.2` (https://repo.maven.apache.org/maven2/com/github/valfirst/slf4j-test/3.0.2/slf4j-test-3.0.2.pom) is broken. Please use version `3.0.3`
 
 **Fixes:**
 
