@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
 import org.slf4j.event.KeyValuePair;
@@ -47,7 +46,8 @@ public class TestLogger implements Logger, LoggingEventAware {
     private final TestLoggerFactory testLoggerFactory;
     private final ThreadLocal<List<LoggingEvent>> loggingEvents = new ThreadLocal<>(ArrayList::new);
 
-    private final List<LoggingEvent> allLoggingEvents = new CopyOnWriteArrayList<>();
+    private final List<LoggingEvent> allLoggingEvents =
+            Collections.synchronizedList(new ArrayList<>());
 
     private static final Set<Level> allLevels =
             Collections.unmodifiableSet(EnumSet.allOf(Level.class));
