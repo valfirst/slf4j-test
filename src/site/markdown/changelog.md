@@ -1,6 +1,6 @@
 ## Changelog
 
-### [slf4j-test-3.0.2](https://github.com/valfirst/slf4j-test/tree/slf4j-test-3.0.2) (2023-08-20)
+### [slf4j-test-3.0.2](https://github.com/valfirst/slf4j-test/tree/slf4j-test-3.0.2) (2025-08-20)
 [Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-3.0.1...slf4j-test-3.0.2)
 
 **Fixes:**
