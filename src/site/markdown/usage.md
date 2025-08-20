@@ -19,20 +19,19 @@ LoggingEvent.
 #### Custom Predicates
 Users can provide custom predicates so that they can assert on `LoggingEvent`s in specific ways in addition to the regular supported ways.
 
-_Example:_
-
-    assertThat(logger)
-        .hasLogged(event -> event.getFormattedMessage().startsWith("First section of long log message"));
-
+```java
+assertThat(logger)
+    .hasLogged(event -> event.getFormattedMessage().startsWith("First section of long log message"));
+```
 
 #### MDC Comparison Strategy
 The default behaviour requires the MDC contents to match exactly. But since the full MDC context isn't always relevant to the test, the MDC comparison strategy can be specified by users.
 
-_Example:_
-
-    assertThat(logger)
-        .usingMdcComparator(MdcComparator.IGNORING)
-        .hasLogged(warn("Some log message"));
+```java
+assertThat(logger)
+    .usingMdcComparator(MdcComparator.IGNORING)
+    .hasLogged(warn("Some log message"));
+```
 
 ### Setting the Log Level on a Logger
 
@@ -40,8 +39,10 @@ SLF4J Test only stores events for levels which are marked as enabled on the
 Logger. By default, all levels are enabled; however, this can be programmatically
 changed on a per logger basis using the following functions:
 
-    Logger.setEnabledLevels(Level... levels)
-    Logger.setEnabledLevelsForAllThreads(Level... levels)
+```java
+Logger.setEnabledLevels(Level... levels)
+Logger.setEnabledLevelsForAllThreads(Level... levels)
+```
 
 It's important to note that SLF4J does *not* imply any relationship between the
 levels - it is perfectly possible for a logger to be enabled for INFO but
@@ -57,19 +58,24 @@ the conventional level hierarchy (if the capture level is set to INFO, DEBUG and
 events won't be captured). This can be set in any of the following ways:
 
 #### Programmatically
-    TestLoggerFactory.getInstance().setCaptureLevel(Level.INFO);
+```java
+TestLoggerFactory.getInstance().setCaptureLevel(Level.INFO);
+```
 
 #### Via a System Property
 Run the JVM with the following:
 
-    -Dslf4jtest.capture.level=INFO
+```shell
+-Dslf4jtest.capture.level=INFO
+```
 
 #### Via a properties file
 Place a file called slf4jtest.properties on the classpath with the following
 line in it:
 
-    capture.level=INFO
-
+```properties
+capture.level=INFO
+```
 
 ### Resetting Stored State
 
@@ -181,12 +187,14 @@ SLF4J Test is designed to facilitate tests run in parallel. Because SLF4J
 Loggers are commonly shared across threads, the SLF4J Test implementation
 maintains its state in ThreadLocals. The following functions:
 
-    TestLogger.getLoggingEvents()
-    TestLogger.clear()
-    TestLogger.getEnabledLevels()
-    TestLogger.setEnabledLevels(Level... levels)
-    TestLoggerFactory.getLoggingEvents()
-    TestLoggerFactory.clear()
+```java
+TestLogger.getLoggingEvents()
+TestLogger.clear()
+TestLogger.getEnabledLevels()
+TestLogger.setEnabledLevels(Level... levels)
+TestLoggerFactory.getLoggingEvents()
+TestLoggerFactory.clear()
+```
 
 all only affect state stored in a ThreadLocal, and thus tests which use them can
 safely be parallelised without any danger of concurrent test runs affecting each
@@ -199,12 +207,13 @@ by concurrent code. To facilitate this SLF4J Test also maintains a record of
 logging events from *all* threads. This state can be accessed and reset using
 the following functions:
 
-    TestLogger.getAllLoggingEvents()
-    TestLogger.clearAll()
-    TestLogger.setEnabledLevelsForAllThreads(Level... levels)
-    TestLoggerFactory.getAllLoggingEvents()
-    TestLoggerFactory.clearAll()
-
+```java
+TestLogger.getAllLoggingEvents()
+TestLogger.clearAll()
+TestLogger.setEnabledLevelsForAllThreads(Level... levels)
+TestLoggerFactory.getAllLoggingEvents()
+TestLoggerFactory.clearAll()
+```
 
 ### Printing log statements to System out and err
 
@@ -218,18 +227,24 @@ disabled [globally](#globally-disabling-a-log-level) will not be printed.
 This can be set in any of the following ways:
 
 #### Programmatically
-    TestLoggerFactory.getInstance().setPrintLevel(Level.INFO);
+```java
+TestLoggerFactory.getInstance().setPrintLevel(Level.INFO);
+```
 
 #### Via a System Property
 Run the JVM with the following:
 
-    -Dslf4jtest.print.level=INFO
+```shell
+-Dslf4jtest.print.level=INFO
+```
 
 #### Via a properties file
 Place a file called slf4jtest.properties on the classpath with the following
 line in it:
 
-    print.level=INFO
+```properties
+print.level=INFO
+```
 
 ### Testing Code Using java.util.logging
 Although this module is named SLF4J Test, it can be used to test code using
@@ -240,7 +255,9 @@ But in case of java.util.logging, there is a little more work than adding
 `jul-to-slf4j` to the classpath. Normally,
 an application will create a `logging.properties` file containing
 
-    handlers = org.slf4j.bridge.SLF4JBridgeHandler
+```properties
+handlers = org.slf4j.bridge.SLF4JBridgeHandler
+```
 
 and set the system property `java.util.logging.config.file` on the
 command line to the full path of the file. But this is not
@@ -258,17 +275,19 @@ If you use Junit 5, it is even easier. There is a Junit 5 extension
 [`JulConfigExtension`](apidocs/apidocs/com/github/valfirst/slf4jtest/JulConfigExtension.html.html)
 doing this declaratively. For example
 
-    import com.github.valfirst.slf4jtest.JulConfigExtension;
-    import org.junit.jupiter.api.extension.ExtendWith;
-    
-    @ExtendWith(JulConfigExtension.class)
-    class JulLoggingTests {
-        @Test
-        void testJulLogging() {
-            ...
-        }
+```java
+import com.github.valfirst.slf4jtest.JulConfigExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+@ExtendWith(JulConfigExtension.class)
+class JulLoggingTests {
+    @Test
+    void testJulLogging() {
         ...
     }
+    ...
+}
+```
 
 ### Customizing the MDC
 The MDC (original meaning Mapped Diagnostic Context) is a place that can
@@ -298,15 +317,21 @@ It is possible to disable the MDC completely by specifying
 
 ##### Programmatically
 
-    TestMDCAdapter.getInstance().setEnable(false);
+```java
+TestMDCAdapter.getInstance().setEnable(false);
+```
 
 ##### Via a System Property
 
-    -Dslf4jtest.mdc.enable=false
+```shell
+-Dslf4jtest.mdc.enable=false
+```
 
 ##### In the slf4j.properties File
 
-    mdc.enable=false
+```properties
+mdc.enable=false
+```
 
 The default value is `true`. If disabled, the `get` and `getCopyOfContextMap`
 methods return null, and all other methods are no-ops.
@@ -319,15 +344,21 @@ adapter, inheritance is always on.
 
 ##### Programmatically
 
-    TestMDCAdapter.getInstance().setInherit(true);
+```java
+TestMDCAdapter.getInstance().setInherit(true);
+```
 
 ##### Via a System Property
 
-    -Dslf4jtest.mdc.inherit=true
+```shell
+-Dslf4jtest.mdc.inherit=true
+```
 
 ##### In the slf4j.properties File
 
-    mdc.inherit=true
+```properties
+mdc.inherit=true
+```
 
 The default value is `false`.
 
@@ -340,15 +371,21 @@ To emulate a backend that does not support null values, this can be configured.
 
 ##### Programmatically
 
-    TestMDCAdapter.getInstance().setAllowNullValues(false);
+```java
+TestMDCAdapter.getInstance().setAllowNullValues(false);
+```
 
 ##### Via a System Property
 
-    -Dslf4jtest.mdc.allow.null.values=false
+```shell
+-Dslf4jtest.mdc.allow.null.values=false
+```
 
 ##### In the slf4j.properties File
 
-    mdc.allow.null.values=false
+```properties
+mdc.allow.null.values=false
+```
 
 The default value is `true`.
 Note that if the MDC functionality has been completely disabled, null
@@ -366,15 +403,21 @@ To change the behavior:
 
 ##### Programmatically
 
-    TestMDCAdapter.getInstance().setReturnNullCopyWhenMdcNotSet(true);
+```java
+TestMDCAdapter.getInstance().setReturnNullCopyWhenMdcNotSet(true);
+```
 
 ##### Via a System Property
 
-    -Dslf4jtest.mdc.return.null.copy.when.mdc.not.set=true
+```shell
+-Dslf4jtest.mdc.return.null.copy.when.mdc.not.set=true
+```
 
 ##### In the slf4j.properties File
 
-    mdc.return.null.copy.when.mdc.not.set=true
+```properties
+mdc.return.null.copy.when.mdc.not.set=true
+```
 
 The default value is `false`, in which case an empty map is returned
 when the MDC is not set.
@@ -385,15 +428,19 @@ Note that if the MDC functionality has been completely disabled,
 To restore these options to the values defined by the initial
 configuration, use
 
-    TestMDCAdapter.getInstance().restoreOptions();
+```java
+TestMDCAdapter.getInstance().restoreOptions();
+```
 
 ### Using the Fluent API
 From SLF4J version 2.0, there is a new fluent logging API.
 It allows writing code like
 
-    logger.atInfo().setMessage("With an argument {}")
-        .addArgument(() -> myObj.calculateValue())
-        .addMarker("ForYourEyesOnly").log();
+```java
+logger.atInfo().setMessage("With an argument {}")
+    .addArgument(() -> myObj.calculateValue())
+    .addMarker("ForYourEyesOnly").log();
+```
 
 The `atInfo()` method returns a `LoggingEventBuilder` which is used to
 build the event and finally log it.
@@ -411,21 +458,24 @@ the `DefaultLoggingEventBuilder` of SLF4J.
 Creating an SLF4J Test `LoggingEvent` to compare against can be done
 in the classic way like
 
-    LoggingEvent.info(
-        MarkerFactory.getMarker("ForYourEyesOnly"),
-        "With an argument {}",
-        myObj.calculateValue());
+```java
+LoggingEvent.info(
+    MarkerFactory.getMarker("ForYourEyesOnly"),
+    "With an argument {}",
+    myObj.calculateValue());
+```
 
 Alternatively, you can create the `LoggingEvent` from an existing SLF4J
 logging event, like
 
-    
-    LoggingEvent.fromSlf4jEvent(
-        new TestLoggingEventBuilder(null, Level.INFO)
-            .setMessage("With an argument {}")
-            .addArgument(() -> myObj.calculateValue())
-            .addMarker(MarkerFactory.getMarker("ForYourEyesOnly"))
-            .toLoggingEvent());
+```java
+LoggingEvent.fromSlf4jEvent(
+    new TestLoggingEventBuilder(null, Level.INFO)
+        .setMessage("With an argument {}")
+        .addArgument(() -> myObj.calculateValue())
+        .addMarker(MarkerFactory.getMarker("ForYourEyesOnly"))
+        .toLoggingEvent());
+```
 
 This approach is necessary if you use the features available
 in the fluent API only. This includes multiple markers and key/value pairs.

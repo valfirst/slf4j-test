@@ -23,34 +23,38 @@ something like a WAR that is deployed in a container) then you have two options:
 separate out the logic into a library, or exclude the real implementation from
 the test classpath. In Maven this can be done as so:
 
-    <build>
-      <plugins>
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <configuration>
-            <classpathDependencyExcludes>
-              <classpathDependencyExcludes>ch.qos.logback:logback-classic</classpathDependencyExcludes>
-            </classpathDependencyExcludes>
-          </configuration>
-        </plugin>
-      </plugins>
-    </build>
+```xml
+<build>
+  <plugins>
+    <plugin>
+      <artifactId>maven-surefire-plugin</artifactId>
+      <configuration>
+        <classpathDependencyExcludes>
+          <classpathDependencyExcludes>ch.qos.logback:logback-classic</classpathDependencyExcludes>
+        </classpathDependencyExcludes>
+      </configuration>
+    </plugin>
+  </plugins>
+</build>
+```
 
 #### Basic example
 
 It is a common pattern to use SLF4J in the following manner:
 
-    import org.slf4j.Logger;
-    import org.slf4j.LoggerFactory;
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-    public class Slf4jUser {
+public class Slf4jUser {
 
-        private static final Logger logger = LoggerFactory.getLogger(Slf4jUser.class);
+    private static final Logger logger = LoggerFactory.getLogger(Slf4jUser.class);
 
-        public void aMethodThatLogs() {
-            logger.info("Hello World!");
-        }
+    public void aMethodThatLogs() {
+        logger.info("Hello World!");
     }
+}
+```
 
 This is because it is arduous to inject a Logger instance into every class that
 needs to log. However, this renders it quite difficult to unit test interactions
@@ -64,29 +68,31 @@ stores the logging events in memory in a form that can be interrogated. So long
 as slf4j-test is present as the sole SLF4J implementation on the classpath, the
 class above could be tested as so:
 
-    import org.junit.After;
-    import org.junit.Test;
+```java
+import org.junit.After;
+import org.junit.Test;
 
-    import com.github.valfirst.slf4jtest.TestLogger;
-    import com.github.valfirst.slf4jtest.TestLoggerFactory;
+import com.github.valfirst.slf4jtest.TestLogger;
+import com.github.valfirst.slf4jtest.TestLoggerFactory;
 
-    import static java.util.Arrays.asList;
-    import static org.hamcrest.Matchers.is;
-    import static org.junit.Assert.assertThat;
-    import static com.github.valfirst.slf4jtest.LoggingEvent.info;
+import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static com.github.valfirst.slf4jtest.LoggingEvent.info;
 
-    public class Slf4jUserTest {
+public class Slf4jUserTest {
 
-        @Rule public TestRule resetLoggingEvents = new TestLoggerFactoryResetRule();
+    @Rule public TestRule resetLoggingEvents = new TestLoggerFactoryResetRule();
 
-        Slf4jUser slf4jUser = new Slf4jUser();
-        TestLogger logger = TestLoggerFactory.getTestLogger(Slf4jUser.class);
+    Slf4jUser slf4jUser = new Slf4jUser();
+    TestLogger logger = TestLoggerFactory.getTestLogger(Slf4jUser.class);
 
-        @Test
-        public void aMethodThatLogsLogsAsExpected() {
+    @Test
+    public void aMethodThatLogsLogsAsExpected() {
 
-            slf4jUser.aMethodThatLogs();
+        slf4jUser.aMethodThatLogs();
 
-            assertThat(logger.getLoggingEvents(), is(asList(info("Hello World!"))));
-        }
+        assertThat(logger.getLoggingEvents(), is(asList(info("Hello World!"))));
     }
+}
+```
