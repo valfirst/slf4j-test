@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.valfirst</groupId>
     <artifactId>slf4j-test</artifactId>
-    <version>3.0.3</version>
+    <version>3.0.4-SNAPSHOT</version>
 
     <name>SLF4J Test</name>
     <description>An in-memory SLF4J implementation focused on aiding unit
@@ -27,7 +27,7 @@
     <scm>
         <connection>scm:git:git@github.com:valfirst/slf4j-test.git</connection>
         <developerConnection>scm:git:git@github.com:valfirst/slf4j-test.git</developerConnection>
-        <tag>slf4j-test-3.0.3</tag>
+        <tag>HEAD</tag>
         <url>https://github.com/valfirst/slf4j-test</url>
     </scm>
 
