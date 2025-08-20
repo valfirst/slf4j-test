@@ -208,9 +208,8 @@ public class TestLoggerAssert extends AbstractTestLoggerAssert<TestLoggerAssert>
 
     private Predicate<LoggingEvent> buildPredicate(LoggingEvent event) {
         return new PredicateBuilder()
-                .withMarkers(event.getMarkers().toArray(new Marker[event.getMarkers().size()]))
-                .withKeyValuePairs(
-                        event.getKeyValuePairs().toArray(new KeyValuePair[event.getKeyValuePairs().size()]))
+                .withMarkers(event.getMarkers().toArray(new Marker[0]))
+                .withKeyValuePairs(event.getKeyValuePairs().toArray(new KeyValuePair[0]))
                 .withThrowable(event.getThrowable().orElse(null))
                 .withLevel(event.getLevel())
                 .withMessage(event.getMessage())
