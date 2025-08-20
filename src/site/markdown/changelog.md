@@ -1,5 +1,17 @@
 ## Changelog
 
+### [slf4j-test-3.0.2](https://github.com/valfirst/slf4j-test/tree/slf4j-test-3.0.2) (2023-08-20)
+[Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-3.0.1...slf4j-test-3.0.2)
+
+**Fixes:**
+
+- [#596](https://github.com/valfirst/slf4j-test/issues/596) via [#600](https://github.com/valfirst/slf4j-test/pull/600) Optimize performance: replace `CopyOnWriteArrayList` with `Collections.synchronizedList` in `TestLogger` (by [@valfirst](https://github.com/valfirst))
+- [#601](https://github.com/valfirst/slf4j-test/pull/601) Optimize performance: pass empty array to `Collection#toArray` calls (by [@valfirst](https://github.com/valfirst))
+
+**Updates:**
+- Bump `org.slf4j:slf4j-api` from `2.0.7` to `2.0.17`
+- Bump `org.assertj:assertj-core` from `3.24.2` to `3.27.4`
+
 ### [slf4j-test-3.0.1](https://github.com/valfirst/slf4j-test/tree/slf4j-test-3.0.1) (2023-07-13)
 [Full Changelog](https://github.com/valfirst/slf4j-test/compare/slf4j-test-3.0.0...slf4j-test-3.0.1)
 
