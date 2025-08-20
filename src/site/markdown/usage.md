@@ -1,5 +1,7 @@
 ## Usage
 
+<!-- MACRO{toc|fromDepth=3} -->
+
 ### Making Assertions
 
 TestLoggerFactory is the underlying implementation to which SLF4J's
@@ -57,19 +59,19 @@ setting can be used to avoid capturing events at a given level or below respecti
 the conventional level hierarchy (if the capture level is set to INFO, DEBUG and TRACE
 events won't be captured). This can be set in any of the following ways:
 
-#### Programmatically
+**Programmatically**
 ```java
 TestLoggerFactory.getInstance().setCaptureLevel(Level.INFO);
 ```
 
-#### Via a System Property
+**Via a System Property**
 Run the JVM with the following:
 
 ```shell
 -Dslf4jtest.capture.level=INFO
 ```
 
-#### Via a properties file
+**Via a properties file**
 Place a file called slf4jtest.properties on the classpath with the following
 line in it:
 
@@ -226,19 +228,19 @@ disabled [globally](#globally-disabling-a-log-level) will not be printed.
 
 This can be set in any of the following ways:
 
-#### Programmatically
+**Programmatically**
 ```java
 TestLoggerFactory.getInstance().setPrintLevel(Level.INFO);
 ```
 
-#### Via a System Property
+**Via a System Property**
 Run the JVM with the following:
 
 ```shell
 -Dslf4jtest.print.level=INFO
 ```
 
-#### Via a properties file
+**Via a properties file**
 Place a file called slf4jtest.properties on the classpath with the following
 line in it:
 
@@ -315,19 +317,19 @@ In the slf4j-simple, the MDC implementation is a no-op.
 
 It is possible to disable the MDC completely by specifying
 
-##### Programmatically
+**Programmatically**
 
 ```java
 TestMDCAdapter.getInstance().setEnable(false);
 ```
 
-##### Via a System Property
+**Via a System Property**
 
 ```shell
 -Dslf4jtest.mdc.enable=false
 ```
 
-##### In the slf4j.properties File
+**In the slf4j.properties File**
 
 ```properties
 mdc.enable=false
@@ -342,19 +344,19 @@ In log4j2 and logback, the MDC is not inherited by default, but this
 behavoir can be changed by the configuration. Using the java.util.logging
 adapter, inheritance is always on.
 
-##### Programmatically
+**Programmatically**
 
 ```java
 TestMDCAdapter.getInstance().setInherit(true);
 ```
 
-##### Via a System Property
+**Via a System Property**
 
 ```shell
 -Dslf4jtest.mdc.inherit=true
 ```
 
-##### In the slf4j.properties File
+**In the slf4j.properties File**
 
 ```properties
 mdc.inherit=true
@@ -369,19 +371,19 @@ method, it says "The `val` parameter can be null only if the underlying
 implementation supports it."
 To emulate a backend that does not support null values, this can be configured.
 
-##### Programmatically
+**Programmatically**
 
 ```java
 TestMDCAdapter.getInstance().setAllowNullValues(false);
 ```
 
-##### Via a System Property
+**Via a System Property**
 
 ```shell
 -Dslf4jtest.mdc.allow.null.values=false
 ```
 
-##### In the slf4j.properties File
+**In the slf4j.properties File**
 
 ```properties
 mdc.allow.null.values=false
@@ -401,19 +403,19 @@ java.util.logging adapter returns null, if `put` has not been called.
 Other implementations may return an empty map in that case.
 To change the behavior:
 
-##### Programmatically
+**Programmatically**
 
 ```java
 TestMDCAdapter.getInstance().setReturnNullCopyWhenMdcNotSet(true);
 ```
 
-##### Via a System Property
+**Via a System Property**
 
 ```shell
 -Dslf4jtest.mdc.return.null.copy.when.mdc.not.set=true
 ```
 
-##### In the slf4j.properties File
+**In the slf4j.properties File**
 
 ```properties
 mdc.return.null.copy.when.mdc.not.set=true
