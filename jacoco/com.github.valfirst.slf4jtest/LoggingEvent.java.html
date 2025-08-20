@@ -344,17 +344,17 @@ public class LoggingEvent {
 <span class="fc" id="L344">        Object[] arguments = event.getArgumentArray();</span>
 <span class="fc" id="L345">        return new LoggingEvent(</span>
 <span class="fc" id="L346">                empty(),</span>
-<span class="fc" id="L347">                event.getLevel(),</span>
+<span class="fc bfc" id="L347" title="All 2 branches covered.">                event.getLevel(),</span>
                 mdc,
-<span class="fc bfc" id="L349" title="All 2 branches covered.">                markers == null</span>
+                markers == null
 <span class="fc" id="L350">                        ? Collections.emptyList()</span>
-<span class="fc" id="L351">                        : Collections.unmodifiableList(new ArrayList&lt;&gt;(markers)),</span>
-<span class="fc bfc" id="L352" title="All 2 branches covered.">                keyValuePairs == null</span>
+<span class="fc bfc" id="L351" title="All 2 branches covered.">                        : Collections.unmodifiableList(new ArrayList&lt;&gt;(markers)),</span>
+                keyValuePairs == null
 <span class="fc" id="L353">                        ? Collections.emptyList()</span>
 <span class="fc" id="L354">                        : Collections.unmodifiableList(new ArrayList&lt;&gt;(keyValuePairs)),</span>
 <span class="fc" id="L355">                ofNullable(event.getThrowable()),</span>
-<span class="fc" id="L356">                event.getMessage(),</span>
-<span class="fc bfc" id="L357" title="All 2 branches covered.">                arguments == null ? emptyObjectArray : arguments);</span>
+<span class="fc bfc" id="L356" title="All 2 branches covered.">                event.getMessage(),</span>
+                arguments == null ? emptyObjectArray : arguments);
     }
 
     public LoggingEvent(final Level level, final String message, final Object... arguments) {
@@ -463,8 +463,8 @@ public class LoggingEvent {
 <span class="fc" id="L463">        this.keyValuePairs = keyValuePairs;</span>
 <span class="fc" id="L464">        this.throwable = requireNonNull(throwable);</span>
 <span class="fc" id="L465">        this.message = message;</span>
-<span class="fc" id="L466">        this.arguments =</span>
-<span class="fc bfc" id="L467" title="All 2 branches covered.">                arguments.length == 0</span>
+<span class="fc bfc" id="L466" title="All 2 branches covered.">        this.arguments =</span>
+                arguments.length == 0
 <span class="fc" id="L468">                        ? Collections.emptyList()</span>
 <span class="fc" id="L469">                        : Collections.unmodifiableList(new ArrayList&lt;&gt;(Arrays.asList(arguments)));</span>
 <span class="fc" id="L470">    }</span>
@@ -630,7 +630,7 @@ public class LoggingEvent {
 
     @Override
     public String toString() {
-<span class="fc" id="L633">        return &quot;LoggingEvent{&quot;</span>
+<span class="fc bfc" id="L633" title="All 2 branches covered.">        return &quot;LoggingEvent{&quot;</span>
                 + &quot;level=&quot;
                 + level
                 + &quot;, mdc=&quot;
@@ -642,7 +642,7 @@ public class LoggingEvent {
                 + &quot;, throwable=&quot;
                 + throwable
                 + &quot;, message=&quot;
-<span class="fc bfc" id="L645" title="All 2 branches covered.">                + (message == null ? &quot;null&quot; : '\'' + message + '\'')</span>
+                + (message == null ? &quot;null&quot; : '\'' + message + '\'')
                 + &quot;, arguments=&quot;
                 + arguments
                 + '}';

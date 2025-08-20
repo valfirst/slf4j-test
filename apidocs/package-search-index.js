@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.github.valfirst.slf4jtest"},{"l":"uk.org.lidalia.lang"}];updateSearchResults();
