@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestLogger.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SLF4J Test</a> &gt; <a href="index.source.html" class="el_package">com.github.valfirst.slf4jtest</a> &gt; <span class="el_source">TestLogger.java</span></div><h1>TestLogger.java</h1><pre class="source lang-java linenums">package com.github.valfirst.slf4jtest;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestLogger.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SLF4J Test</a> &gt; <a href="index.source.html" class="el_package">com.github.valfirst.slf4jtest</a> &gt; <span class="el_source">TestLogger.java</span></div><h1>TestLogger.java</h1><pre class="source lang-java linenums">package com.github.valfirst.slf4jtest;
 
 import static java.util.Optional.ofNullable;
 
@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
 import org.slf4j.event.KeyValuePair;
@@ -45,9 +44,10 @@ public class TestLogger implements Logger, LoggingEventAware {
 
     private final String name;
     private final TestLoggerFactory testLoggerFactory;
-<span class="fc" id="L48">    private final ThreadLocal&lt;List&lt;LoggingEvent&gt;&gt; loggingEvents = new ThreadLocal&lt;&gt;(ArrayList::new);</span>
+<span class="fc" id="L47">    private final ThreadLocal&lt;List&lt;LoggingEvent&gt;&gt; loggingEvents = new ThreadLocal&lt;&gt;(ArrayList::new);</span>
 
-<span class="fc" id="L50">    private final List&lt;LoggingEvent&gt; allLoggingEvents = new CopyOnWriteArrayList&lt;&gt;();</span>
+<span class="fc" id="L49">    private final List&lt;LoggingEvent&gt; allLoggingEvents =</span>
+<span class="fc" id="L50">            Collections.synchronizedList(new ArrayList&lt;&gt;());</span>
 
 <span class="fc" id="L52">    private static final Set&lt;Level&gt; allLevels =</span>
 <span class="fc" id="L53">            Collections.unmodifiableSet(EnumSet.allOf(Level.class));</span>
@@ -577,4 +577,4 @@ public class TestLogger implements Logger, LoggingEventAware {
 <span class="fc" id="L577">                : Collections.unmodifiableSet(EnumSet.copyOf(levels));</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

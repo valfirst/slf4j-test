@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestLoggerAssert.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SLF4J Test</a> &gt; <a href="index.source.html" class="el_package">com.github.valfirst.slf4jtest</a> &gt; <span class="el_source">TestLoggerAssert.java</span></div><h1>TestLoggerAssert.java</h1><pre class="source lang-java linenums">package com.github.valfirst.slf4jtest;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestLoggerAssert.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SLF4J Test</a> &gt; <a href="index.source.html" class="el_package">com.github.valfirst.slf4jtest</a> &gt; <span class="el_source">TestLoggerAssert.java</span></div><h1>TestLoggerAssert.java</h1><pre class="source lang-java linenums">package com.github.valfirst.slf4jtest;
 
 import java.util.*;
 import java.util.function.BiPredicate;
@@ -208,40 +208,39 @@ public class TestLoggerAssert extends AbstractTestLoggerAssert&lt;TestLoggerAsse
 
     private Predicate&lt;LoggingEvent&gt; buildPredicate(LoggingEvent event) {
 <span class="fc" id="L210">        return new PredicateBuilder()</span>
-<span class="fc" id="L211">                .withMarkers(event.getMarkers().toArray(new Marker[event.getMarkers().size()]))</span>
-<span class="fc" id="L212">                .withKeyValuePairs(</span>
-<span class="fc" id="L213">                        event.getKeyValuePairs().toArray(new KeyValuePair[event.getKeyValuePairs().size()]))</span>
-<span class="fc" id="L214">                .withThrowable(event.getThrowable().orElse(null))</span>
-<span class="fc" id="L215">                .withLevel(event.getLevel())</span>
-<span class="fc" id="L216">                .withMessage(event.getMessage())</span>
-<span class="fc" id="L217">                .withArguments(event.getArguments().toArray())</span>
-<span class="fc" id="L218">                .withMdc(event.getMdc(), mdcComparator)</span>
-<span class="fc" id="L219">                .build();</span>
+<span class="fc" id="L211">                .withMarkers(event.getMarkers().toArray(new Marker[0]))</span>
+<span class="fc" id="L212">                .withKeyValuePairs(event.getKeyValuePairs().toArray(new KeyValuePair[0]))</span>
+<span class="fc" id="L213">                .withThrowable(event.getThrowable().orElse(null))</span>
+<span class="fc" id="L214">                .withLevel(event.getLevel())</span>
+<span class="fc" id="L215">                .withMessage(event.getMessage())</span>
+<span class="fc" id="L216">                .withArguments(event.getArguments().toArray())</span>
+<span class="fc" id="L217">                .withMdc(event.getMdc(), mdcComparator)</span>
+<span class="fc" id="L218">                .build();</span>
     }
 
     private Optional&lt;LoggingEvent&gt; findEvent(Predicate&lt;LoggingEvent&gt; predicate) {
-<span class="fc" id="L223">        return loggingEventsSupplier.get().stream().filter(predicate).findFirst();</span>
+<span class="fc" id="L222">        return loggingEventsSupplier.get().stream().filter(predicate).findFirst();</span>
     }
 
-<span class="fc" id="L226">    public static class PredicateBuilder {</span>
+<span class="fc" id="L225">    public static class PredicateBuilder {</span>
 
-<span class="fc" id="L228">        private static final Predicate&lt;LoggingEvent&gt; IGNORE_PREDICATE = event -&gt; true;</span>
+<span class="fc" id="L227">        private static final Predicate&lt;LoggingEvent&gt; IGNORE_PREDICATE = event -&gt; true;</span>
 
-<span class="fc" id="L230">        private Predicate&lt;LoggingEvent&gt; messagePredicate = IGNORE_PREDICATE;</span>
-<span class="fc" id="L231">        private Predicate&lt;LoggingEvent&gt; argumentsPredicate = IGNORE_PREDICATE;</span>
-<span class="fc" id="L232">        private Predicate&lt;LoggingEvent&gt; markerPredicate = IGNORE_PREDICATE;</span>
-<span class="fc" id="L233">        private Predicate&lt;LoggingEvent&gt; keyValuePairsPredicate = IGNORE_PREDICATE;</span>
-<span class="fc" id="L234">        private Predicate&lt;LoggingEvent&gt; mdcPredicate = IGNORE_PREDICATE;</span>
-<span class="fc" id="L235">        private Predicate&lt;LoggingEvent&gt; throwablePredicate = IGNORE_PREDICATE;</span>
-<span class="fc" id="L236">        private Predicate&lt;LoggingEvent&gt; levelPredicate = IGNORE_PREDICATE;</span>
+<span class="fc" id="L229">        private Predicate&lt;LoggingEvent&gt; messagePredicate = IGNORE_PREDICATE;</span>
+<span class="fc" id="L230">        private Predicate&lt;LoggingEvent&gt; argumentsPredicate = IGNORE_PREDICATE;</span>
+<span class="fc" id="L231">        private Predicate&lt;LoggingEvent&gt; markerPredicate = IGNORE_PREDICATE;</span>
+<span class="fc" id="L232">        private Predicate&lt;LoggingEvent&gt; keyValuePairsPredicate = IGNORE_PREDICATE;</span>
+<span class="fc" id="L233">        private Predicate&lt;LoggingEvent&gt; mdcPredicate = IGNORE_PREDICATE;</span>
+<span class="fc" id="L234">        private Predicate&lt;LoggingEvent&gt; throwablePredicate = IGNORE_PREDICATE;</span>
+<span class="fc" id="L235">        private Predicate&lt;LoggingEvent&gt; levelPredicate = IGNORE_PREDICATE;</span>
 
         public static PredicateBuilder aLog() {
-<span class="fc" id="L239">            return new PredicateBuilder();</span>
+<span class="fc" id="L238">            return new PredicateBuilder();</span>
         }
 
         public PredicateBuilder withLevel(Level level) {
-<span class="fc" id="L243">            levelPredicate = event -&gt; event.getLevel().equals(level);</span>
-<span class="fc" id="L244">            return this;</span>
+<span class="fc" id="L242">            levelPredicate = event -&gt; event.getLevel().equals(level);</span>
+<span class="fc" id="L243">            return this;</span>
         }
 
         /**
@@ -250,90 +249,90 @@ public class TestLoggerAssert extends AbstractTestLoggerAssert&lt;TestLoggerAsse
          */
         @Deprecated
         public PredicateBuilder withMarker(Marker marker) {
-<span class="fc bfc" id="L253" title="All 2 branches covered.">            return withMarkers(marker == null ? new Marker[] {} : new Marker[] {marker});</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">            return withMarkers(marker == null ? new Marker[] {} : new Marker[] {marker});</span>
         }
 
         public PredicateBuilder withMarkers(Marker... markers) {
-<span class="fc" id="L257">            markerPredicate = event -&gt; event.getMarkers().equals(Arrays.asList(markers));</span>
-<span class="fc" id="L258">            return this;</span>
+<span class="fc" id="L256">            markerPredicate = event -&gt; event.getMarkers().equals(Arrays.asList(markers));</span>
+<span class="fc" id="L257">            return this;</span>
         }
 
         public PredicateBuilder withKeyValuePairs(KeyValuePair... keyValuePair) {
-<span class="fc" id="L262">            keyValuePairsPredicate =</span>
-<span class="fc" id="L263">                    event -&gt; event.getKeyValuePairs().equals(Arrays.asList(keyValuePair));</span>
-<span class="fc" id="L264">            return this;</span>
+<span class="fc" id="L261">            keyValuePairsPredicate =</span>
+<span class="fc" id="L262">                    event -&gt; event.getKeyValuePairs().equals(Arrays.asList(keyValuePair));</span>
+<span class="fc" id="L263">            return this;</span>
         }
 
         public PredicateBuilder withMessage(String message) {
-<span class="fc" id="L268">            return withMessage(message::equals);</span>
+<span class="fc" id="L267">            return withMessage(message::equals);</span>
         }
 
         public PredicateBuilder withMessage(Predicate&lt;String&gt; predicate) {
-<span class="fc" id="L272">            this.messagePredicate = event -&gt; predicate.test(event.getMessage());</span>
-<span class="fc" id="L273">            return this;</span>
+<span class="fc" id="L271">            this.messagePredicate = event -&gt; predicate.test(event.getMessage());</span>
+<span class="fc" id="L272">            return this;</span>
         }
 
         public PredicateBuilder withArguments(Object... arguments) {
-<span class="fc" id="L277">            return withArguments(actualArgs -&gt; actualArgs.equals(Arrays.asList(arguments)));</span>
+<span class="fc" id="L276">            return withArguments(actualArgs -&gt; actualArgs.equals(Arrays.asList(arguments)));</span>
         }
 
         public PredicateBuilder withArguments(Predicate&lt;Collection&lt;Object&gt;&gt; predicate) {
-<span class="fc" id="L281">            this.argumentsPredicate = event -&gt; predicate.test(event.getArguments());</span>
-<span class="fc" id="L282">            return this;</span>
+<span class="fc" id="L280">            this.argumentsPredicate = event -&gt; predicate.test(event.getArguments());</span>
+<span class="fc" id="L281">            return this;</span>
         }
 
         public PredicateBuilder withThrowable(Throwable throwable) {
-<span class="fc" id="L286">            return withThrowable(t -&gt; t.equals(Optional.ofNullable(throwable)));</span>
+<span class="fc" id="L285">            return withThrowable(t -&gt; t.equals(Optional.ofNullable(throwable)));</span>
         }
 
         public PredicateBuilder withThrowable(Predicate&lt;Optional&lt;Throwable&gt;&gt; predicate) {
-<span class="fc" id="L290">            this.throwablePredicate = event -&gt; predicate.test(event.getThrowable());</span>
-<span class="fc" id="L291">            return this;</span>
+<span class="fc" id="L289">            this.throwablePredicate = event -&gt; predicate.test(event.getThrowable());</span>
+<span class="fc" id="L290">            return this;</span>
         }
 
         public PredicateBuilder withMdc(Map&lt;String, String&gt; mdc, MdcComparator comparator) {
-<span class="fc" id="L295">            this.mdcPredicate = event -&gt; comparator.compare(event.getMdc(), mdc);</span>
-<span class="fc" id="L296">            return this;</span>
+<span class="fc" id="L294">            this.mdcPredicate = event -&gt; comparator.compare(event.getMdc(), mdc);</span>
+<span class="fc" id="L295">            return this;</span>
         }
 
         public Predicate&lt;LoggingEvent&gt; build() {
-<span class="fc" id="L300">            return levelPredicate</span>
-<span class="fc" id="L301">                    .and(markerPredicate)</span>
-<span class="fc" id="L302">                    .and(keyValuePairsPredicate)</span>
-<span class="fc" id="L303">                    .and(messagePredicate)</span>
-<span class="fc" id="L304">                    .and(argumentsPredicate)</span>
-<span class="fc" id="L305">                    .and(throwablePredicate)</span>
-<span class="fc" id="L306">                    .and(mdcPredicate);</span>
+<span class="fc" id="L299">            return levelPredicate</span>
+<span class="fc" id="L300">                    .and(markerPredicate)</span>
+<span class="fc" id="L301">                    .and(keyValuePairsPredicate)</span>
+<span class="fc" id="L302">                    .and(messagePredicate)</span>
+<span class="fc" id="L303">                    .and(argumentsPredicate)</span>
+<span class="fc" id="L304">                    .and(throwablePredicate)</span>
+<span class="fc" id="L305">                    .and(mdcPredicate);</span>
         }
     }
 
     public static final class MdcComparator {
 
         /** Disables verification of the MDC contents. */
-<span class="fc" id="L313">        public static final MdcComparator IGNORING = new MdcComparator((a, b) -&gt; true);</span>
+<span class="fc" id="L312">        public static final MdcComparator IGNORING = new MdcComparator((a, b) -&gt; true);</span>
 
         /**
          * Validates the contents of the MDC on the logging event exactly match the specified values.
          */
-<span class="fc" id="L318">        public static final MdcComparator EXACT =</span>
-<span class="pc bpc" id="L319" title="1 of 4 branches missed.">                new MdcComparator((a, b) -&gt; a.size() == b.size() &amp;&amp; a.entrySet().containsAll(b.entrySet()));</span>
+<span class="fc" id="L317">        public static final MdcComparator EXACT =</span>
+<span class="pc bpc" id="L318" title="1 of 4 branches missed.">                new MdcComparator((a, b) -&gt; a.size() == b.size() &amp;&amp; a.entrySet().containsAll(b.entrySet()));</span>
 
         /**
          * Validates the MDC contains all specified entries, but will not fail if additional entries
          * exist.
          */
-<span class="fc" id="L325">        public static final MdcComparator CONTAINING =</span>
-<span class="fc" id="L326">                new MdcComparator((a, b) -&gt; a.entrySet().containsAll(b.entrySet()));</span>
+<span class="fc" id="L324">        public static final MdcComparator CONTAINING =</span>
+<span class="fc" id="L325">                new MdcComparator((a, b) -&gt; a.entrySet().containsAll(b.entrySet()));</span>
 
         private final BiPredicate&lt;Map&lt;String, String&gt;, Map&lt;String, String&gt;&gt; compareFunction;
 
-<span class="fc" id="L330">        private MdcComparator(BiPredicate&lt;Map&lt;String, String&gt;, Map&lt;String, String&gt;&gt; compareFunction) {</span>
-<span class="fc" id="L331">            this.compareFunction = compareFunction;</span>
-<span class="fc" id="L332">        }</span>
+<span class="fc" id="L329">        private MdcComparator(BiPredicate&lt;Map&lt;String, String&gt;, Map&lt;String, String&gt;&gt; compareFunction) {</span>
+<span class="fc" id="L330">            this.compareFunction = compareFunction;</span>
+<span class="fc" id="L331">        }</span>
 
         public boolean compare(Map&lt;String, String&gt; actual, Map&lt;String, String&gt; expected) {
-<span class="fc" id="L335">            return compareFunction.test(actual, expected);</span>
+<span class="fc" id="L334">            return compareFunction.test(actual, expected);</span>
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

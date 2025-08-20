@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.github.valfirst.slf4jtest","l":"TestLoggerFactoryResetRuleTests"},{"p":"uk.org.lidalia.lang","l":"ThreadLocalTests"}];updateSearchResults();
