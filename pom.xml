@@ -49,7 +49,7 @@
         <mockito.version>4.11.0</mockito.version>
         <junit-pioneer.version>1.9.1</junit-pioneer.version>
         <pmd.version>7.16.0</pmd.version>
-        <maven.surefire.version>3.5.3</maven.surefire.version>
+        <maven.surefire.version>3.5.4</maven.surefire.version>
     </properties>
 
     <dependencyManagement>
