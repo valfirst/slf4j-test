@@ -47,7 +47,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.8</jdk.version>
         <mockito.version>4.11.0</mockito.version>
-        <junit-pioneer.version>1.9.1</junit-pioneer.version>
+        <junit-pioneer.version>2.3.0</junit-pioneer.version>
         <pmd.version>7.17.0</pmd.version>
         <maven.surefire.version>3.5.4</maven.surefire.version>
     </properties>
