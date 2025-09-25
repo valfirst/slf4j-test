@@ -526,9 +526,6 @@
                         <version>2.46.1</version>
                         <configuration>
                             <java>
-                                <googleJavaFormat>
-                                    <version>1.17.0</version>
-                                </googleJavaFormat>
                                 <formatAnnotations />
                                 <trimTrailingWhitespace />
                                 <endWithNewline />
