@@ -25,14 +25,14 @@ public class TestLoggerFactoryExtension implements BeforeEachCallback, BeforeTes
     @Override
     public void beforeEach(ExtensionContext context) {
         if (calculateCleanupStage(context) == CleanupStage.BEFORE_EACH) {
-            TestLoggerFactory.clear();
+            TestLoggerFactory.clearAll();
         }
     }
 
     @Override
     public void beforeTestExecution(ExtensionContext context) {
         if (calculateCleanupStage(context) == CleanupStage.BEFORE_TEST_EXECUTION) {
-            TestLoggerFactory.clear();
+            TestLoggerFactory.clearAll();
         }
     }
 
